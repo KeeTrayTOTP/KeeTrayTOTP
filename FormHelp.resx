@@ -1,0 +1,383 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="SplitContainerHelp.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TreeViewHelp.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelWelcome.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionWelcome.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionWelcome.Text" xml:space="preserve">
+    <value>Tray TOTP Plugin is a KeePass extension that enables TOTP generation using the RFC 4226 standard.
+
+This includes any TOTP that can be used with Google's Authenticator.
+
+Use the menu to the left to display help. You will find all the required information to use the plugin.
+
+If you have questions or comments about the plugin, you will find the contact email in the about window.
+
+Thank you for using Tray TOTP Plugin.
+</value>
+  </data>
+  <metadata name="LabelTitleWelcome.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelGettingStarted.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PictureBoxGettingStarted.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionGettingStarted.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionGettingStarted.Text" xml:space="preserve">
+    <value>Congratulations! You have successfully installed the Tray TOTP Plugin into KeePass 2.
+
+This window contains all the information you need to understand the functionning of the plugin.
+
+The figure below shows where to find the menu to reopen this window in the future.</value>
+  </data>
+  <metadata name="LabelTitleGettingStarted.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelCopyTOTP.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionCopyTOTP.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionCopyTOTP.Text" xml:space="preserve">
+    <value>This menu is located under the Copy Password menu in the context menu.
+
+It simply copies the current generated TOTP to the clipboard and uses KeePass's settings to determine if KeePass will be minimized or not.</value>
+  </data>
+  <metadata name="PictureBoxCopyTOTP.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTitleCopyTOTP.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelContextMenu.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionContextMenu.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PictureBoxContextMenu.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTitleContextMenu.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelAutoType.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PictureBoxAutoType.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionAutoType.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionAutoType.Text" xml:space="preserve">
+    <value>This plugin's help information will not include explanations on the function as it is very widely used. If you do not know how it works, Google it!! You are missing out on the second most important part of KeePass (after password storage).
+
+This figure shows you that this plugin supports Auto-Type and has it's own placeholder to send the TOTP in a keystroke sequence.</value>
+  </data>
+  <metadata name="LabelTitleAutoType.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelComponents.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionComponents.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionComponents.Text" xml:space="preserve">
+    <value>Not only does it support TOTP generation, it also gives the user many ways to use that data. It can be accessed from the Tray Menu, in the entry list when the custom column is used, it can be accessed from the entry list's context menu and of course it can be sent through the KeePass's auto-type system.
+
+The plugin also has a TOTP wizard which guides the user through the creation of a successfully generating TOTP or just to modify it.
+
+Also, all components can be disabled/enabled in the plugin's settings (located in the tools menu under the plugin's name).
+
+Finally, it supports time correction for servers that have high security standards and do not allow a TOTP range. This function gets the server's time so that TOTPs generated on this computer are in sync with the server's.</value>
+  </data>
+  <metadata name="LabelTitleComponents.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelStorage.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PictureBoxStorage.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionStorage.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionStorage.Text" xml:space="preserve">
+    <value>The figure below show's where the TOTP seed and settings are stored within the entry. Only one TOTP may be created in an entry.
+
+The settings lets you change the name of these strings in case you required to used another name.
+
+Do not simply rename them as the reference will be lost and the TOTP will not generate.</value>
+  </data>
+  <metadata name="LabelTitleStorage.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelSetupTOTP.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionSetupTOTP.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionSetupTOTP.Text" xml:space="preserve">
+    <value>This menu is located in the context menu under the Selected Entries menu as a submenu. It is the plugin's TOTP creation or modification wizard.
+
+It guides the user through the process of creating a new TOTP for the selected entry or if the entry already has a TOTP, to change it.</value>
+  </data>
+  <metadata name="PictureBoxSetupTOTP.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTitleSetupTOTP.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelCustomColumn.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionCustomColumn.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionCustomColumn.Text" xml:space="preserve">
+    <value>To enable display of the current TOTP for any entry displayed in the entry list, open the KeePass's view menu and click on the column configuration menu.
+
+Scroll down the column list and you will find the columns provided by plugin.
+
+Check the TOTP column and click OK. The TOTP will now be displayed in the entry list. When you double-click on the TOTP, it will be copied to the clipboard and KeePass's settings will be used to determine if KeePass will be minimized or not.</value>
+  </data>
+  <metadata name="PictureBoxCustomColumn.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTitleCustomColumn.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelEntryList.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionEntryList.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PictureBoxEntryList.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTitleEntryList.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionTimeCorrection.Text" xml:space="preserve">
+    <value>To use Time Correction, activate it in the plugin's settings and specify the server you want to sync with.
+
+Once that is done, when you create or modify a TOTP entry using the wizard, you will be offered to sync that TOTP with any servers specified earlier.
+
+Save changes and the TOTPs for that entry will now be in sync with the specifies server.
+
+Note: Not all servers support syncing, this is why when adding a time correction, the plugin must make sure the server supports it. This makes adding a time correction server impossible when you are not connected to the internet.</value>
+  </data>
+  <metadata name="LabelTitleTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PanelTrayIcon.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionTrayIcon.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelDescriptionTrayIcon.Text" xml:space="preserve">
+    <value>The initial function that led to the devlopment of this plugin is the tray menu function.
+
+It displays all TOTP enabled entries and when clicked, it generates and copies the TOTP to the clipboard.
+
+It is recommended to enable the KeePass setting that starts KeePass at logon and keeps it in the tray (minimize to tray when closing).
+</value>
+  </data>
+  <metadata name="PictureBoxTrayIcon.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTitleTrayIcon.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+        Wf////////////Py+v/xukT/9shZ//jOYv/2xlX/1XgQuAAAAADJZQpK56U5//nLXP/0vk//9MBQ//XB
+        Uf/lojD/7MiY//Pavf/loUD/9b5G//XBUv/zvk//+ctc/+elOf/JZQpKzG4Pn/K3Qv/0vEv/8bhI//G3
+        SP/0v0z/6ac2/9F3Cf/TgRP/3Isb//O9TP/xuEn/8bhI//S8S//yt0L/zG4Pn815Iun3xVP/7aw2/+6w
+        P//usD//8LA5/+CbMf/38ev//////9aNRP/uqCj/7rJB/+6wPv/trDb/98VT/815I+nOfyv3+dd//+up
+        NP/rpCv/7Kcx//GzO//ZfwT/58i2///////lxJz/2HsB//GxN//spCv/66k0//fFU//OfSr3wm4e9/jU
+        dv/uwGX/67BC/+ehJv/nniH/5psb/8lzF//9/////////9GTVP/YfgH/8LVF//TKY//0ymP/wm4e97lf
+        Fun0ymP/7bpY/+y+Yf/sulX/7a9B/++tNf/bgwf/zZFd///////+////1ZdR/+i6Zv/oumb/9Mpj/7lf
+        FumnQgCf6Lpm/+67Uf/qskn/6LBO/9OVOf/cmCv/8bhC/9SMH//x4tb//////+rXwv/oumb/6Lpm/+i6
+        Zv+nQgCfmzAASsR4LP/62n3/7LNF/9mRIv/evKT/6tO//9SZTv/ctH///Pn4///////mzbX/255F//TK
+        Y//EeCz/mzAASgAAAACVLQC42p1F//jYd//Wnk3/9vP5////////////////////////////1qRr//TR
+        bf/bnkX/lS0AuAAAAAAAAAAAmDMACpQvAODWkzX/8s1m/+W/ef/n0br/7ePY//n4/v/s4dT/4LqB//DJ
+        Xf/XlzX/ky8A4JgzAAoAAAAAAAAAAAAAAACKLAAMhiQAt7hkFP/fnjP/7LZG/+m3S//msE3/5a1E/92b
+        MP+3ZRT/hyQAt4osAAwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAB5IgBMiSkAnpE7A+miTAz0ok0M9JM8
+        A+mIKgCeeSIATAAAAAAAAAAAAAAAAAAAAADwDwAAwAMAAIABAACAAQAAAAAAAAAAAAAAAAAAAAAAAAAA
+        AAAAAAAAAAAAAAAAAACAAQAAgAEAAMADAADwDwAA
+</value>
+  </data>
+</root>

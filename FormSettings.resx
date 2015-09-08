@@ -1,0 +1,597 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <metadata name="TabControlSettings.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageContextMenus.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageEntryList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageAutoType.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageSync.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageStorage.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageContextMenus.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTrayMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxEntryMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTrayMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxShowTOTPEntriesTrayMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionTrayMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxShowTOTPEntriesTrayMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="HelpProviderSettings.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>426, 17</value>
+  </metadata>
+  <metadata name="LabelDescriptionTrayMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxEntryMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxShowSetupTOTPEntryMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxShowCopyTOTPEntryMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionEntryMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxShowSetupTOTPEntryMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxShowCopyTOTPEntryMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionEntryMenu.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageEntryList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTOTPColumn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTOTPColumn.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxTOTPColumnClipboard.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionTOTPColumnTimer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxTOTPColumnTimer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxTOTPColumnClipboard.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionTOTPColumnTimer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxTOTPColumnTimer.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageAutoType.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxAutoType.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxAutoType.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxAutoType.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="HelpProviderSettings.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>426, 17</value>
+  </metadata>
+  <data name="CheckBoxAutoType.HelpString" xml:space="preserve">
+    <value>When enabled, the auto-type entry field specified below will be replaced by a generated TOTP during a global auto-type event. This option adds the entry field to the custom keystroke sequence editor as well.</value>
+  </data>
+  <metadata name="GroupBoxAutoType.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TextBoxAutoTypeFieldName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxAutoTypeFieldRename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxAutoTypeFieldName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionAutoType.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TextBoxAutoTypeFieldName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxAutoTypeFieldRename.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxAutoTypeFieldName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionAutoType.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageSync.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTimeCorrectonList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="CheckBoxTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTimeCorrectonList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ToolStripTimeCorrectionList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>223, 17</value>
+  </metadata>
+  <metadata name="ToolStripTimeCorrectionList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ListViewTimeCorrectionList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ToolStripTimeCorrectionList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>223, 17</value>
+  </metadata>
+  <metadata name="ToolStripTimeCorrectionList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="ToolStripButtonAddTimeCorrection.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANeSURBVDhPXZF9TFNXGMZPliwmi8v+MpsmC8n+8HObWTJx
+        bn7ExJD4sRizZOrMFrr5MamTVDRi8KNNVBCLZVgqaKUsDBwFqhdrjRV366UUq2KBAqGWtVqQwugtt71U
+        Svl4ds9Nt2x7kifnvee8v/c9572ECmfIG+Idop6wkq64lTyes5F58sG/JDLkXXou5bljd8mS9LYEV5I3
+        o02kWHiyeygVYcE//nr0UfNWZ15L0nG0ZZKnprGL2cHFPXsjr/vy+WgjcfM3yftygZEbpEBwf/tqauQO
+        wu2KcbdplVjkjED/ZBTXO8OyaXyJC6CzdnFC8GoSYmfenyO1pIM2JyETORXvyOfDrYpxlyljuqw9hPqu
+        YdRxL2Cw9KKsoRfVDwKo8wyh6iELtnnDbE9Pw0z41jLfkFF6yh9Xybp+w1s+1rg4UcwGcMMdgoUNYmAw
+        hkhMxFhsAr5QDDX2AVS1BlHPaPGoJjPZV/n2s4AhPYu867cvHm/y4qozCLPUjSoqCHj+KoxJKaYW54AK
+        6wAMDj9OmzkcNLWdk2GqPVeeOo41elFx14c+qXNieg5iIoHyKhNGpULxZBJN934H91xAobkbNJcyaZyQ
+        L0tZXlX3DBdquzD6OoVochZTUtcTag1+tTA4fkYDu8sNr5DCEYMbNJcyaVwqcJ7h9xvdUJs8CIkpqcgs
+        BoU4zmpLZJjzdGNsGngaSeGn0nbQXMqkcUKyTjc6dulYaGo68NAvYFh69GA8BZujDQE+hpEZoN5lgepK
+        NvZf2o7d57KwueCHYBonZOOxX9Rb1LeQe82FIrMPY9LAoikgPitZihvafoOmQQFrTzk6h+3Q3c/BTt1H
+        yFQu1MoFPldWfLomR9+bdeo2VJUcLpj74QmOQ5TmISZSUBRvBuMtBdNXRn8QtC37oGs5gJXKdyblAlSZ
+        +0oOHCyqSWzKv4nvtPehuszh6M9OqHSt2FbwCWw9Rhn+W83d5VitXIg0TojT6dzo9XrxgOVmvlAasepQ
+        HVbnWmSvOZSBi/bvUWjPluHCe9n/vYHNZltgtVpFv98PhmH4ld+c1CzfWeD4cFc+T/2xYsPLr7RLUWLf
+        K3emK/3+ZwZms3l+dXV1v16vn5LWFfLm/5SZ817RZz8umqDXXns4Y2597geXCSHkLxAbeqgwf/xqAAAA
+        AElFTkSuQmCC
+</value>
+  </data>
+  <data name="ToolStripButtonPropertiesTimeCorrection.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAN8SURBVDhPTZF9TFtlFMbfmBgTo/+YGI2J2aIJxiz7T0k0
+        8QNNUCRLNHHKJNskaMmmxkzc+ApSlrF2MGQbpSsMuDRdWdYxttKuqJtr6QrsDlgLl3bUMooFVnC03Pbu
+        9oOufXxvaaJPcpKT95zfc973vEQSGsgTwjUif2Qm01EzuZOxkKeyhf9JMJIXpDrtYyPD5LXcMYU7yZPh
+        y6SZn9izvLluRejOF2u3h4odlTcStp9vxENSSPmY8TN71PnNesxTHQoPEDZ0hbycNVi9QOp4du9KcvUa
+        guNlGyzzpqB0rEM1sYYeVzAbUv6rfQEufZ7Ic42i4Kr8Z1VPpqThJMCQ+uhUdSh4q2xjjNmWOjMewMXp
+        B+i3L0I96MaZS270/bmAfucyekessA69l56dvfQ4ePV173I3fcr9LvLOnPppr7U7T2y2LuACG8Cg1Y/5
+        pQjWIwIeRh7BG4hA98c8em/5cdF4Erd1+QlP57N3F9S5XVT2mFqqLnPocvhhoNMkhXkef60EEae5FEIG
+        uGLSY05fAp+xCa6eQrg6duzLGpSenbQdHuCgGfbCQyeLqQwEUURHL4M1ahRNJGD7TYHgzSrwM2bqtoKN
+        mQHYmz9ezRrsOmUNHeq/ixP6aazFNhFOpJGkU2vkjTg/aMS502UIueVILg0haGtBjBvE40UHnG2y+JbB
+        cWNI1s1CzjgREDapSRpLfBTHTrZC3VaB8Gw90jEHYve/p9/8A+7pytHSUJ5h2z/NyxoU/jJgK2mzolE3
+        hREfjwf00UvRTYxcVyPM1SAdH4c4vx/xQCminlpwmmLIjrZPZmFJBYe18k/kV/HjuTEoDV48pAvzzRgR
+        nKjKwfsQ//srRGbr4OkoQsXRs5CYHE7I299p3njroMpdWG/CoU47ND1d8Px+hF7bjri/HInAXvD0Jvc6
+        PkJJw3lIvRKTw7eU/21rxQGlTpT9dARuSy2mh09hmd0N0V+KkKsazvZiHFTosKdJK0q9Oew/ORyOAo7j
+        YDjxIRBdxFzX57hZ+xJGNUUwyd9HWU0bmo4rMgqlMjM6OvpuDtuSxWJ53mw2Cz6fD8dkO5EcVyHJngbb
+        VICG8u2ZXV8fmNzxZZ18yGSKer1eMAyTosyrOZwQg8HwTF9f35xKpUruzn8uodi/LcUoi1LXWz8YMVfv
+        fCXXRii4XavV8jRWaP4iIYT8C7wagCwmmVFMAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="ToolStripButtonRemoveTimeCorrection.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAANrSURBVDhPXZFtTFNnFMefCWTJoh+2xcwvZtEPbGPL9mVq
+        3GIURZNt4YNffNniFjPnpmgMolJf2yZTkcF0rFZwQFkYOAsUq23xBbz1UsGqWKBCqMWiBSlIb7nt5UIp
+        bf97nptmW/wn/9yT5zm/c55zLmGCmsyTrEQzZSE9EQu5n7SR15WL/0kyk3fYPc1zhlvIe6ljCleQjFAT
+        KRYfbB2JBTkI9zeN37v6laOgNWo/0DojMLO4w7yRj7h2BKf7VUKokTiFZrJYKTB2iRwVndtezI5ZEejc
+        Puk0LJOKHEHoHoyjqjugmMW/8j5012XKolsrS90FL8fqSBdrTvwGcjzSpRIC7dsnOwzvzpV1+nG5ZxT1
+        /DPoTX0oa+hDTZsP9a4RVN/hwF1dnXj8uCEeuPKBZ6SSjvL0Ilk1oH/Dw1VmysWcD5ecfpi4IQwOhxEM
+        S5gIT8HjD6P25iCq24dw2VyCe7XLo/0VCx759KldFFRd+6WwyY2LjiEYaTemkCjiyYsAZmjMLCWBcssg
+        9HYvThh57DLcPanATN9ceGg/2OhGeYsH/bSzPJeEJMs4X23AOC0UiUbRdOM2+CciTht7wXIZk8IJyT3H
+        Cfn1j3Cmrgfj0zGEognM0q6HNVr8ZTKjUK3FzQ4n3GIM+/VOsFzGpHBa4JRZ2FnphMbggl+K0SIJDIsR
+        /FxSqsC8qxcTc8DDYAx7z3WC5TImhROy4USjfctZDtraLtzxihilQw9HYrDZ78InhDEWB3obzuP2tvfR
+        ujYDptxFOPndRl8KJyT74J+aLzVXsO+PDhQZPZigCwvFgEiCmsbeZj16D63CjLUUyf7rkP/ej5K8j5O3
+        1qXvVQp8llf+6crdur4Nx68hv4LHGeMAXEOTkOg+JDmG1q1LMU1hlOUChW8Cp5ZgongNrNlp/71i+Q+l
+        P+4qqpVzVM34tuQW8n/nceA3B/LPtivPTnaZ2N/9V5PqRVCvTU+mcEIcDke22+1GG8fHP8+rxLI99Vix
+        z6S44YuFmKr6HqBQ9BBBiPr5T2m4vj5tRIFtNttCi8Uieb1emM1m4ZOvj2mzNh+1f7RFJTCrN617xq3O
+        TIwWLsHLwxl4uuM1tGWlx1ty5h1RChiNxvk1NTUDOp1uln4/VA5fUfvmxaobOenDbJyWrLfj1ty3ThNC
+        yD//tHiWsmJyuwAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="ToolStripButtonRefreshTimeCorrection.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGQSURBVDhPY6A5yN2XuCp0VSgzlEs6yNgReyl5c9QBKBc/
+        KD6e7lB0JO1A/oHk/9l7Ev6nb4/933So8n/dvtL/kUv9dkKVYQcgzQWHU8/MuTTl/6Zbq/+vv7ni/9ob
+        S/+vurbo//Kr8/+XbMn57zPV9Q5UOSbIP5g6c/r5vv8bb67633y46n/i+vD/MSuD/ldsz/9fsjn7v88U
+        191QpdhBzs64B0D//k/ZHPU/bm3oIagwQ8Ast0ueU5wP1dczMFn0WnBChfED5FD3mui0hqxY8JvuugbK
+        JB6ErAzhrK+vZ/KZ4nLIrd/hElSYwaLa4JBxqe5/vXzN/1ppqg+gwtiB5xTH3Vkrk/6nLon9b91g+t+s
+        yvB/xPTA/70nmv4nL4z+r5KkOBOqFBN4TbB/mbE84f/0s73/p5zu+j/xVPv/vpMt/3tONP4HiaskKpyR
+        j5d2gCrHDuwaLXbGzQ37HzUz+L9+odZ/7Wy1/+ppyv+VkuQOENQMA0bFugf08jThYUAyCA1lYNbIVF0F
+        5dISMDAAADTErppoqfe3AAAAAElFTkSuQmCC
+</value>
+  </data>
+  <metadata name="ListViewTimeCorrectionList.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ImageListTimeCorrectionList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="ImageListTimeCorrectionList.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
+        LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
+        ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAD0
+        CwAAAk1TRnQBSQFMAgEBBAEAAegBAQHoAQEBEAEAARABAAT/AQkBAAj/AUIBTQE2AQQGAAE2AQQCAAEo
+        AwABQAMAASADAAEBAQABCAYAAQgYAAGAAgABgAMAAoABAAGAAwABgAEAAYABAAKAAgADwAEAAcAB3AHA
+        AQAB8AHKAaYBAAEzBQABMwEAATMBAAEzAQACMwIAAxYBAAMcAQADIgEAAykBAANVAQADTQEAA0IBAAM5
+        AQABgAF8Af8BAAJQAf8BAAGTAQAB1gEAAf8B7AHMAQABxgHWAe8BAAHWAucBAAGQAakBrQIAAf8BMwMA
+        AWYDAAGZAwABzAIAATMDAAIzAgABMwFmAgABMwGZAgABMwHMAgABMwH/AgABZgMAAWYBMwIAAmYCAAFm
+        AZkCAAFmAcwCAAFmAf8CAAGZAwABmQEzAgABmQFmAgACmQIAAZkBzAIAAZkB/wIAAcwDAAHMATMCAAHM
+        AWYCAAHMAZkCAALMAgABzAH/AgAB/wFmAgAB/wGZAgAB/wHMAQABMwH/AgAB/wEAATMBAAEzAQABZgEA
+        ATMBAAGZAQABMwEAAcwBAAEzAQAB/wEAAf8BMwIAAzMBAAIzAWYBAAIzAZkBAAIzAcwBAAIzAf8BAAEz
+        AWYCAAEzAWYBMwEAATMCZgEAATMBZgGZAQABMwFmAcwBAAEzAWYB/wEAATMBmQIAATMBmQEzAQABMwGZ
+        AWYBAAEzApkBAAEzAZkBzAEAATMBmQH/AQABMwHMAgABMwHMATMBAAEzAcwBZgEAATMBzAGZAQABMwLM
+        AQABMwHMAf8BAAEzAf8BMwEAATMB/wFmAQABMwH/AZkBAAEzAf8BzAEAATMC/wEAAWYDAAFmAQABMwEA
+        AWYBAAFmAQABZgEAAZkBAAFmAQABzAEAAWYBAAH/AQABZgEzAgABZgIzAQABZgEzAWYBAAFmATMBmQEA
+        AWYBMwHMAQABZgEzAf8BAAJmAgACZgEzAQADZgEAAmYBmQEAAmYBzAEAAWYBmQIAAWYBmQEzAQABZgGZ
+        AWYBAAFmApkBAAFmAZkBzAEAAWYBmQH/AQABZgHMAgABZgHMATMBAAFmAcwBmQEAAWYCzAEAAWYBzAH/
+        AQABZgH/AgABZgH/ATMBAAFmAf8BmQEAAWYB/wHMAQABzAEAAf8BAAH/AQABzAEAApkCAAGZATMBmQEA
+        AZkBAAGZAQABmQEAAcwBAAGZAwABmQIzAQABmQEAAWYBAAGZATMBzAEAAZkBAAH/AQABmQFmAgABmQFm
+        ATMBAAGZATMBZgEAAZkBZgGZAQABmQFmAcwBAAGZATMB/wEAApkBMwEAApkBZgEAA5kBAAKZAcwBAAKZ
+        Af8BAAGZAcwCAAGZAcwBMwEAAWYBzAFmAQABmQHMAZkBAAGZAswBAAGZAcwB/wEAAZkB/wIAAZkB/wEz
+        AQABmQHMAWYBAAGZAf8BmQEAAZkB/wHMAQABmQL/AQABzAMAAZkBAAEzAQABzAEAAWYBAAHMAQABmQEA
+        AcwBAAHMAQABmQEzAgABzAIzAQABzAEzAWYBAAHMATMBmQEAAcwBMwHMAQABzAEzAf8BAAHMAWYCAAHM
+        AWYBMwEAAZkCZgEAAcwBZgGZAQABzAFmAcwBAAGZAWYB/wEAAcwBmQIAAcwBmQEzAQABzAGZAWYBAAHM
+        ApkBAAHMAZkBzAEAAcwBmQH/AQACzAIAAswBMwEAAswBZgEAAswBmQEAA8wBAALMAf8BAAHMAf8CAAHM
+        Af8BMwEAAZkB/wFmAQABzAH/AZkBAAHMAf8BzAEAAcwC/wEAAcwBAAEzAQAB/wEAAWYBAAH/AQABmQEA
+        AcwBMwIAAf8CMwEAAf8BMwFmAQAB/wEzAZkBAAH/ATMBzAEAAf8BMwH/AQAB/wFmAgAB/wFmATMBAAHM
+        AmYBAAH/AWYBmQEAAf8BZgHMAQABzAFmAf8BAAH/AZkCAAH/AZkBMwEAAf8BmQFmAQAB/wKZAQAB/wGZ
+        AcwBAAH/AZkB/wEAAf8BzAIAAf8BzAEzAQAB/wHMAWYBAAH/AcwBmQEAAf8CzAEAAf8BzAH/AQAC/wEz
+        AQABzAH/AWYBAAL/AZkBAAL/AcwBAAJmAf8BAAFmAf8BZgEAAWYC/wEAAf8CZgEAAf8BZgH/AQAC/wFm
+        AQABIQEAAaUBAANfAQADdwEAA4YBAAOWAQADywEAA7IBAAPXAQAD3QEAA+MBAAPqAQAD8QEAA/gBAAHw
+        AfsB/wEAAaQCoAEAA4ADAAH/AgAB/wMAAv8BAAH/AwAB/wEAAf8BAAL/AgAD//8A/wD/AP8ANgAB/wEb
+        ARoBkwJ0AUwESwEcARoB/wUAAfQBCAFyAkkBcgEIAfQEAAGaCFIBMQUrAZkEAAH/ARoBbwJMAW8BGgH/
+        BQADmQKaBJkBkwJ0AUsBdAQAAfIBTwFQBJgCTwHxAwABeQEaDPYBmgFSAwAB8wJvAZMClAEWAkwBGwQA
+        ApkBBwEZAfMB/wHzAQkBtQK0Ae0BbgF0AwAB8gFPAXgBCAGYApcBmAEIAZcBSQHxAgAB8wF6AfYBwwd6
+        AVkBegH2AVIB8wIAAfMBTAEWAZQBFgJvARYBlAFvAUwBGwMAAf8BCQHdAfQE/wMZAQkBtAH0AgAB/wFQ
+        AXgBCAaXAQgBlwFPAfQCAAF5AZoB9gGaAnoCUgN6AcMBmQF5AgAB/wFvARYBmgJvApQCFwGUAm8B/wMA
+        Ad0BCQH0BP8DGQG7AQkDAAEIAVYBCAKXAXgBGwGYA5cBCAFPAQgCAAH2AVgB9gHDBnoBmgH2AVIB/wIA
+        ARoBbwGaA+MC/wJvARcBlAFvARoEAAHxAQkB8wP/AfQBCQG1AQkEAAGXApgBlwF4A/8BmAKXApgBcgMA
+        ApoB9gGaAXoBWAFSAnoBwwF5ARoDAAEWApQD4wKUA28BFgGTAW8FAAH0AQkBGQL0AgkB9AUAAVUBmAGX
+        AXgC/wH0Av8BmAKXAZgBTwMAAf8BeQEbAfYBegJSAXoBwwEaAVIB/wMAAeMBmgF1A+MBvQH/AuMCbwGU
+        AUwHAAHdAhkBCQcAAVYBCAF4AZcBCAHxAZcBCAL/AZgBlwGYAU8EAAEbAXoB/wF6AlIBegH2AXkBGwQA
+        AeMBmgF1A+MC/wTjAZQBTAcAAd0CGQEJBwABlwKYBZcBCAH/AfMCmAFyBQABegEaAfYCUgHDAZoBeQUA
+        A5QBdQLjAv8D4wKUAW8FAAH0AQkBGQH0ARkCCQH0BQABCAGXAQgGlwEIAZcBCAFQAQgFAAH0AVkB/wKg
+        AfYBUgH0BQABGgEWAZoDdQL/A+MBmgFvARoEAAEZAd0B9AH/AfQDGQEJAfAEAAH/AZcBeAEIBpcBCAF4
+        AVAB/wYAApoC9gGaARoGAAH2AXUBlAGaAnUC/wLjAZoBFgFvAf8DAAIZAfQC/wH0BBkCCQQAAfMBVgF4
+        AQgBmAJ4AZgBCAF4AU8BGwcAAf8BWQH2AcMBWAH/BwAB8wF1AZQBmgGUAnUBlAGaAXUBbwHzAwAB/wG8
+        AZkCdAFSAUwESwFzAe0B9AQAAfMClwSYAZcBVgEbCQABGgKaARsJAAHzAZQBFgGUApoBlAEWAXUB8wQA
+        A5kCmgSZAZMCdAFLAXMFAAH/AQgBeAJWAZcBCAH/CgAB/wF6AZoB/woAAf8BGgGUAnUBlAEaAf8FAAOZ
+        BJoDmQJ0AUsBdDIAAf8BGwEaAZkFdAFSAXQBHAEaAf8BAAFCAU0BPgcAAT4DAAEoAwABQAMAASADAAEB
+        AQABAQYAAQEWAAP/gQAG/wGAAQEB8AEPAgAB8AEPAYABAQHgAQcCAAHgAQcBgAEBAcABAwIAAcABAwGA
+        AQEBgAEBAYABAQGAAQEBwAEDAYABAQGAAQEBgAEBAeABBwGAAQEBwAEDAYABAQHwAQ8BgAEBAcABAwGA
+        AQEB/AE/AYABAQHgAQcBgAEBAfwBPwGAAQEB8AEPAYABAQHwAQ8BgAEBAfABDwGAAQEB4AEHAYABAQH4
+        AR8BgAEBAcABAwHAAQMB+AEfAcABAwGAAQEB4AEHAfwBPwHgAQcBgAEBAfABDwH8AT8B8AEPAYABAQb/
+        AYABAQs=
+</value>
+  </data>
+  <metadata name="CheckBoxTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="CheckBoxTimeCorrection.HelpString" xml:space="preserve">
+    <value>When enabled, the listed servers specified below will be checked for time difference. This time difference will be used by the TOTP generator to correct the current computer time making sure the TOTP is accurate.</value>
+  </data>
+  <metadata name="GroupBoxTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTimeCorrectionMinutes.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTimeCorrectionInterval.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="NumericTimeCorrectionInterval.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTimeCorrectionMinutes.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTimeCorrectionInterval.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="NumericTimeCorrectionInterval.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTimeCorrection.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="TabPageStorage.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTOTPSettings.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTOTPSeed.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTOTPSettings.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTOTPSettingsStringName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ComboBoxTOTPSettingsStringName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionTOTPSettings.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTOTPSettingsStringName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="LabelTOTPSettingsStringName.HelpString" xml:space="preserve">
+    <value>Customizes the String Name that the software will look for when trying to generate TOTP. Make sure that the String contains the each settings seperated by a semicolon in this order: Time Interval in seconds, TOTP Length, Time Correction URL (optional). Ex// 30;6;https://www.google.com</value>
+  </data>
+  <metadata name="ComboBoxTOTPSettingsStringName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <data name="ComboBoxTOTPSettingsStringName.HelpString" xml:space="preserve">
+    <value>Customizes the String Name that the software will look for when trying to generate TOTP. Make sure that the String contains the each settings seperated by a semicolon in this order: Time Interval in seconds, TOTP Length, Time Correction URL (optional). Ex// 30;6;https://www.google.com</value>
+  </data>
+  <metadata name="LabelDescriptionTOTPSettings.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="GroupBoxTOTPSeed.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTOTPSeedStringName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ComboBoxTOTPSeedStringName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionTOTPSeed.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelTOTPSeedStringName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ComboBoxTOTPSeedStringName.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="LabelDescriptionTOTPSeed.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ButtonOK.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ButtonCancel.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ButtonApply.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ButtonReset.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="WorkerLoad.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>592, 17</value>
+  </metadata>
+  <metadata name="WorkerSave.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>710, 17</value>
+  </metadata>
+  <metadata name="ErrorProviderSettings.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>948, 17</value>
+  </metadata>
+  <metadata name="$this.Locked" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>57</value>
+  </metadata>
+  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        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
+</value>
+  </data>
+  <metadata name="WorkerReset.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>827, 17</value>
+  </metadata>
+</root>

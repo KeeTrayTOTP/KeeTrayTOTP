@@ -1,0 +1,242 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BF4A8A1F-B9B6-499C-8756-810B44895B8A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>KeeTrayTOTP</RootNamespace>
+    <AssemblyName>KeeTrayTOTP</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>TOTP.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="KeePass">
+      <HintPath>..\..\..\..\..\..\..\..\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FormAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAbout.Designer.cs">
+      <DependentUpon>FormAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormAbout_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FormAbout_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="FormHelp_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FormHelp_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="FormSettings_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FormSettings_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="FormSetup_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FormSetup_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="FormTimeCorrection_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>FormTimeCorrection_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TrayTOTP_CustomColumn.cs" />
+    <Compile Include="TrayTOTP_CustomColumn_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrayTOTP_CustomColumn_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TrayTOTP_Extensions.cs" />
+    <Compile Include="FormHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHelp.Designer.cs">
+      <DependentUpon>FormHelp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSettings.Designer.cs">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormSetup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormSetup.Designer.cs">
+      <DependentUpon>FormSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormTimeCorrection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormTimeCorrection.Designer.cs">
+      <DependentUpon>FormTimeCorrection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Libraries\TOTP_Client.cs" />
+    <Compile Include="TrayTOTP_Extensions_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrayTOTP_Extensions_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TrayTOTP_Plugin.cs" />
+    <Compile Include="TrayTOTP_Plugin_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrayTOTP_Plugin_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="TrayTOTP_TimeCorrectionCollection.cs" />
+    <Compile Include="TrayTOTP_TimeCorrectionCollection_Localization.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TrayTOTP_TimeCorrectionCollection_Localization.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormAbout.resx">
+      <DependentUpon>FormAbout.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAbout_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FormAbout_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHelp.resx">
+      <DependentUpon>FormHelp.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHelp_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FormHelp_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings.resx">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSettings_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FormSettings_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSetup.resx">
+      <DependentUpon>FormSetup.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormSetup_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FormSetup_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTimeCorrection.resx">
+      <DependentUpon>FormTimeCorrection.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormTimeCorrection_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FormTimeCorrection_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrayTOTP_CustomColumn_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrayTOTP_CustomColumn_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrayTOTP_Extensions_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrayTOTP_Extensions_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrayTOTP_Plugin_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrayTOTP_Plugin_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TrayTOTP_TimeCorrectionCollection_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>TrayTOTP_TimeCorrectionCollection_Localization.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\textfield_key.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_key.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_delete.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bullet_error.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Equipment.png" />
+    <None Include="Resources\Help symbol.png" />
+    <None Include="Resources\Info.png" />
+    <None Include="Resources\Magic wand.png" />
+    <None Include="Resources\ContextMenu-Copy.png" />
+    <None Include="Resources\ContextMenu-Setup.png" />
+    <None Include="Resources\CustomColumn-Menu.png" />
+    <None Include="Resources\EntryList.png" />
+    <None Include="Resources\TrayMenu.png" />
+    <None Include="Resources\StorageStrings.png" />
+    <None Include="Resources\HelpMenu.png" />
+    <None Include="Resources\ContextMenu.png" />
+    <None Include="Resources\AutoType.png" />
+    <None Include="Resources\bullet_lock.png" />
+    <Content Include="TOTP.ico" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
