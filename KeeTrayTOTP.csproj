@@ -49,8 +49,10 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FormAbout.cs">
@@ -83,6 +85,26 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>FormTimeCorrection_Localization.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Libraries\Base32.cs" />
+    <Compile Include="Libraries\TimeCorrectionProvider.cs" />
+    <Compile Include="Libraries\TOTPEncoder.cs" />
+    <Compile Include="Setup.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Setup.Designer.cs">
+      <DependentUpon>Setup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TEmp\FormSetupCopy.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="TEmp\FormSetupCopy.Designer.cs">
+      <DependentUpon>FormSetupCopy.cs</DependentUpon>
+    </Compile>
+    <Compile Include="TEmp\FormSetup_Localization.Designer.cs">
+      <DependentUpon>FormSetup_Localization.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="TrayTOTP_CustomColumn.cs" />
     <Compile Include="TrayTOTP_CustomColumn_Localization.Designer.cs">
@@ -121,7 +143,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Libraries\TOTP_Client.cs" />
+    <Compile Include="Libraries\TOTPProvider.cs" />
     <Compile Include="TrayTOTP_Extensions_Localization.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -184,6 +206,14 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TEmp\FormSetupCopy.resx">
+      <DependentUpon>FormSetupCopy.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TEmp\FormSetup_Localization.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>FormSetup_Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="TrayTOTP_CustomColumn_Localization.resx">
       <Generator>ResXFileCodeGenerator</Generator>

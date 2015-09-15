@@ -5,7 +5,7 @@ using KeePass.UI;
 using KeePass.Plugins;
 using KeePassLib;
 
-using OtpProviderClient;
+using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
 {
@@ -75,7 +75,7 @@ namespace KeeTrayTOTP
                     if (plugin.SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl))
                     {
                         string[] Settings = plugin.SettingsGet(pe);
-                        var TOTPGenerator = new TOTP_Provider(Convert.ToInt16(Settings[0]), Convert.ToInt16(Settings[1]));
+                        var TOTPGenerator = new TOTPProvider(Convert.ToInt16(Settings[0]), Convert.ToInt16(Settings[1]));
                         if (ValidUrl)
                         {
                             var TimeCorrection = plugin.TimeCorrections[Settings[2]];

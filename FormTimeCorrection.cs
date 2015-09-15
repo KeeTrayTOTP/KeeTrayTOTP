@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 using KeePass.Plugins;
 
-using OtpProviderClient;
+using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
 {
@@ -42,7 +42,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// TimeCorrection Provider that validates the URL.
         /// </summary>
-        private volatile TimeCorrection_Provider TestTimeCorrection;
+        private volatile TimeCorrectionProvider TestTimeCorrection;
 
         /// <summary>
         /// Windows Form Load.
@@ -97,7 +97,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void WorkerWaitForCheck_DoWork(object sender, DoWorkEventArgs e)
         {
-            TestTimeCorrection = new TimeCorrection_Provider(ComboBoxUrlTimeCorrection.Text); //Creates a new Time Correction to validate the desired URL.
+            TestTimeCorrection = new TimeCorrectionProvider(ComboBoxUrlTimeCorrection.Text); //Creates a new Time Correction to validate the desired URL.
             while (!WorkerWaitForCheck.CancellationPending) //Waits for the validation to end or a cancellation.
             {
                 System.Threading.Thread.Sleep(100); //Waits

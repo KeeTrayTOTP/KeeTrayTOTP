@@ -3,14 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using OtpProviderClient;
+using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
 {
     /// <summary>
     /// Time_Correction Collection.
     /// </summary>
-    internal class TimeCorrection_Collection : IEnumerable<TimeCorrection_Provider>
+    internal class TimeCorrection_Collection : IEnumerable<TimeCorrectionProvider>
     {
         /// <summary>
         /// Reference to the main plugin class.
@@ -19,7 +19,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Time Correction List.
         /// </summary>
-        private readonly List<TimeCorrection_Provider> TimeCorrections;
+        private readonly List<TimeCorrectionProvider> TimeCorrections;
         private bool _Enable;
         /// <summary>
         /// Enables or disables the Time Correction verification for all the collection items.
@@ -42,7 +42,7 @@ namespace KeeTrayTOTP
         /// </summary>
         /// <param name="URL">URL.</param>
         /// <returns></returns>
-        internal TimeCorrection_Provider this[string URL]
+        internal TimeCorrectionProvider this[string URL]
         {
             get
             {
@@ -66,7 +66,7 @@ namespace KeeTrayTOTP
         {
             plugin = Plugin;
             _Enable = Enable;
-            TimeCorrections = new List<TimeCorrection_Provider>();
+            TimeCorrections = new List<TimeCorrectionProvider>();
         }
 
         /// <summary>
@@ -90,7 +90,7 @@ namespace KeeTrayTOTP
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) TimeCorrections.Add(new TimeCorrection_Provider(URL, _Enable));
+                    if (!next) TimeCorrections.Add(new TimeCorrectionProvider(URL, _Enable));
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace KeeTrayTOTP
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) TimeCorrections.Add(new TimeCorrection_Provider(URL, _Enable));
+                    if (!next) TimeCorrections.Add(new TimeCorrectionProvider(URL, _Enable));
                 }
             }
         }
@@ -143,7 +143,7 @@ namespace KeeTrayTOTP
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) TimeCorrections.Add(new TimeCorrection_Provider(URL, _Enable));
+                    if (!next) TimeCorrections.Add(new TimeCorrectionProvider(URL, _Enable));
                 }
             }
         }
@@ -170,7 +170,7 @@ namespace KeeTrayTOTP
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) TimeCorrections.Add(new TimeCorrection_Provider(LVI.Text, _Enable));
+                    if (!next) TimeCorrections.Add(new TimeCorrectionProvider(LVI.Text, _Enable));
                 }
             }
         }
@@ -229,7 +229,7 @@ namespace KeeTrayTOTP
         /// Support the enumeration of the collection to handle [foreach (var VARIABLE in...].
         /// </summary>
         /// <returns>Time Correction List Enumerator.</returns>
-        public IEnumerator<TimeCorrection_Provider> GetEnumerator()
+        public IEnumerator<TimeCorrectionProvider> GetEnumerator()
         {
             return TimeCorrections.GetEnumerator();
         }

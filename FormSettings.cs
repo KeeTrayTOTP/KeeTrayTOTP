@@ -350,7 +350,7 @@ namespace KeeTrayTOTP
             _plugin.m_host.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_TimeCorrection_Enable, CheckBoxTimeCorrection.Checked);
             _plugin.TimeCorrections.Enable = CheckBoxTimeCorrection.Checked;
             _plugin.m_host.CustomConfig.SetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, Convert.ToUInt64(NumericTimeCorrectionInterval.Value));
-            OtpProviderClient.TimeCorrection_Provider.Interval = Convert.ToInt16(NumericTimeCorrectionInterval.Value);
+            KeeTrayTOTP.Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(NumericTimeCorrectionInterval.Value);
             _plugin.TimeCorrections.ResetThenAddRangeFromLVIs(ListViewTimeCorrectionList.Items);
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_TimeCorrection_List, _plugin.TimeCorrections.ToSetting());
             if (WorkerSave.CancellationPending) { e.Cancel = true; return; }
@@ -409,7 +409,7 @@ namespace KeeTrayTOTP
             //Time Correction
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_TimeCorrection_Enable, null);
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, null);
-            OtpProviderClient.TimeCorrection_Provider.Interval = Convert.ToInt16(KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime);
+            KeeTrayTOTP.Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime);
             _plugin.TimeCorrections.ResetThenAddRangeFromString(string.Empty);
 
             //Storage
