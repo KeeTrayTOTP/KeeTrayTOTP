@@ -18,6 +18,8 @@ Variou reasons, first and most important: I don't want to use another applicatio
 
 Second: for education, working with another developer's code , specially in a language you're not familiar with, its a difficult task but not  uncommon situation.
 
+Third: I wanted only to make a slightly modification, then I needed to make a new setting options, change the way plugin generate in order ta add another step, some rewriting later, too much was changed for simply patch, so I decided to create my own fork and made more changes
+
 ### Steam TOTP Secret?!
 There is no easy way to get it, there various complications. Since Steam doesn't setup like most services (using QR Codes), the easiest way is to have through a rooted android phone.
 

@@ -80,7 +80,7 @@ namespace KeeTrayTOTP
 
                         if (plugin.SeedValidate(pe))
                         {
-                            return TOTPGenerator.Generate(
+                            return TOTPGenerator.GenerateByByte(
                                 Base32.Decode(plugin.SeedGet(pe).ReadString().ExtWithoutSpaces())) + (m_host.CustomConfig.GetBool(setname_bool_TOTPColumnTimer_Visible, true) ? TOTPGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
                         }
                         return TrayTOTP_CustomColumn_Localization.strWarningBadSeed;
