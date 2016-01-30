@@ -44,7 +44,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Tray TOTP Support Email
         /// </summary>
-        internal const string strEmail = "traytotp@gartech.ca";
+        internal const string strEmail = "victor.rds@protonmail.ch";
         /// <summary>
         /// Constants (keepass form object names).
         /// </summary>
@@ -177,7 +177,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Time Correction Collection.
         /// </summary>
-        internal TimeCorrection_Collection TimeCorrections;
+        internal TimeCorrectionCollection TimeCorrections;
 
         /// <summary>
         /// Network status of the computer.
@@ -267,7 +267,7 @@ namespace KeeTrayTOTP
             liRefreshTimer.Tick += OnTimerTick;
 
             //Time Correction.
-            TimeCorrections = new TimeCorrection_Collection(this, m_host.CustomConfig.GetBool(setname_bool_TimeCorrection_Enable, false));
+            TimeCorrections = new TimeCorrectionCollection(m_host.CustomConfig.GetBool(setname_bool_TimeCorrection_Enable, false));
             TimeCorrectionProvider.Interval = Convert.ToInt16(m_host.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime));
             TimeCorrections.AddRangeFromList(m_host.CustomConfig.GetString(setname_string_TimeCorrection_List, string.Empty).Split(';').ToList());
 
@@ -386,7 +386,7 @@ namespace KeeTrayTOTP
         {
             if (m_host.MainWindow.GetSelectedEntriesCount() == 1)
             {
-                var FormWizard = new FormSetup(this, m_host.MainWindow.GetSelectedEntry(true));
+                var FormWizard = new SetupTOTP(this, m_host.MainWindow.GetSelectedEntry(true));
                 FormWizard.ShowDialog();
                 m_host.MainWindow.RefreshEntriesList();
             }
@@ -535,27 +535,16 @@ namespace KeeTrayTOTP
                         bool ValidInterval = false; bool ValidLength = false; bool ValidUrl = false;
                         if (SettingsValidate(e.Context.Entry, out ValidInterval, out ValidLength, out ValidUrl))
                         {
-                            bool NoTimeCorrection = false;
                             string[] Settings = SettingsGet(e.Context.Entry);
-                            var TOTPGenerator = new TOTPProvider(Convert.ToInt16(Settings[0]), Convert.ToInt16(Settings[1]));
-                            if (ValidUrl)
-                            {
-                                var CurrentTimeCorrection = TimeCorrections[Settings[2]];
-                                if (CurrentTimeCorrection != null)
-                                {
-                                    TOTPGenerator.TimeCorrection = CurrentTimeCorrection.TimeCorrection;
-                                }
-                                else
-                                {
-                                    TOTPGenerator.TimeCorrection = TimeSpan.Zero;
-                                    NoTimeCorrection = true;
-                                }
-                            }
+
+                            TOTPProvider TOTPGenerator = new TOTPProvider(Settings, ref this.TimeCorrections);
+
                             string InvalidCharacters;
+
                             if (SeedValidate(e.Context.Entry, out InvalidCharacters))
                             {
                                 e.Context.Entry.Touch(false);
-                                string totp = TOTPGenerator.Generate(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()), TOTPEncoder.rfc6238);
+                                string totp = TOTPGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
                                 e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, m_host.CustomConfig.GetString(setname_string_AutoType_FieldName,setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
                             }
                             else
@@ -563,7 +552,7 @@ namespace KeeTrayTOTP
                                 e.Text = string.Empty;
                                 MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadSeed + InvalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
                             }
-                            if (NoTimeCorrection) MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadUrl);
+                            if (TOTPGenerator.TimeCorrectionError) MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadUrl);
                         }
                         else
                         {
@@ -638,7 +627,7 @@ namespace KeeTrayTOTP
                 }
                 try
                 {
-                    IsLengthValid = (Settings[1] == "6") || (Settings[1] == "8"); //Length
+                    IsLengthValid = (Settings[1] == "6") || (Settings[1] == "8") || (Settings[1] == "S"); //Length
                 }
                 catch (Exception)
                 {
@@ -727,28 +716,16 @@ namespace KeeTrayTOTP
                 bool ValidInterval; bool ValidLength; bool ValidUrl;
                 if (SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl))
                 {
-                    bool NoTimeCorrection = false;
                     string[] Settings = SettingsGet(pe);
-                    var TOTPGenerator = new TOTPProvider(Convert.ToInt16(Settings[0]), Convert.ToInt16(Settings[1]));
-                    if (ValidUrl)
-                    {
-                        var CurrentTimeCorrection = TimeCorrections[Settings[2]];
-                        if (CurrentTimeCorrection != null)
-                        {
-                            TOTPGenerator.TimeCorrection = CurrentTimeCorrection.TimeCorrection;
-                        }
-                        else
-                        {
-                            TOTPGenerator.TimeCorrection = TimeSpan.Zero;
-                            NoTimeCorrection = true;
-                        }
-                    }
+
+                    TOTPProvider TOTPGenerator = new TOTPProvider(Settings, ref this.TimeCorrections);
+
                     string InvalidCharacters;
                     if (SeedValidate(pe, out InvalidCharacters))
                     {
                         pe.Touch(false);
 
-                        string totp = TOTPGenerator.Generate(SeedGet(pe).ReadString().ExtWithoutSpaces(), TOTPEncoder.rfc6238);
+                        string totp = TOTPGenerator.Generate(SeedGet(pe).ReadString().ExtWithoutSpaces());
 
                         ClipboardUtil.CopyAndMinimize(totp, true, m_host.MainWindow, pe, m_host.MainWindow.ActiveDatabase);
                         m_host.MainWindow.StartClipboardCountdown();
@@ -757,7 +734,7 @@ namespace KeeTrayTOTP
                     {
                         MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadSeed + InvalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
                     }
-                    if (NoTimeCorrection) MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadUrl);
+                    if (TOTPGenerator.TimeCorrectionError) MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadUrl);
                 }
                 else
                 {

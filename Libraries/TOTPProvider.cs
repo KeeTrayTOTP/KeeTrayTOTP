@@ -49,22 +49,100 @@ namespace KeeTrayTOTP.Libraries
             }
 
         }
-        private TimeSpan timeCorrection;
+
+
+        /// <summary>
+        /// TOTP Encoder.
+        /// </summary>
+        private Func<byte[], int, string> encoder;
+        public Func<byte[], int, string> Encoder
+        {
+            get
+            {
+                return this.encoder;
+            }
+            set
+            {
+                this.encoder = value; //Defines variable from argument.
+            }
+        }
+
         /// <summary>
         /// Sets the time span that is used to match the server's UTC time to ensure accurate generation of Time-based One Time Passwords.
         /// </summary>
-        public TimeSpan TimeCorrection { set { timeCorrection = value; } }
+        private TimeSpan timeCorrection;
+        public TimeSpan TimeCorrection
+        {
+            get
+            {
+                return this.timeCorrection;
+            }
+            set
+            {
+                this.timeCorrection = value; //Defines variable from argument.
+            }
+        }
+
+        private bool timeCorrectionError;
+        public bool TimeCorrectionError
+        {
+            get
+            {
+                return this.timeCorrectionError;
+            } 
+        }
 
         /// <summary>
         /// Instanciates a new TOTP_Generator.
         /// </summary>
         /// <param name="initDuration">Duration of generation of each totp, in seconds.</param>
         /// <param name="initLength">Length of the generated totp.</param>
-        public TOTPProvider(int initDuration, int initLength)
+        /// <param name="initEncoder">The output encoder.</param>
+        /*public TOTPProvider(int initDuration, int initLength, Func<byte[], int, string> initEncoder)
         {
             this.Duration = initDuration;
             this.Length = initLength;
+            this.encoder = initEncoder;
             this.TimeCorrection = TimeSpan.Zero;
+        }*/
+
+        /// <summary>
+        /// Instanciates a new TOTP_Generator.
+        /// </summary>
+        /// <param name="initSettings">Saved Settings.</param>
+        public TOTPProvider(string[] Settings, ref TimeCorrectionCollection tcc)
+        {
+            this.duration = Convert.ToInt16(Settings[0]);
+
+            if (Settings[1] == "S")
+            {
+                this.length = 5;
+                this.encoder = TOTPEncoder.steam;
+            }
+            else
+            {
+                this.length = Convert.ToInt16(Settings[1]);
+                this.encoder = TOTPEncoder.rfc6238;
+            }
+
+            if(Settings.Length > 2 && Settings[2] != String.Empty)
+            {
+                var tc = tcc[Settings[2]];
+
+                if (tc != null)
+                    this.TimeCorrection = tc.TimeCorrection;
+                else
+                {
+                    this.TimeCorrection = TimeSpan.Zero;
+                    this.timeCorrectionError = false;
+                }
+            }
+            else
+            {
+                this.TimeCorrection = TimeSpan.Zero;
+            }
+
+                           
         }
 
         /// <summary>
@@ -156,28 +234,15 @@ namespace KeeTrayTOTP.Libraries
         public string Generate(string key)
         {
             byte[] bkey = Base32.Decode(key);
-            return this.Generate(bkey, TOTPEncoder.rfc6238);
+            return this.GenerateByByte(bkey);
         }
 
-        /// <summary>
-        /// Generate a TOTP using provided binary data.
-        /// </summary>
-        /// <param name="key">Key in String Format.</param>
-        /// <param name="encoder">String encoder.</param>
-        /// <returns>Time-based One Time Password encoded byte array.</returns>
-        public string Generate(string key, Func<byte[], int, string> encoder)
-        {
-            byte[] bkey = Base32.Decode(key);
-            return this.Generate(bkey, encoder);
-        }
-
-        /// <summary>
+         /// <summary>
         /// Generate a TOTP using provided binary data.
         /// </summary>
         /// <param name="key">Binary data.</param>
-        /// <param name="encoder">String encoder.</param>
         /// <returns>Time-based One Time Password encoded byte array.</returns>
-        public string Generate(byte[] key, Func<byte[], int, string> encoder)
+        public string GenerateByByte(byte[] key)
         {
 
             HMACSHA1 hmac = new HMACSHA1(key, true); //Instanciates a new hash provider with a key.
@@ -196,9 +261,8 @@ namespace KeeTrayTOTP.Libraries
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(totp);
 
-            return encoder(totp, length);
+            return this.encoder(totp, length);
         }
-
 
     }
 }

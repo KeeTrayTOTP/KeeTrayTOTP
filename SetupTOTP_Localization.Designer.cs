@@ -22,14 +22,14 @@ namespace KeeTrayTOTP {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class FormSetup_Localization {
+    internal class SetupTOTP_Localization {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal FormSetup_Localization() {
+        internal SetupTOTP_Localization() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace KeeTrayTOTP {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("KeeTrayTOTP.FormSetup_Localization", typeof(FormSetup_Localization).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("KeeTrayTOTP.SetupTOTP_Localization", typeof(SetupTOTP_Localization).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

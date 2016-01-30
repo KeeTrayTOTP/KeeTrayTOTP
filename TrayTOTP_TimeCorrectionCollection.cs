@@ -10,12 +10,8 @@ namespace KeeTrayTOTP
     /// <summary>
     /// Time_Correction Collection.
     /// </summary>
-    internal class TimeCorrection_Collection : IEnumerable<TimeCorrectionProvider>
+    public class TimeCorrectionCollection : IEnumerable<TimeCorrectionProvider>
     {
-        /// <summary>
-        /// Reference to the main plugin class.
-        /// </summary>
-        private readonly KeeTrayTOTPExt plugin;
         /// <summary>
         /// Time Correction List.
         /// </summary>
@@ -62,9 +58,8 @@ namespace KeeTrayTOTP
         /// </summary>
         /// <param name="Plugin">Handle to the plugin's class.</param>
         /// <param name="Enable">Enabled by Default.</param>
-        internal TimeCorrection_Collection(KeeTrayTOTPExt Plugin, bool Enable = true)
+        internal TimeCorrectionCollection(bool Enable = true)
         {
-            plugin = Plugin;
             _Enable = Enable;
             TimeCorrections = new List<TimeCorrectionProvider>();
         }

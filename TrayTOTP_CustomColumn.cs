@@ -75,16 +75,13 @@ namespace KeeTrayTOTP
                     if (plugin.SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl))
                     {
                         string[] Settings = plugin.SettingsGet(pe);
-                        var TOTPGenerator = new TOTPProvider(Convert.ToInt16(Settings[0]), Convert.ToInt16(Settings[1]));
-                        if (ValidUrl)
-                        {
-                            var TimeCorrection = plugin.TimeCorrections[Settings[2]];
-                            if (TimeCorrection == null) return TrayTOTP_CustomColumn_Localization.strWarningBadUrl;
-                            TOTPGenerator.TimeCorrection = TimeCorrection.TimeCorrection;
-                        }
+                      
+                        TOTPProvider TOTPGenerator = new TOTPProvider(Settings, ref plugin.TimeCorrections);
+
                         if (plugin.SeedValidate(pe))
                         {
-                            return TOTPGenerator.Generate(Base32.Decode(plugin.SeedGet(pe).ReadString().ExtWithoutSpaces())) + (m_host.CustomConfig.GetBool(setname_bool_TOTPColumnTimer_Visible, true) ? TOTPGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
+                            return TOTPGenerator.Generate(
+                                Base32.Decode(plugin.SeedGet(pe).ReadString().ExtWithoutSpaces())) + (m_host.CustomConfig.GetBool(setname_bool_TOTPColumnTimer_Visible, true) ? TOTPGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
                         }
                         return TrayTOTP_CustomColumn_Localization.strWarningBadSeed;
                     }
