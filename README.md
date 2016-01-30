@@ -7,7 +7,11 @@ Most of consumer TOTPs use the RFC6238 output style, sadly some companies (eg.: 
 
 In the case of Steam Mobile Authenticator the new output format was reverse engineered by various developers, and alternatives to it starting to popping around, most to prety goodjob and can by themselves recover the TOTP secret (which is no easy task given Valve's implementation).
 
-This plugin But for those who use the [Tray TOTP Plugin](http://sourceforge.net/projects/traytotp-kp2/)
+This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.net/projects/traytotp-kp2/), but also want to use with Valve's Steam.
+
+## Dependencies
+* [Keepass 2.31](http://keepass.info/)
+* .NET 3.5 or superior
 
 ## So, why do this? 
 Variou reasons, first and most important: I don't want to use another application only for steam! KeePass and Tray TOTP (with some modifications) are more than capable enough to handle this task.
@@ -25,3 +29,8 @@ TODO: Tutorial how to get Steam TOTP secret
 My first objective is complete: I made a working prototype.
 But I'm not happy with the code, I want to rebuild this thing from the ground if needed, I'm by no means criticizing the original work, but it's little complex for me and rebuilding it may help to better understanding it. 
 Also I'm open to suggestion, issues, new features, etc.
+
+
+**Thanks to [Dominik Reichl](http://www.dominik-reichl.de/) for KeePass software and to [Morphlin](http://sourceforge.net/u/morphlin/profile/) for the original plugin**
+
+English isn't my native language, so please excuse any mistakes.
