@@ -25,7 +25,8 @@ There is no easy way to get it, there are various complications. Since Steam doe
 
 Another way would be using totp generators that support Steam like [Windows Authenticator](https://github.com/winauth/winauth) and [Steam Desktop Authenticator](https://github.com/Jessecar96/SteamDesktopAuthenticator), as far as I know, they emulate the mobile app API calls in order to generate a new TOTP Secret, one could use them to obtain the secret (never tried though), also this have the drawback of disabling the mobile app.
 
-#### Obtaining TOTP secret from a rooted Android phone
+#### Obtaining TOTP secret from a rooted Android phone (by [DarkDaskin](https://github.com/DarkDaskin))
+
 You need a rooted Android phone with a file manager application and [Steam](https://play.google.com/store/apps/details?id=com.valvesoftware.android.steam.community) installed.
 Follow [this instruction](https://support.steampowered.com/kb_article.php?ref=4440-RTUI-9218) to set up Steam Guard if you did not do this before.
 
