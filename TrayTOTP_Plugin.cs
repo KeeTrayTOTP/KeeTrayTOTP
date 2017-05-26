@@ -776,15 +776,15 @@ namespace KeeTrayTOTP
             toSubMenuAbout.Dispose();
 
             //Remove Notify Icon menus.
-            m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Opening -= OnNotifyMenuOpening;
-            m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Remove(niMenuTitle);
+            m_host.MainWindow.TrayContextMenu.Opening -= OnNotifyMenuOpening;
+            m_host.MainWindow.TrayContextMenu.Items.Remove(niMenuTitle);
             niMenuTitle.Dispose();
             foreach (var Menu in niMenuList)
             {
-                m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Remove(Menu);
+                m_host.MainWindow.TrayContextMenu.Items.Remove(Menu);
                 Menu.Dispose();
             }
-            m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Remove(niMenuSeperator);
+            m_host.MainWindow.TrayContextMenu.Items.Remove(niMenuSeperator);
             niMenuSeperator.Dispose();
 
             //Remove Context menus.
