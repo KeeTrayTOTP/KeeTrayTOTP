@@ -243,12 +243,12 @@ namespace KeeTrayTOTP
             ContextMenu.DropDownItems.Insert(ContextMenu.DropDownItems.IndexOf(enMenuSetupTOTP) + 1, enMenuSeperator);
 
             //Notify Icon Context Menus.
-            m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Opening += OnNotifyMenuOpening;
+            m_host.MainWindow.TrayContextMenu.Opening += OnNotifyMenuOpening;
             niMenuTitle = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strTrayTOTPPlugin);
             niMenuTitle.Image = Properties.Resources.TOTP;
-            m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Insert(0, niMenuTitle);
+            m_host.MainWindow.TrayContextMenu.Items.Insert(0, niMenuTitle);
             niMenuSeperator = new ToolStripSeparator();
-            m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Insert(1, niMenuSeperator);
+            m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuSeperator);
 
             //Register auto-type function.
             if (m_host.CustomConfig.GetBool(setname_bool_AutoType_Enable, true))
@@ -401,7 +401,7 @@ namespace KeeTrayTOTP
         {
             foreach (var Menu in niMenuList)
             {
-                m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Remove(Menu);
+                m_host.MainWindow.TrayContextMenu.Items.Remove(Menu);
             }
             niMenuList.Clear();
             if (m_host.CustomConfig.GetBool(setname_bool_NotifyContext_Visible, true))
@@ -429,7 +429,7 @@ namespace KeeTrayTOTP
                         niMenuList.Sort((p1, p2) => string.Compare(p1.Text, p2.Text, true));
                         for (int i = 0; i <= niMenuList.Count - 1; i++)
                         {
-                            m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Insert(i + 1, niMenuList[i]);
+                            m_host.MainWindow.TrayContextMenu.Items.Insert(i + 1, niMenuList[i]);
                         }
                     }
                     else
@@ -437,7 +437,7 @@ namespace KeeTrayTOTP
                         var NewMenu = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strNoTOTPFound);
                         NewMenu.Image = Properties.Resources.TOTP_None;
                         niMenuList.Add(NewMenu);
-                        m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Insert(1, niMenuList[0]);
+                        m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuList[0]);
                     }
                 }
                 else
@@ -447,14 +447,14 @@ namespace KeeTrayTOTP
                         var NewMenu = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strDatabaseIsLocked);
                         NewMenu.Image = Properties.Resources.TOTP_Lock;
                         niMenuList.Add(NewMenu);
-                        m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Insert(1, niMenuList[0]);
+                        m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuList[0]);
                     }
                     else
                     {
                         var NewMenu = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strDatabaseNotOpen);
                         NewMenu.Image = Properties.Resources.TOTP_Error;
                         niMenuList.Add(NewMenu);
-                        m_host.MainWindow.MainNotifyIcon.ContextMenuStrip.Items.Insert(1, niMenuList[0]);
+                        m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuList[0]);
                     }
                 }
             }
