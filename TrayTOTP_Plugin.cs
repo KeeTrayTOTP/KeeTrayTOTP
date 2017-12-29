@@ -374,7 +374,10 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnEntryMenuTOTPClick(object sender, EventArgs e)
         {
-            TOTPCopyToClipboard(((PwEntry)((ToolStripMenuItem)sender).Tag));
+            PwEntry pe = m_host.MainWindow.GetSelectedEntry(false);
+
+            if (pe != null)
+                TOTPCopyToClipboard(pe);
         }
 
         /// <summary>
