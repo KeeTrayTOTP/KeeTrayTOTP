@@ -228,6 +228,7 @@ namespace KeeTrayTOTP
 
             //Entry Context Menus.
             m_host.MainWindow.EntryContextMenu.Opening += OnEntryMenuOpening;
+            m_host.MainWindow.EntryContextMenu.Closed += OnEntryMenuClosed;
             enMenuCopyTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strCopyTOTP);
             enMenuCopyTOTP.Image = Properties.Resources.TOTP;
             enMenuCopyTOTP.ShortcutKeys = (Keys)Shortcut.CtrlT;
@@ -365,6 +366,19 @@ namespace KeeTrayTOTP
             bool boolSetup = m_host.CustomConfig.GetBool(setname_bool_EntryContextSetup_Visible, true);
             enMenuSetupTOTP.Visible = boolSetup;
             enMenuSeperator.Visible = boolSetup;
+        }
+
+        /// <summary>
+        /// Entry Context Menu Closed.
+        /// </summary>
+        /// <remarks>
+        /// Enables the CopyTOTP menu item, so that Ctrl-T works after opening a menu for an item without TOTP settings.
+        /// </remarks>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnEntryMenuClosed(object sender, EventArgs e)
+        {            
+            enMenuCopyTOTP.Enabled = true;
         }
 
         /// <summary>
@@ -792,6 +806,7 @@ namespace KeeTrayTOTP
 
             //Remove Context menus.
             m_host.MainWindow.EntryContextMenu.Opening -= OnEntryMenuOpening;
+            m_host.MainWindow.EntryContextMenu.Closed -= OnEntryMenuClosed;
             m_host.MainWindow.EntryContextMenu.Items.Remove(enMenuCopyTOTP);
             enMenuCopyTOTP.Dispose();
 
