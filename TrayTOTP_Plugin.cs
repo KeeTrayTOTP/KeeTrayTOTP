@@ -839,7 +839,7 @@ namespace KeeTrayTOTP
         /// </summary>
         public override string UpdateUrl
         {
-            get { return "http://traytotp-kp2.sourceforge.net/version_manifest.txt"; }
+            get { return "https://raw.githubusercontent.com/victor-rds/KeeTrayTOTP/master/version_manifest.txt"; }
         }
     }
 }

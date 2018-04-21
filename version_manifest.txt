@@ -1,4 +1,4 @@
 :
-KeeTrayTOTP:2.0.0.6
+KeeTrayTOTP:0.9.1.0
 
 :
