@@ -431,7 +431,7 @@ namespace KeeTrayTOTP
                     {
                         if (SettingsCheck(Entry) && SeedCheck(Entry))
                         {
-                            var NewMenu = new ToolStripMenuItem(Entry.Strings.ReadSafe(PwDefs.TitleField).ExtWithSpaceAfter() + Entry.Strings.ReadSafe(PwDefs.UserNameField).ExtWithParenthesis(), Properties.Resources.TOTP_Key, OnEntryMenuTOTPClick);
+                            var NewMenu = new ToolStripMenuItem(Entry.Strings.ReadSafe(PwDefs.TitleField).ExtWithSpaceAfter() + Entry.Strings.ReadSafe(PwDefs.UserNameField).ExtWithParenthesis(), Properties.Resources.TOTP_Key, OnNotifyMenuTOTPClick);
                             NewMenu.Tag = Entry;
                             if (!SettingsValidate(Entry))
                             {
@@ -480,6 +480,23 @@ namespace KeeTrayTOTP
                 niMenuTitle.Visible = false;
                 niMenuSeperator.Visible = false;
             }
+        }
+
+        /// <summary>
+        /// Entry Notify Menu Copy Click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnNotifyMenuTOTPClick(object sender, EventArgs e)
+        {
+            ToolStripMenuItem tsi = sender as ToolStripMenuItem;
+            if (tsi == null)
+                return;
+
+            PwEntry pe = tsi.Tag as PwEntry;
+
+            if (pe != null)
+                TOTPCopyToClipboard(pe);
         }
 
         /// <summary>
