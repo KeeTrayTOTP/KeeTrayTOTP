@@ -181,7 +181,7 @@
             // 
             this.NumericIntervalSetup.Location = new System.Drawing.Point(82, 26);
             this.NumericIntervalSetup.Maximum = new decimal(new int[] {
-            60,
+            180,
             0,
             0,
             0});
@@ -217,7 +217,7 @@
             this.IntervalDescriptionSetupLabel.Size = new System.Drawing.Size(322, 18);
             this.IntervalDescriptionSetupLabel.TabIndex = 0;
             this.IntervalDescriptionSetupLabel.TabStop = true;
-            this.IntervalDescriptionSetupLabel.Text = "Please specify the time interval. Between 1 and 60 seconds.";
+            this.IntervalDescriptionSetupLabel.Text = "Please specify the time interval. Between 1 and 180 seconds.";
             // 
             // IntervalPanel
             // 
