@@ -104,6 +104,12 @@
     <Compile Include="SetupTOTP.Designer.cs">
       <DependentUpon>SetupTOTP.cs</DependentUpon>
     </Compile>
+    <Compile Include="ShowQR.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ShowQR.Designer.cs">
+      <DependentUpon>ShowQR.cs</DependentUpon>
+    </Compile>
     <Compile Include="Stream4Methods.cs" />
     <Compile Include="TrayTOTP_CustomColumn.cs" />
     <Compile Include="TrayTOTP_CustomColumn_Localization.Designer.cs">
@@ -198,6 +204,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="SetupTOTP.resx">
       <DependentUpon>SetupTOTP.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ShowQR.resx">
+      <DependentUpon>ShowQR.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="TrayTOTP_CustomColumn_Localization.resx">
       <Generator>ResXFileCodeGenerator</Generator>
