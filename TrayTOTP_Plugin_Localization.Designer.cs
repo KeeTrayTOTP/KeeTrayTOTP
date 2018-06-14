@@ -160,6 +160,15 @@ namespace KeeTrayTOTP {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show QR.
+        /// </summary>
+        internal static string strShowQR {
+            get {
+                return ResourceManager.GetString("strShowQR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to  - .
         /// </summary>
         internal static string strSpaceDashSpace {

@@ -177,4 +177,7 @@
   <data name="strWarningStorage" xml:space="preserve">
     <value>Error, storage!</value>
   </data>
+  <data name="strShowQR" xml:space="preserve">
+    <value>Show QR</value>
+  </data>
 </root>

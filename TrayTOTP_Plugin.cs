@@ -242,7 +242,7 @@ namespace KeeTrayTOTP
             enMenuSetupTOTP.Image = Properties.Resources.TOTP_Setup;
             enMenuSetupTOTP.ShortcutKeys = (Keys)Shortcut.CtrlShiftI;
             enMenuSetupTOTP.Click += OnEntryMenuSetupClick;
-            enMenuShowQR = new ToolStripMenuItem("Show QR");
+            enMenuShowQR = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strShowQR);
             enMenuShowQR.Image = Properties.Resources.TOTP_Setup;
             enMenuShowQR.ShortcutKeys = (Keys)Shortcut.CtrlShiftJ;
             enMenuShowQR.Click += OnEntryMenuShowQRClick;
