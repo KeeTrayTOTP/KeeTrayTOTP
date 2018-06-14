@@ -115,6 +115,10 @@ namespace KeeTrayTOTP
         /// </summary>
         private ToolStripMenuItem enMenuSetupTOTP;
         /// <summary>
+        /// Entry Context Menu Show QR.
+        /// </summary>
+        private ToolStripMenuItem enMenuShowQR;
+        /// <summary>
         /// Entry Context Menu Setup Seperator.
         /// </summary>
         private ToolStripSeparator enMenuSeperator;
@@ -238,10 +242,15 @@ namespace KeeTrayTOTP
             enMenuSetupTOTP.Image = Properties.Resources.TOTP_Setup;
             enMenuSetupTOTP.ShortcutKeys = (Keys)Shortcut.CtrlShiftI;
             enMenuSetupTOTP.Click += OnEntryMenuSetupClick;
+            enMenuShowQR = new ToolStripMenuItem("Show QR");
+            enMenuShowQR.Image = Properties.Resources.TOTP_Setup;
+            enMenuShowQR.ShortcutKeys = (Keys)Shortcut.CtrlShiftJ;
+            enMenuShowQR.Click += OnEntryMenuShowQRClick;
             var ContextMenu = (ToolStripMenuItem)m_host.MainWindow.EntryContextMenu.Items.Find(keeobj_string_EntryContextMenuEntriesSubMenu_Name, true)[0];
             ContextMenu.DropDownItems.Insert(ContextMenu.DropDownItems.IndexOfKey(keeobj_string_EntryContextMenuEntriesSubMenuSeperator1_Name) + 1, enMenuSetupTOTP);
+            ContextMenu.DropDownItems.Insert(ContextMenu.DropDownItems.IndexOfKey(keeobj_string_EntryContextMenuEntriesSubMenuSeperator1_Name) + 2, enMenuShowQR);
             enMenuSeperator = new ToolStripSeparator();
-            ContextMenu.DropDownItems.Insert(ContextMenu.DropDownItems.IndexOf(enMenuSetupTOTP) + 1, enMenuSeperator);
+            ContextMenu.DropDownItems.Insert(ContextMenu.DropDownItems.IndexOf(enMenuShowQR) + 1, enMenuSeperator);
 
             //Notify Icon Context Menus.
             m_host.MainWindow.TrayContextMenu.Opening += OnNotifyMenuOpening;
@@ -407,6 +416,27 @@ namespace KeeTrayTOTP
                 FormWizard.ShowDialog();
                 m_host.MainWindow.RefreshEntriesList();
             }
+        }
+
+        /// <summary>
+        /// Entry Context Menu Show QR Click.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnEntryMenuShowQRClick(object sender, EventArgs e)
+        {
+            if (m_host.MainWindow.GetSelectedEntriesCount() != 1) return;
+
+            var entry = m_host.MainWindow.GetSelectedEntry(true);
+            var showQr = new ShowQR
+            {
+                Seed = this.SeedGet(entry).ReadString(),
+                IssuerText = { Text = entry.Strings.Get("Title").ReadString() },
+                UsernameText = { Text = entry.Strings.Get("UserName").ReadString() },
+            };
+            showQr.ShowDialog();
+
+            m_host.MainWindow.RefreshEntriesList();
         }
 
         /// <summary>
