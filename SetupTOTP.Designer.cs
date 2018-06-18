@@ -246,10 +246,12 @@
             // RadioButtonLength6Setup
             // 
             this.RadioButtonLength6Setup.AutoSize = true;
+            this.RadioButtonLength6Setup.Checked = true;
             this.RadioButtonLength6Setup.Location = new System.Drawing.Point(93, 28);
             this.RadioButtonLength6Setup.Name = "RadioButtonLength6Setup";
             this.RadioButtonLength6Setup.Size = new System.Drawing.Size(31, 17);
             this.RadioButtonLength6Setup.TabIndex = 0;
+            this.RadioButtonLength6Setup.TabStop = true;
             this.RadioButtonLength6Setup.Text = "&6";
             this.RadioButtonLength6Setup.UseVisualStyleBackColor = true;
             // 
@@ -325,7 +327,7 @@
             this.TimeCorrectionDescriptionSetupLabel.Size = new System.Drawing.Size(322, 20);
             this.TimeCorrectionDescriptionSetupLabel.TabIndex = 0;
             this.TimeCorrectionDescriptionSetupLabel.TabStop = true;
-            this.TimeCorrectionDescriptionSetupLabel.Text = "Time correction is optionnal but strongly recommended.\r\n";
+            this.TimeCorrectionDescriptionSetupLabel.Text = "Time correction is optional but strongly recommended.\r\n";
             // 
             // TimeCorrectionPanel
             // 
