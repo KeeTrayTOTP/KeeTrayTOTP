@@ -471,6 +471,8 @@ namespace KeeTrayTOTP
                         niMenuList.Add(NewMenu);
                         m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuList[0]);
                     }
+
+                    CreateMenuItemForOtherDatabases(niMenuList);
                 }
                 else
                 {
@@ -494,6 +496,43 @@ namespace KeeTrayTOTP
             {
                 niMenuTitle.Visible = false;
                 niMenuSeperator.Visible = false;
+            }
+        }
+
+        /// <summary>
+        /// Creates the necessary menu items to switch to another database
+        /// </summary>
+        /// <param name="items"></param>
+        private void CreateMenuItemForOtherDatabases(IList<ToolStripMenuItem> items)
+        {
+            var tabcontrol = m_host.MainWindow.Controls.OfType<TabControl>().FirstOrDefault();
+            var nonSelectedTabs = tabcontrol.TabPages.OfType<TabPage>().Where(c => c != tabcontrol.SelectedTab).ToList();
+
+            int i = 1;
+            foreach (var tab in nonSelectedTabs)
+            {
+                var item = new ToolStripMenuItem("Switch to " + tab.Text)
+                {
+                    Tag = tab
+                };
+                item.Click += SwitchToOtherDatabase;
+                items.Add(item);
+                
+                m_host.MainWindow.TrayContextMenu.Items.Insert(i++, item);
+            }
+        }
+
+        private void SwitchToOtherDatabase(object sender, EventArgs e)
+        {
+            var tabControl = m_host.MainWindow.Controls.OfType<TabControl>().FirstOrDefault();
+            var changeDbToolStripItem = sender as ToolStripMenuItem;
+            if (changeDbToolStripItem != null)
+            {
+                var databaseTab = changeDbToolStripItem.Tag as TabPage;
+                if (databaseTab != null)
+                {
+                    tabControl.SelectedTab = databaseTab;
+                }
             }
         }
 
