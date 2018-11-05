@@ -386,7 +386,7 @@ namespace KeeTrayTOTP
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnEntryMenuClosed(object sender, EventArgs e)
-        {            
+        {
             enMenuCopyTOTP.Enabled = true;
         }
 
@@ -400,7 +400,9 @@ namespace KeeTrayTOTP
             PwEntry pe = m_host.MainWindow.GetSelectedEntry(false);
 
             if (pe != null)
+            {
                 TOTPCopyToClipboard(pe);
+            }
         }
 
         /// <summary>
@@ -426,8 +428,13 @@ namespace KeeTrayTOTP
         private void OnEntryMenuShowQRClick(object sender, EventArgs e)
         {
             if (m_host.MainWindow.GetSelectedEntriesCount() != 1) return;
-
             var entry = m_host.MainWindow.GetSelectedEntry(true);
+
+            if (!SeedCheck(entry))
+            {
+                return;
+            }
+
             var showQr = new ShowQR
             {
                 Seed = this.SeedGet(entry).ReadString(),
@@ -609,7 +616,7 @@ namespace KeeTrayTOTP
                             {
                                 e.Context.Entry.Touch(false);
                                 string totp = TOTPGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
-                                e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, m_host.CustomConfig.GetString(setname_string_AutoType_FieldName,setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
+                                e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, m_host.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
                             }
                             else
                             {
@@ -650,7 +657,7 @@ namespace KeeTrayTOTP
         /// <returns>Error(s) while validating Interval or Length.</returns>
         internal bool SettingsValidate(PwEntry pe)
         {
-            bool ValidInterval; bool ValidLength ; bool ValidUrl; //Dummies
+            bool ValidInterval; bool ValidLength; bool ValidUrl; //Dummies
             return SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl);
         }
 
@@ -882,7 +889,7 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Returns update URL for KeepAss automatic update check. (file must be UTF-8 without BOM (support for BOM fron KP 2.21))
+        /// Returns update URL for KeepAss automatic update check. (file must be UTF-8 without BOM (support for BOM from KP 2.21))
         /// </summary>
         public override string UpdateUrl
         {

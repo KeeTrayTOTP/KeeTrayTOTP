@@ -385,8 +385,10 @@
             // 
             // SetupTOTP
             // 
+            this.AcceptButton = this.FinishSetupButton;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.CancelSetupButton;
             this.ClientSize = new System.Drawing.Size(365, 445);
             this.Controls.Add(this.DeleteSetupButton);
             this.Controls.Add(this.FinishSetupButton);
