@@ -60,7 +60,7 @@
             this.QROutputPicture.Location = new System.Drawing.Point(12, 118);
             this.QROutputPicture.Name = "QROutputPicture";
             this.QROutputPicture.Size = new System.Drawing.Size(360, 360);
-            this.QROutputPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.QROutputPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.QROutputPicture.TabIndex = 13;
             this.QROutputPicture.TabStop = false;
             // 
