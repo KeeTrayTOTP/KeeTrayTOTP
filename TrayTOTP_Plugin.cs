@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
-
+using System.Text.RegularExpressions;
 using KeePass.App;
 using KeePass.App.Configuration;
 using KeePass.DataExchange;
@@ -435,9 +435,12 @@ namespace KeeTrayTOTP
                 return;
             }
 
+            var rawSeed = this.SeedGet(entry).ReadString();
+            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "");
+
             var showQr = new ShowQR
             {
-                Seed = this.SeedGet(entry).ReadString(),
+                Seed = cleanSeed,
                 IssuerText = { Text = entry.Strings.Get("Title").ReadString() },
                 UsernameText = { Text = entry.Strings.Get("UserName").ReadString() },
             };
