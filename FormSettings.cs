@@ -245,6 +245,7 @@ namespace KeeTrayTOTP
             CheckBoxShowCopyTOTPEntryMenu.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_EntryContextCopy_Visible, true);
             CheckBoxShowSetupTOTPEntryMenu.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_EntryContextSetup_Visible, true);
             CheckBoxShowTOTPEntriesTrayMenu.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_NotifyContext_Visible, true);
+            CheckBoxTrimTrayText.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
             if (WorkerLoad.CancellationPending) { e.Cancel = true; return; }
 
             //TOTP Column
@@ -312,6 +313,7 @@ namespace KeeTrayTOTP
             _plugin.m_host.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_EntryContextCopy_Visible, CheckBoxShowCopyTOTPEntryMenu.Checked);
             _plugin.m_host.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_EntryContextSetup_Visible, CheckBoxShowSetupTOTPEntryMenu.Checked);
             _plugin.m_host.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_NotifyContext_Visible, CheckBoxShowTOTPEntriesTrayMenu.Checked);
+            _plugin.m_host.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, CheckBoxTrimTrayText.Checked);
             if (WorkerSave.CancellationPending) { e.Cancel = true; return; }
 
             //TOTP Column

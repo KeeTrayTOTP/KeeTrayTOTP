@@ -70,6 +70,7 @@ namespace KeeTrayTOTP
         internal const string setname_ulong_TimeCorrection_RefreshTime = "timecorrection_refreshtime";
         internal const string setname_string_TOTPSeed_StringName = "totpseed_stringname";
         internal const string setname_string_TOTPSettings_StringName = "totpsettings_stringname";
+        internal const string setname_bool_TrimTrayText = "traytotp_trim_tray_text";
         /// <summary>
         /// Constants (default settings values).
         /// </summary>
@@ -79,6 +80,7 @@ namespace KeeTrayTOTP
         /// Constants (static settings value).
         /// </summary>
         internal const int setstat_int_EntryList_RefreshRate = 300;
+        internal const int setstat_trim_text_length = 25;
 
         /// <summary>
         /// Form Help Global Reference.
@@ -467,11 +469,27 @@ namespace KeeTrayTOTP
                 niMenuSeperator.Visible = true;
                 if (m_host.MainWindow.ActiveDatabase.IsOpen)
                 {
+                    var trimTrayText = m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
                     foreach (PwEntry Entry in m_host.MainWindow.ActiveDatabase.RootGroup.GetEntries(true))
                     {
                         if (SettingsCheck(Entry) && SeedCheck(Entry))
                         {
-                            var NewMenu = new ToolStripMenuItem(Entry.Strings.ReadSafe(PwDefs.TitleField).ExtWithSpaceAfter() + Entry.Strings.ReadSafe(PwDefs.UserNameField).ExtWithParenthesis(), Properties.Resources.TOTP_Key, OnNotifyMenuTOTPClick);
+                            var entryTitle = Entry.Strings.ReadSafe(PwDefs.TitleField);
+
+                            var context = new SprContext(Entry, m_host.MainWindow.ActiveDatabase,SprCompileFlags.All, false, false);
+                            var entryUsername = SprEngine.Compile(Entry.Strings.ReadSafe(PwDefs.UserNameField), context);
+                            string trayTitle;
+                            if (trimTrayText && entryTitle.Length+entryUsername.Length > setstat_trim_text_length)
+                            {
+                                trayTitle = entryTitle.ExtWithSpaceAfter();
+                            }
+                            else
+                            {
+                                trayTitle = entryTitle.ExtWithSpaceAfter() + entryUsername.ExtWithParenthesis();
+                            }
+                            m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
+
+                            var NewMenu = new ToolStripMenuItem(trayTitle, Properties.Resources.TOTP_Key, OnNotifyMenuTOTPClick);
                             NewMenu.Tag = Entry;
                             if (!SettingsValidate(Entry))
                             {

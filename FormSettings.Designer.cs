@@ -33,6 +33,7 @@
             this.TabControlSettings = new System.Windows.Forms.TabControl();
             this.TabPageContextMenus = new System.Windows.Forms.TabPage();
             this.GroupBoxTrayMenu = new System.Windows.Forms.GroupBox();
+            this.CheckBoxTrimTrayText = new System.Windows.Forms.CheckBox();
             this.CheckBoxShowTOTPEntriesTrayMenu = new System.Windows.Forms.CheckBox();
             this.LabelDescriptionTrayMenu = new System.Windows.Forms.Label();
             this.GroupBoxEntryMenu = new System.Windows.Forms.GroupBox();
@@ -108,8 +109,8 @@
             // 
             // TabControlSettings
             // 
-            this.TabControlSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.TabControlSettings.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.TabControlSettings.Controls.Add(this.TabPageContextMenus);
             this.TabControlSettings.Controls.Add(this.TabPageEntryList);
@@ -137,14 +138,27 @@
             // 
             // GroupBoxTrayMenu
             // 
+            this.GroupBoxTrayMenu.Controls.Add(this.CheckBoxTrimTrayText);
             this.GroupBoxTrayMenu.Controls.Add(this.CheckBoxShowTOTPEntriesTrayMenu);
             this.GroupBoxTrayMenu.Controls.Add(this.LabelDescriptionTrayMenu);
             this.GroupBoxTrayMenu.Location = new System.Drawing.Point(10, 143);
             this.GroupBoxTrayMenu.Name = "GroupBoxTrayMenu";
-            this.GroupBoxTrayMenu.Size = new System.Drawing.Size(335, 100);
+            this.GroupBoxTrayMenu.Size = new System.Drawing.Size(335, 131);
             this.GroupBoxTrayMenu.TabIndex = 1;
             this.GroupBoxTrayMenu.TabStop = false;
             this.GroupBoxTrayMenu.Text = "Tray Menu";
+            // 
+            // CheckBoxTrimTrayText
+            // 
+            this.HelpProviderSettings.SetHelpString(this.CheckBoxTrimTrayText, "Control the visibility of the menu items that appear in the tray menu. This also " +
+        "deactivate the search for entries that contain seeds.");
+            this.CheckBoxTrimTrayText.Location = new System.Drawing.Point(19, 93);
+            this.CheckBoxTrimTrayText.Name = "CheckBoxTrimTrayText";
+            this.HelpProviderSettings.SetShowHelp(this.CheckBoxTrimTrayText, true);
+            this.CheckBoxTrimTrayText.Size = new System.Drawing.Size(300, 31);
+            this.CheckBoxTrimTrayText.TabIndex = 2;
+            this.CheckBoxTrimTrayText.Text = "Hide username if entry title and username is longer then 25 characters";
+            this.CheckBoxTrimTrayText.UseVisualStyleBackColor = true;
             // 
             // CheckBoxShowTOTPEntriesTrayMenu
             // 
@@ -444,8 +458,8 @@
             // 
             // ListViewTimeCorrectionList
             // 
-            this.ListViewTimeCorrectionList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-            | System.Windows.Forms.AnchorStyles.Left)
+            this.ListViewTimeCorrectionList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ListViewTimeCorrectionList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.ColumnTimeCorrection,
@@ -858,5 +872,6 @@
         private System.Windows.Forms.CheckBox CheckBoxTOTPColumnClipboard;
         private System.Windows.Forms.Button ButtonReset;
         private System.ComponentModel.BackgroundWorker WorkerReset;
+        private System.Windows.Forms.CheckBox CheckBoxTrimTrayText;
     }
 }
