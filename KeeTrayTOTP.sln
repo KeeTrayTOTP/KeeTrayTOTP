@@ -17,6 +17,10 @@ Global
 		Release|ARM = Release|ARM
 		Release|x64 = Release|x64
 		Release|x86 = Release|x86
+		ReleasePlgx|Any CPU = ReleasePlgx|Any CPU
+		ReleasePlgx|ARM = ReleasePlgx|ARM
+		ReleasePlgx|x64 = ReleasePlgx|x64
+		ReleasePlgx|x86 = ReleasePlgx|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -35,6 +39,14 @@ Global
 		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.Release|x64.Build.0 = Release|Any CPU
 		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.Release|x86.ActiveCfg = Release|Any CPU
 		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.Release|x86.Build.0 = Release|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|Any CPU.ActiveCfg = ReleasePlgx|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|Any CPU.Build.0 = ReleasePlgx|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|ARM.ActiveCfg = ReleasePlgx|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|ARM.Build.0 = ReleasePlgx|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x64.ActiveCfg = ReleasePlgx|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x64.Build.0 = ReleasePlgx|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x86.ActiveCfg = ReleasePlgx|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x86.Build.0 = ReleasePlgx|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -51,6 +63,13 @@ Global
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Release|x64.Build.0 = Release|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Release|x86.ActiveCfg = Release|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Release|x86.Build.0 = Release|Any CPU
+		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|Any CPU.ActiveCfg = ReleasePlgx|Any CPU
+		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|ARM.ActiveCfg = ReleasePlgx|Any CPU
+		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|ARM.Build.0 = ReleasePlgx|Any CPU
+		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|x64.ActiveCfg = ReleasePlgx|Any CPU
+		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|x64.Build.0 = ReleasePlgx|Any CPU
+		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|x86.ActiveCfg = ReleasePlgx|Any CPU
+		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|x86.Build.0 = ReleasePlgx|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

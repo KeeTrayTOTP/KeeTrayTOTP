@@ -48,11 +48,11 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Concatenates the current string with a charater in front and another character to the end.
+        /// Concatenates the current string with a character in front and another character to the end.
         /// </summary>
         /// <param name="Extension">Current string.</param>
         /// <param name="Left">Front character.</param>
-        /// <param name="Right">End charater.</param>
+        /// <param name="Right">End character.</param>
         /// <returns></returns>
         internal static string ExtWith(this string Extension, char Left, char Right)
         {
