@@ -38,12 +38,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="KeePass">
+      <HintPath>C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
+      <HintPath>C:\Program Files (x86)\KeePass2x\KeePass.exe</HintPath>
+      <HintPath>\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TrayTOTP_PluginTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\KeeTrayTOTP\KeeTrayTOTP.csproj">
+      <Project>{bf4a8a1f-b9b6-499c-8756-810b44895b8a}</Project>
+      <Name>KeeTrayTOTP</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
