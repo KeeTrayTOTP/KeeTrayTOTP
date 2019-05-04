@@ -2,8 +2,6 @@
 using System.ComponentModel;
 using System.Windows.Forms;
 
-using KeePass.Plugins;
-
 namespace KeeTrayTOTP
 {
     /// <summary>
@@ -11,6 +9,13 @@ namespace KeeTrayTOTP
     /// </summary>
     internal partial class FormSettings : Form
     {
+        /// <summary>
+        /// Helper delegate for cross thread UI operations
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private delegate void SafeCallDelegate(object sender, DoWorkEventArgs e);
+        
         /// <summary>
         /// Plugin Host.
         /// </summary>
@@ -38,9 +43,9 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void FormSettings_Load(object sender, EventArgs e)
         {
-            Text = TrayTOTP_Plugin_Localization.strSettings + TrayTOTP_Plugin_Localization.strSpaceDashSpace + TrayTOTP_Plugin_Localization.strTrayTOTPPlugin; //Set form's name using constants.
-            Working(true, true); //Set controls depending on the state of action.
-            WorkerLoad.RunWorkerAsync(); //Load Settings in form controls.
+            Text = TrayTOTP_Plugin_Localization.strSettings + TrayTOTP_Plugin_Localization.strSpaceDashSpace + TrayTOTP_Plugin_Localization.strTrayTOTPPlugin; // Set form's name using constants.
+            Working(true, true); // Set controls depending on the state of action.
+            WorkerLoad.RunWorkerAsync(); // Load Settings in form controls.
         }
 
         /// <summary>
@@ -238,33 +243,40 @@ namespace KeeTrayTOTP
 
         private void WorkerLoad_DoWork(object sender, DoWorkEventArgs e)
         {
-            //Argument
+            if (InvokeRequired)
+            {
+                var safeCallDelegate = new SafeCallDelegate(WorkerLoad_DoWork);
+                Invoke(safeCallDelegate, sender, e);
+                return;
+            }
+
+            // Argument
             e.Result = e.Argument;
 
-            //Menus
+            // Menus
             CheckBoxShowCopyTOTPEntryMenu.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_EntryContextCopy_Visible, true);
             CheckBoxShowSetupTOTPEntryMenu.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_EntryContextSetup_Visible, true);
             CheckBoxShowTOTPEntriesTrayMenu.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_NotifyContext_Visible, true);
             CheckBoxTrimTrayText.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
             if (WorkerLoad.CancellationPending) { e.Cancel = true; return; }
 
-            //TOTP Column
+            // TOTP Column
             CheckBoxTOTPColumnClipboard.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnCopy_Enable, true);
             CheckBoxTOTPColumnTimer.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnTimer_Visible, true);
             if (WorkerLoad.CancellationPending) { e.Cancel = true; return; }
 
-            //Auto-Type
+            // Auto-Type
             CheckBoxAutoType.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_AutoType_Enable, true);
             TextBoxAutoTypeFieldName.Text = _plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_AutoType_FieldName, KeeTrayTOTPExt.setdef_string_AutoType_FieldName);
             if (WorkerLoad.CancellationPending) { e.Cancel = true; return; }
 
-            //Time Correction
+            // Time Correction
             CheckBoxTimeCorrection.Checked = _plugin.m_host.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TimeCorrection_Enable, false);
             NumericTimeCorrectionInterval.Value = Convert.ToDecimal(_plugin.m_host.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime));
             ListViewTimeCorrectionList.Items.AddRange(_plugin.TimeCorrections.ToLVI());
             if (WorkerLoad.CancellationPending) { e.Cancel = true; return; }
 
-            //Storage
+            // Storage
             if (_plugin.m_host.MainWindow.ActiveDatabase.IsOpen)
             {
                 foreach (var pe in _plugin.m_host.MainWindow.ActiveDatabase.RootGroup.GetEntries(true))
@@ -293,7 +305,7 @@ namespace KeeTrayTOTP
             }
             else
             {
-                Working(false, true); //Set controls depending on the state of action.
+                Working(false, true); // Set controls depending on the state of action.
                 if (e.Result != null)
                 {
                     if (e.Result.ToString() == "Reset")
@@ -379,16 +391,16 @@ namespace KeeTrayTOTP
 
         private void WorkerReset_DoWork(object sender, DoWorkEventArgs e)
         {
-            //Menus
+            // Menus
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_EntryContextCopy_Visible, null);
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_EntryContextSetup_Visible, null);
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_NotifyContext_Visible, null);
 
-            //TOTP Column
+            // TOTP Column
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_TOTPColumnCopy_Enable, null);
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_TOTPColumnTimer_Visible, null);
 
-            //Auto-Type
+            // Auto-Type
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_AutoType_Enable, null);
             string OldAutoTypeFieldName = _plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_AutoType_FieldName, KeeTrayTOTPExt.setdef_string_AutoType_FieldName).ExtWithBrackets();
             string NewAutoTypeFieldName = TrayTOTP_Plugin_Localization.strTOTP.ExtWithBrackets();
@@ -408,13 +420,13 @@ namespace KeeTrayTOTP
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_AutoType_FieldName, null);
             KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Add(NewAutoTypeFieldName);
 
-            //Time Correction
+            // Time Correction
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_TimeCorrection_Enable, null);
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, null);
-            KeeTrayTOTP.Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime);
+            Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime);
             _plugin.TimeCorrections.ResetThenAddRangeFromString(string.Empty);
 
-            //Storage
+            // Storage
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, null);
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, null);
         }

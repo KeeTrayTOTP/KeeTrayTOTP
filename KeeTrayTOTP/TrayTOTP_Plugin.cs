@@ -5,13 +5,8 @@ using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using KeePass.App;
 using KeePass.App.Configuration;
-using KeePass.DataExchange;
-using KeePass.Forms;
-using KeePass.Ecas;
 using KeePass.Plugins;
-using KeePass.Resources;
 using KeePass.UI;
 using KeePass.Util;
 using KeePass.Util.Spr;
@@ -19,14 +14,6 @@ using KeePass.Util.Spr;
 using KeePassLib;
 using KeePassLib.Utility;
 using KeePassLib.Security;
-using KeePassLib.Delegates;
-using KeePassLib.Resources;
-using KeePassLib.Interfaces;
-using KeePassLib.Collections;
-using KeePassLib.Serialization;
-using KeePassLib.Cryptography.Cipher;
-using KeePassLib.Cryptography.PasswordGenerator;
-
 using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
@@ -34,7 +21,7 @@ namespace KeeTrayTOTP
     /// <summary>
     /// Main Plugin Class
     /// </summary>
-    internal sealed partial class KeeTrayTOTPExt : Plugin
+    public sealed partial class KeeTrayTOTPExt : Plugin
     {
         /// <summary>
         /// Plugin host Global Reference for access to KeePass functions.
@@ -45,16 +32,19 @@ namespace KeeTrayTOTP
         /// Tray TOTP Support Email
         /// </summary>
         internal const string strEmail = "victor.rds@protonmail.ch";
+
         /// <summary>
         /// Constants (keepass form object names).
         /// </summary>
         internal const string keeobj_string_EntryContextMenuCopyPassword_Name = "m_ctxEntryCopyPassword";
         internal const string keeobj_string_EntryContextMenuEntriesSubMenu_Name = "m_ctxEntryMassModify";
         internal const string keeobj_string_EntryContextMenuEntriesSubMenuSeperator1_Name = "m_ctxEntrySelectedSep1";
+
         /// <summary>
         /// Constants (custom string key).
         /// </summary>
         internal const string setname_string_TimeCorrection_List = "traytotp_timecorrection_list";
+
         /// <summary>
         /// Constants (setting names).
         /// </summary>
@@ -71,11 +61,13 @@ namespace KeeTrayTOTP
         internal const string setname_string_TOTPSeed_StringName = "totpseed_stringname";
         internal const string setname_string_TOTPSettings_StringName = "totpsettings_stringname";
         internal const string setname_bool_TrimTrayText = "traytotp_trim_tray_text";
+
         /// <summary>
         /// Constants (default settings values).
         /// </summary>
         internal const string setdef_string_AutoType_FieldName = "TOTP";
         internal const long setdef_ulong_TimeCorrection_RefreshTime = 60;
+
         /// <summary>
         /// Constants (static settings value).
         /// </summary>
@@ -88,53 +80,16 @@ namespace KeeTrayTOTP
         private FormHelp HelpForm;
 
         /// <summary>
-        /// Tools Menu Tray TOTP Plugin.
-        /// </summary>
-        private ToolStripMenuItem toMenuTrayTOTP;
-        /// <summary>
-        /// Tools Menu Tray TOTP Settings.
-        /// </summary>
-        private ToolStripMenuItem toSubMenuSettings;
-        /// <summary>
-        /// Tools Menu Tray TOTP Settings Seperator.
-        /// </summary>
-        private ToolStripSeparator toSubMenuSeperator1;
-        /// <summary>
-        /// Tools Menu Tray TOTP Help.
-        /// </summary>
-        private ToolStripMenuItem toSubMenuHelp;
-        /// <summary>
-        /// Tools Menu Tray TOTP About.
-        /// </summary>
-        private ToolStripMenuItem toSubMenuAbout;
-
-        /// <summary>
-        /// Entry Context Menu Copy.
-        /// </summary>
-        private ToolStripMenuItem enMenuCopyTOTP;
-        /// <summary>
-        /// Entry Context Menu Setup.
-        /// </summary>
-        private ToolStripMenuItem enMenuSetupTOTP;
-        /// <summary>
-        /// Entry Context Menu Show QR.
-        /// </summary>
-        private ToolStripMenuItem enMenuShowQR;
-        /// <summary>
-        /// Entry Context Menu Setup Seperator.
-        /// </summary>
-        private ToolStripSeparator enMenuSeperator;
-
-        /// <summary>
         /// Notify Icon Context Menu Title.
         /// </summary>
         private ToolStripMenuItem niMenuTitle;
+
         /// <summary>
         /// Notify Icon Context Menu List.
         /// </summary>
         private List<ToolStripMenuItem> niMenuList = new List<ToolStripMenuItem>();
         /// <summary>
-        /// Notify Icon Context Menu Seperator.
+        /// Notify Icon Context Menu Separator.
         /// </summary>
         private ToolStripSeparator niMenuSeperator = null;
 
@@ -164,6 +119,7 @@ namespace KeeTrayTOTP
         /// Entries Refresh Timer.
         /// </summary>
         private Timer liRefreshTimer = new Timer();
+
         /// <summary>
         /// Entries Refresh Timer.
         /// </summary>
@@ -175,6 +131,7 @@ namespace KeeTrayTOTP
                 liRefreshTimer.Enabled = true;
             }
         }
+
         /// <summary>
         /// Entries Refresh Timer Previous Counter to Prevent Useless Refresh.
         /// </summary>
@@ -196,6 +153,92 @@ namespace KeeTrayTOTP
             }
         }
 
+        public override ToolStripMenuItem GetMenuItem(PluginMenuType type)
+        {
+            // Provide a menu item for the main location(s)
+            if (type == PluginMenuType.Main)
+            {
+                var toMenuTrayTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strTrayTOTPPlugin);
+                toMenuTrayTOTP.Image = Properties.Resources.TOTP;
+
+                var toSubMenuSettings = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strSettings);
+                toSubMenuSettings.Image = Properties.Resources.TOTP_Settings;
+                toSubMenuSettings.Click += OnMenuSettingsClick;
+
+                toMenuTrayTOTP.DropDownItems.Add(toSubMenuSettings);
+                var toSubMenuSeparator1 = new ToolStripSeparator();
+                toMenuTrayTOTP.DropDownItems.Add(toSubMenuSeparator1);
+                var toSubMenuHelp = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strHelp);
+                toSubMenuHelp.Image = Properties.Resources.TOTP_Help;
+                toSubMenuHelp.Click += OnMenuHelpClick;
+                toMenuTrayTOTP.DropDownItems.Add(toSubMenuHelp);
+                var toSubMenuAbout = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strAbout + "...");
+                toSubMenuAbout.Image = Properties.Resources.TOTP_Info;
+                toSubMenuAbout.Click += OnMenuAboutClick;
+                toMenuTrayTOTP.DropDownItems.Add(toSubMenuAbout);
+
+                return toMenuTrayTOTP;
+            }
+            else if (type == PluginMenuType.Entry)
+            {
+                var enMenuTrayTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strTrayTOTPPlugin);
+                enMenuTrayTOTP.Image = Properties.Resources.TOTP;
+
+                var enMenuCopyTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strCopyTOTP);
+                enMenuCopyTOTP.Image = Properties.Resources.TOTP;
+                enMenuCopyTOTP.ShortcutKeys = (Keys)Shortcut.CtrlT;
+                enMenuCopyTOTP.Click += OnEntryMenuTOTPClick;
+                var enMenuSetupTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strSetupTOTP);
+                enMenuSetupTOTP.Image = Properties.Resources.TOTP_Setup;
+                enMenuSetupTOTP.ShortcutKeys = (Keys)Shortcut.CtrlShiftI;
+                enMenuSetupTOTP.Click += OnEntryMenuSetupClick;
+                var enMenuShowQR = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strShowQR);
+                enMenuShowQR.Image = Properties.Resources.TOTP_Setup;
+                enMenuShowQR.ShortcutKeys = (Keys)Shortcut.CtrlShiftJ;
+                enMenuShowQR.Click += OnEntryMenuShowQRClick;
+
+                enMenuTrayTOTP.DropDownItems.Add(enMenuCopyTOTP);
+                enMenuTrayTOTP.DropDownItems.Add(enMenuSetupTOTP);
+                enMenuTrayTOTP.DropDownItems.Add(enMenuShowQR);
+
+                enMenuTrayTOTP.DropDownOpening += delegate (object sender, EventArgs e)
+                {
+                    enMenuCopyTOTP.Enabled = false;
+                    enMenuSetupTOTP.Enabled = false;
+
+                    bool boolCopy = m_host.CustomConfig.GetBool(setname_bool_EntryContextCopy_Visible, true);
+                    enMenuCopyTOTP.Visible = boolCopy;
+
+                    if (m_host.MainWindow.GetSelectedEntriesCount() == 1)
+                    {
+                        var CurrentEntry = m_host.MainWindow.GetSelectedEntry(true);
+                        if (SettingsCheck(CurrentEntry) && SeedCheck(CurrentEntry))
+                        {
+                            if (SettingsValidate(CurrentEntry))
+                            {
+                                enMenuCopyTOTP.Enabled = true;
+                                enMenuCopyTOTP.Tag = CurrentEntry;
+                            }
+                        }
+
+                        enMenuSetupTOTP.Enabled = true;
+                    }
+
+                    bool boolSetup = m_host.CustomConfig.GetBool(setname_bool_EntryContextSetup_Visible, true);
+                    enMenuSetupTOTP.Visible = boolSetup;
+                };
+
+                enMenuTrayTOTP.DropDownClosed += delegate (object sender, EventArgs e)
+                {
+                    enMenuCopyTOTP.Enabled = true;
+                };
+
+                return enMenuTrayTOTP;
+            }
+
+            return null; // No menu items in other locations
+        }
+
         /// <summary>
         /// Initialization of the plugin, adding menus, handlers and forms.
         /// </summary>
@@ -203,58 +246,17 @@ namespace KeeTrayTOTP
         /// <returns>Successful loading of the plugin, if not the plugin is removed.</returns>
         public override bool Initialize(IPluginHost host)
         {
-            //Internalise Host Handle.
+            // Internalize Host Handle.
             if (host == null) return false;
             m_host = host;
 
-            //Instanciate Help Form.
+            // Instantiate Help Form.
             HelpForm = new FormHelp(this);
 
-            //Register form events.
+            // Register events.
             m_host.MainWindow.Shown += MainWindow_Shown;
 
-            //Tools Menus.
-            toMenuTrayTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strTrayTOTPPlugin);
-            toMenuTrayTOTP.Image = Properties.Resources.TOTP;
-            m_host.MainWindow.ToolsMenu.DropDownItems.Add(toMenuTrayTOTP);
-            toSubMenuSettings = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strSettings);
-            toSubMenuSettings.Image = Properties.Resources.TOTP_Settings;
-            toSubMenuSettings.Click += OnMenuSettingsClick;
-            toMenuTrayTOTP.DropDownItems.Add(toSubMenuSettings);
-            toSubMenuSeperator1 = new ToolStripSeparator();
-            toMenuTrayTOTP.DropDownItems.Add(toSubMenuSeperator1);
-            toSubMenuHelp = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strHelp);
-            toSubMenuHelp.Image = Properties.Resources.TOTP_Help;
-            toSubMenuHelp.Click += OnMenuHelpClick;
-            toMenuTrayTOTP.DropDownItems.Add(toSubMenuHelp);
-            toSubMenuAbout = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strAbout + "...");
-            toSubMenuAbout.Image = Properties.Resources.TOTP_Info;
-            toSubMenuAbout.Click += OnMenuAboutClick;
-            toMenuTrayTOTP.DropDownItems.Add(toSubMenuAbout);
-
-            //Entry Context Menus.
-            m_host.MainWindow.EntryContextMenu.Opening += OnEntryMenuOpening;
-            m_host.MainWindow.EntryContextMenu.Closed += OnEntryMenuClosed;
-            enMenuCopyTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strCopyTOTP);
-            enMenuCopyTOTP.Image = Properties.Resources.TOTP;
-            enMenuCopyTOTP.ShortcutKeys = (Keys)Shortcut.CtrlT;
-            enMenuCopyTOTP.Click += OnEntryMenuTOTPClick;
-            m_host.MainWindow.EntryContextMenu.Items.Insert(m_host.MainWindow.EntryContextMenu.Items.IndexOfKey(keeobj_string_EntryContextMenuCopyPassword_Name) + 1, enMenuCopyTOTP);
-            enMenuSetupTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strSetupTOTP);
-            enMenuSetupTOTP.Image = Properties.Resources.TOTP_Setup;
-            enMenuSetupTOTP.ShortcutKeys = (Keys)Shortcut.CtrlShiftI;
-            enMenuSetupTOTP.Click += OnEntryMenuSetupClick;
-            enMenuShowQR = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strShowQR);
-            enMenuShowQR.Image = Properties.Resources.TOTP_Setup;
-            enMenuShowQR.ShortcutKeys = (Keys)Shortcut.CtrlShiftJ;
-            enMenuShowQR.Click += OnEntryMenuShowQRClick;
-            var ContextMenu = (ToolStripMenuItem)m_host.MainWindow.EntryContextMenu.Items.Find(keeobj_string_EntryContextMenuEntriesSubMenu_Name, true)[0];
-            ContextMenu.DropDownItems.Insert(ContextMenu.DropDownItems.IndexOfKey(keeobj_string_EntryContextMenuEntriesSubMenuSeperator1_Name) + 1, enMenuSetupTOTP);
-            ContextMenu.DropDownItems.Insert(ContextMenu.DropDownItems.IndexOfKey(keeobj_string_EntryContextMenuEntriesSubMenuSeperator1_Name) + 2, enMenuShowQR);
-            enMenuSeperator = new ToolStripSeparator();
-            ContextMenu.DropDownItems.Insert(ContextMenu.DropDownItems.IndexOf(enMenuShowQR) + 1, enMenuSeperator);
-
-            //Notify Icon Context Menus.
+            // Notify Icon Context Menus.
             m_host.MainWindow.TrayContextMenu.Opening += OnNotifyMenuOpening;
             niMenuTitle = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strTrayTOTPPlugin);
             niMenuTitle.Image = Properties.Resources.TOTP;
@@ -262,18 +264,18 @@ namespace KeeTrayTOTP
             niMenuSeperator = new ToolStripSeparator();
             m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuSeperator);
 
-            //Register auto-type function.
+            // Register auto-type function.
             if (m_host.CustomConfig.GetBool(setname_bool_AutoType_Enable, true))
             {
                 SprEngine.FilterCompile += SprEngine_FilterCompile;
                 SprEngine.FilterPlaceholderHints.Add(m_host.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets());
             }
 
-            //List Column TOTP.
+            // List Column TOTP.
             liColumnTOTP = new TrayTOTP_CustomColumn(this);
             m_host.ColumnProviderPool.Add(liColumnTOTP);
 
-            //Refresh Timer.
+            // Refresh Timer.
             liRefreshTimer.Interval = setstat_int_EntryList_RefreshRate;
             liRefreshTimer.Enabled = true;
             liRefreshTimer.Tick += OnTimerTick;
@@ -345,51 +347,6 @@ namespace KeeTrayTOTP
         {
             var FormAbout = new FormAbout(this);
             UIUtil.ShowDialogAndDestroy(FormAbout);
-        }
-
-        /// <summary>
-        /// Entry Context Menu Opening.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnEntryMenuOpening(object sender, CancelEventArgs e)
-        {
-            enMenuCopyTOTP.Enabled = false;
-            enMenuSetupTOTP.Enabled = false;
-
-            bool boolCopy = m_host.CustomConfig.GetBool(setname_bool_EntryContextCopy_Visible, true);
-            enMenuCopyTOTP.Visible = boolCopy;
-
-            if (m_host.MainWindow.GetSelectedEntriesCount() == 1)
-            {
-                var CurrentEntry = m_host.MainWindow.GetSelectedEntry(true);
-                if (SettingsCheck(CurrentEntry) && SeedCheck(CurrentEntry))
-                {
-                    if (SettingsValidate(CurrentEntry))
-                    {
-                        enMenuCopyTOTP.Enabled = true;
-                        enMenuCopyTOTP.Tag = CurrentEntry;
-                    }
-                }
-                enMenuSetupTOTP.Enabled = true;
-            }
-
-            bool boolSetup = m_host.CustomConfig.GetBool(setname_bool_EntryContextSetup_Visible, true);
-            enMenuSetupTOTP.Visible = boolSetup;
-            enMenuSeperator.Visible = boolSetup;
-        }
-
-        /// <summary>
-        /// Entry Context Menu Closed.
-        /// </summary>
-        /// <remarks>
-        /// Enables the CopyTOTP menu item, so that Ctrl-T works after opening a menu for an item without TOTP settings.
-        /// </remarks>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnEntryMenuClosed(object sender, EventArgs e)
-        {
-            enMenuCopyTOTP.Enabled = true;
         }
 
         /// <summary>
@@ -476,10 +433,10 @@ namespace KeeTrayTOTP
                         {
                             var entryTitle = Entry.Strings.ReadSafe(PwDefs.TitleField);
 
-                            var context = new SprContext(Entry, m_host.MainWindow.ActiveDatabase,SprCompileFlags.All, false, false);
+                            var context = new SprContext(Entry, m_host.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
                             var entryUsername = SprEngine.Compile(Entry.Strings.ReadSafe(PwDefs.UserNameField), context);
                             string trayTitle;
-                            if (trimTrayText && entryTitle.Length+entryUsername.Length > setstat_trim_text_length)
+                            if (trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length)
                             {
                                 trayTitle = entryTitle.ExtWithSpaceAfter();
                             }
@@ -678,7 +635,9 @@ namespace KeeTrayTOTP
         /// <returns>Error(s) while validating Interval or Length.</returns>
         internal bool SettingsValidate(PwEntry pe)
         {
-            bool ValidInterval; bool ValidLength; bool ValidUrl; //Dummies
+            bool ValidInterval;
+            bool ValidLength;
+            bool ValidUrl; //Dummies
             return SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl);
         }
 
@@ -840,11 +799,11 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Removes all ressources such as menus, handles and forms from KeePass.
+        /// Removes all resources such as menus, handles and forms from KeePass.
         /// </summary>
         public override void Terminate()
         {
-            //Destroy Help Form.
+            // Destroy Help Form.
             if (HelpForm.Visible)
             {
                 HelpForm.Close();
@@ -854,20 +813,10 @@ namespace KeeTrayTOTP
                 HelpForm.Dispose();
             }
 
-            //Unregister internal events.
+            // Unregister internal events.
             m_host.MainWindow.Shown -= MainWindow_Shown;
 
-            //Remove Tools Menus.
-            m_host.MainWindow.ToolsMenu.DropDownItems.Remove(toMenuTrayTOTP);
-            toMenuTrayTOTP.Dispose();
-            m_host.MainWindow.ToolsMenu.DropDownItems.Remove(toSubMenuSettings);
-            toSubMenuSettings.Dispose();
-            m_host.MainWindow.ToolsMenu.DropDownItems.Remove(toSubMenuSeperator1);
-            toSubMenuSeperator1.Dispose();
-            m_host.MainWindow.ToolsMenu.DropDownItems.Remove(toSubMenuAbout);
-            toSubMenuAbout.Dispose();
-
-            //Remove Notify Icon menus.
+            // Remove Notify Icon menus.
             m_host.MainWindow.TrayContextMenu.Opening -= OnNotifyMenuOpening;
             m_host.MainWindow.TrayContextMenu.Items.Remove(niMenuTitle);
             niMenuTitle.Dispose();
@@ -879,24 +828,18 @@ namespace KeeTrayTOTP
             m_host.MainWindow.TrayContextMenu.Items.Remove(niMenuSeperator);
             niMenuSeperator.Dispose();
 
-            //Remove Context menus.
-            m_host.MainWindow.EntryContextMenu.Opening -= OnEntryMenuOpening;
-            m_host.MainWindow.EntryContextMenu.Closed -= OnEntryMenuClosed;
-            m_host.MainWindow.EntryContextMenu.Items.Remove(enMenuCopyTOTP);
-            enMenuCopyTOTP.Dispose();
-
-            //Unregister auto-type function.
+            // Unregister auto-type function.
             if (SprEngine.FilterPlaceholderHints.Contains(m_host.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets()))
             {
                 SprEngine.FilterCompile -= SprEngine_FilterCompile;
                 SprEngine.FilterPlaceholderHints.Remove(m_host.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets());
             }
 
-            //Remove Column provider.
+            // Remove Column provider.
             m_host.ColumnProviderPool.Remove(liColumnTOTP);
             liColumnTOTP = null;
 
-            //Remove Timer.
+            // Remove Timer.
             liRefreshTimer.Tick -= OnTimerTick;
             liRefreshTimer.Dispose();
         }

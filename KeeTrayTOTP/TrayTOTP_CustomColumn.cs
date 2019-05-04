@@ -12,7 +12,7 @@ namespace KeeTrayTOTP
     /// <summary>
     /// Main Plugin Class
     /// </summary>
-    internal sealed partial class KeeTrayTOTPExt
+    public sealed partial class KeeTrayTOTPExt
     {
         internal class TrayTOTP_CustomColumn : ColumnProvider
         {
