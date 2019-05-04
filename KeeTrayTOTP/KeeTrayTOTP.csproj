@@ -20,9 +20,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KeeTrayTOTP</RootNamespace>
     <AssemblyName>KeeTrayTOTP</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
   </PropertyGroup>
@@ -56,11 +57,8 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="KeePass.exe">
-      <HintPath>C:\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
-	  <HintPath>C:\Program Files (x86)\KeePass2x\KeePass.exe</HintPath>
-      <HintPath>\Program Files (x86)\KeePass Password Safe 2\KeePass.exe</HintPath>
-      <private>False</private>
+    <Reference Include="KeePass, Version=2.41.0.38197, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\KeePass.2.41.0.38197\lib\net45\KeePass.exe</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -279,6 +277,7 @@
     <Optimize>True</Optimize>
     <OutputPath>bin\ReleasePlgx</OutputPath>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <StartAction>Program</StartAction>
@@ -300,11 +299,12 @@
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'ReleasePlgx'">
-    <CallTarget Targets="BuildPlgx" /> 
-	<Delete Files="$(OutDir)Keepass.exe" />
-	<Delete Files="$(OutDir)Keepass.config.xml" />
-	<Delete Files="$(OutDir)KeeTrayTOTP.dll" />
-	<Delete Files="$(OutDir)Test.kdbx" />
+    <CallTarget Targets="BuildPlgx" />
+    <Delete Files="$(OutDir)Keepass.xml" />
+    <Delete Files="$(OutDir)Keepass.exe" />
+    <Delete Files="$(OutDir)Keepass.config.xml" />
+    <Delete Files="$(OutDir)KeeTrayTOTP.dll" />
+    <Delete Files="$(OutDir)Test.kdbx" />
   </Target>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
