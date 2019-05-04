@@ -25,7 +25,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using QRCoder.Framework4._0Methods;
 
 namespace QRCoder
