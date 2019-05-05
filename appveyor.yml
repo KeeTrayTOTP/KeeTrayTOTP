@@ -1,0 +1,8 @@
+version: 1.0.{build}
+configuration: ReleasePlgx
+before_build:
+- ps: nuget restore
+build:
+  verbosity: minimal
+before_package:
+- ps: ''
