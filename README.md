@@ -11,7 +11,7 @@ This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.n
 
 ## Dependencies
 * [Keepass 2.31](http://keepass.info/)
-* .NET 3.5 or superior
+* .NET 4.5 or superior
 
 ## So, why do this? 
 Variou reasons, first and most important: I don't want to use another application only for steam! KeePass and Tray TOTP (with some modifications) are more than capable enough to handle this task.
@@ -40,7 +40,6 @@ TODO: Tutorial how to get Steam TOTP secret other ways
 My first objective is complete: I made a working prototype.
 But I'm not happy with the code, I want to rebuild this thing from the ground if needed, I'm by no means criticizing the original work, but it's little complex for me and rebuilding it may help to better understanding it. 
 Also I'm open to suggestion, issues, new features, etc.
-
 
 **Thanks to [Dominik Reichl](http://www.dominik-reichl.de/) for KeePass software and to [Morphlin](http://sourceforge.net/u/morphlin/profile/) for the original plugin**
 
