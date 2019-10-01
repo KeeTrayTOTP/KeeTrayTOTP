@@ -10,11 +10,11 @@ In the first step download the [program files](https://github.com/Jessecar96/Ste
 
 Start the `Steam Desktop Authenticator.exe` executable, and follow the instructions of SDA to setup it as an authenticator for your Steam account, but when asking for an encryption passkey choose *Cancel*. We need the file unencrypted to extract the secret later:
 
-![step4-encrypt-decition](images\step4-encrypt-decition.png)
+![step4-encrypt-decition](images/step4-encrypt-decition.png)
 
 After that there is an additional confirmation step, which explains that this is a really bad idea. However, we will move the secret to our encrypted KeePass Database, so in this special case this is OK.
 
-![step5-encrypt-confirmation](images\step5-encrypt-confirmation.png)
+![step5-encrypt-confirmation](images/step5-encrypt-confirmation.png)
 
 After this there are some additional step. Follow them as instructed.
 
@@ -24,7 +24,7 @@ After this there are some additional step. Follow them as instructed.
 
 In the folder of your `Steam Desktop Authenticator.exe` there was a new folder created, called `maFiles`. It should include two files (there are more if you have activated multiple steam accounts):
 
-![maFiles](images\maFiles.png)
+![maFiles](images/maFiles.png)
 
 Now open the `[some_number].maFile`  file with a text editor. The file extension `maFile` is not linked with an text editor, so you have to open the file manually with the open dialogue of your text editor. The file should have the following content (generated codes were replaced):
 
@@ -42,7 +42,7 @@ You should backup the two files in the `maFiles`, so you can restore the SDA pro
 
 It is up to you how you backup it, but since it contains the secret is should be a save place. It could be a dedicated USB-stick, but a very good place is attaching them to your KeePass entry:
 
-![keepass-attachments](images\keepass-attachments.png)
+![keepass-attachments](images/keepass-attachments.png)
 
 
 
