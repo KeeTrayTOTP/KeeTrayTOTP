@@ -36,6 +36,15 @@ Copy the value of `[TOTP secret]` info the *TOTP Seed* field of the *TOTP Setup 
 
 TODO: Tutorial how to get Steam TOTP secret other ways
 
+#### Obtaining TOTP secret from an iOS backup
+
+If you use an iOS device you can use a tool like the [iPhone Backup Viewer](http://www.imactools.com/iphonebackupviewer/) to extract the secret key.
+   1. Open the backup using such a tool
+   2. Find the Steam App: `com.valvesoftware.Steam` in `AppDomain`
+   3. Extract `Documents/Steamguard-[your Steam ID]`
+   4. Open the file using a text editor and look for the text `otpauth:\/\/totp\/Steam:[your Steam login]?secret=[TOTP secret]&issuer=Steam`.
+   5. Copy the value of `[TOTP secret]` info the *TOTP Seed* field of the *TOTP Setup Wizard*.
+
 ### What's next?
 My first objective is complete: I made a working prototype.
 But I'm not happy with the code, I want to rebuild this thing from the ground if needed, I'm by no means criticizing the original work, but it's little complex for me and rebuilding it may help to better understanding it. 
