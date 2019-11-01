@@ -45,6 +45,7 @@
             this.IntervalDescriptionSetupLabel = new System.Windows.Forms.Label();
             this.IntervalPanel = new System.Windows.Forms.Panel();
             this.RadioButtonLength8Setup = new System.Windows.Forms.RadioButton();
+            this.RadioButtonLength7Setup = new System.Windows.Forms.RadioButton();
             this.RadioButtonLength6Setup = new System.Windows.Forms.RadioButton();
             this.FormatSetupLabel = new System.Windows.Forms.Label();
             this.FormatDescriptionSetupLabel = new System.Windows.Forms.Label();
@@ -235,13 +236,23 @@
             // RadioButtonLength8Setup
             // 
             this.RadioButtonLength8Setup.AutoSize = true;
-            this.RadioButtonLength8Setup.Location = new System.Drawing.Point(130, 28);
+            this.RadioButtonLength8Setup.Location = new System.Drawing.Point(167, 28);
             this.RadioButtonLength8Setup.Name = "RadioButtonLength8Setup";
             this.RadioButtonLength8Setup.Size = new System.Drawing.Size(31, 17);
-            this.RadioButtonLength8Setup.TabIndex = 1;
+            this.RadioButtonLength8Setup.TabIndex = 2;
             this.RadioButtonLength8Setup.Tag = "";
             this.RadioButtonLength8Setup.Text = "&8";
             this.RadioButtonLength8Setup.UseVisualStyleBackColor = true;
+            // 
+            // RadioButtonLength7Setup
+            // 
+            this.RadioButtonLength7Setup.AutoSize = true;
+            this.RadioButtonLength7Setup.Location = new System.Drawing.Point(130, 28);
+            this.RadioButtonLength7Setup.Name = "RadioButtonLength7Setup";
+            this.RadioButtonLength7Setup.Size = new System.Drawing.Size(31, 17);
+            this.RadioButtonLength7Setup.TabIndex = 1;
+            this.RadioButtonLength7Setup.Text = "&7";
+            this.RadioButtonLength7Setup.UseVisualStyleBackColor = true;
             // 
             // RadioButtonLength6Setup
             // 
@@ -272,15 +283,16 @@
             this.FormatDescriptionSetupLabel.Size = new System.Drawing.Size(322, 20);
             this.FormatDescriptionSetupLabel.TabIndex = 1;
             this.FormatDescriptionSetupLabel.TabStop = true;
-            this.FormatDescriptionSetupLabel.Text = "Please select the TOTP Format. ( 6 digits, 8 digits or Steam)";
+            this.FormatDescriptionSetupLabel.Text = "Please select the TOTP Format. (6,7,8 digits or Steam)";
             // 
             // LengthPanel
             // 
             this.LengthPanel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.LengthPanel.Controls.Add(this.RadioButtonSteamFormatSetup);
             this.LengthPanel.Controls.Add(this.FormatDescriptionSetupLabel);
-            this.LengthPanel.Controls.Add(this.RadioButtonLength8Setup);
             this.LengthPanel.Controls.Add(this.FormatSetupLabel);
+            this.LengthPanel.Controls.Add(this.RadioButtonLength8Setup);
+            this.LengthPanel.Controls.Add(this.RadioButtonLength7Setup);
             this.LengthPanel.Controls.Add(this.RadioButtonLength6Setup);
             this.LengthPanel.Location = new System.Drawing.Point(10, 270);
             this.LengthPanel.Name = "LengthPanel";
@@ -291,10 +303,10 @@
             // RadioButtonSteamFormatSetup
             // 
             this.RadioButtonSteamFormatSetup.AutoSize = true;
-            this.RadioButtonSteamFormatSetup.Location = new System.Drawing.Point(167, 28);
+            this.RadioButtonSteamFormatSetup.Location = new System.Drawing.Point(204, 28);
             this.RadioButtonSteamFormatSetup.Name = "RadioButtonSteamFormatSetup";
             this.RadioButtonSteamFormatSetup.Size = new System.Drawing.Size(55, 17);
-            this.RadioButtonSteamFormatSetup.TabIndex = 2;
+            this.RadioButtonSteamFormatSetup.TabIndex = 3;
             this.RadioButtonSteamFormatSetup.Tag = "";
             this.RadioButtonSteamFormatSetup.Text = "&Steam";
             this.RadioButtonSteamFormatSetup.UseVisualStyleBackColor = true;
@@ -438,6 +450,7 @@
         private System.Windows.Forms.Label IntervalDescriptionSetupLabel;
         private System.Windows.Forms.Panel IntervalPanel;
         private System.Windows.Forms.RadioButton RadioButtonLength8Setup;
+        private System.Windows.Forms.RadioButton RadioButtonLength7Setup;
         private System.Windows.Forms.RadioButton RadioButtonLength6Setup;
         private System.Windows.Forms.Label FormatSetupLabel;
         private System.Windows.Forms.Label FormatDescriptionSetupLabel;

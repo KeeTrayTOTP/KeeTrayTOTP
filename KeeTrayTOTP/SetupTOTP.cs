@@ -32,17 +32,21 @@ namespace KeeTrayTOTP
         {
             Text = TrayTOTP_Plugin_Localization.strSetup + TrayTOTP_Plugin_Localization.strSpaceDashSpace + TrayTOTP_Plugin_Localization.strTrayTOTPPlugin; //Set form's name using constants.
 
-            if ( _plugin.SettingsCheck(entry) || _plugin.SeedCheck(entry) ) //Checks the the totp settings exists.
+            if (_plugin.SettingsCheck(entry) || _plugin.SeedCheck(entry)) //Checks the the totp settings exists.
             {
                 string[] Settings = _plugin.SettingsGet(entry); //Gets the the existing totp settings.
-                bool ValidInterval = false; bool ValidLength = false; bool ValidUrl = false;
+                bool ValidInterval;
+                bool ValidLength;
+                bool ValidUrl;
                 _plugin.SettingsValidate(entry, out ValidInterval, out ValidLength, out ValidUrl); //Validates the settings value.
                 if (ValidInterval) NumericIntervalSetup.Value = Convert.ToDecimal(Settings[0]); //Checks if interval is valid and sets interval numeric to the setting value.
                 if (ValidLength) //Checks if length is valid.
                 {
-                    RadioButtonLength6Setup.Checked = Settings[1] == "6"; //Sets length radio 6 to checked if the setting value is 6.
-                    RadioButtonLength8Setup.Checked = Settings[1] == "8"; //Sets length radio 8 to checked if the setting value is 8.
-                    RadioButtonSteamFormatSetup.Checked = Settings[1] == "S"; //Sets format Steam to checked if the setting value is S.
+                    // Select the correct radio button
+                    RadioButtonLength6Setup.Checked = Settings[1] == "6";
+                    RadioButtonLength7Setup.Checked = Settings[1] == "7";
+                    RadioButtonLength8Setup.Checked = Settings[1] == "8";
+                    RadioButtonSteamFormatSetup.Checked = Settings[1] == "S";
                 }
                 if (ValidUrl) ComboBoxTimeCorrectionSetup.Text = Settings[2]; //Checks if url is valid and sets time correction textbox to the setting value.
 
@@ -95,7 +99,7 @@ namespace KeeTrayTOTP
                 ErrorProviderSetup.SetError(NumericIntervalSetup, string.Empty);
 
             // Format/Interval radios
-            if (!RadioButtonLength6Setup.Checked && !RadioButtonLength8Setup.Checked && !RadioButtonSteamFormatSetup.Checked)
+            if (!RadioButtonLength6Setup.Checked && !RadioButtonLength7Setup.Checked && !RadioButtonLength8Setup.Checked && !RadioButtonSteamFormatSetup.Checked)
                 ErrorProviderSetup.SetError(RadioButtonLength8Setup, SetupTOTP_Localization.SetupLengthMandatory);
             else
                 ErrorProviderSetup.SetError(RadioButtonLength8Setup, string.Empty);
@@ -108,31 +112,31 @@ namespace KeeTrayTOTP
                 Uri uriResult;
                 bool validURL = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
                               && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-                if(!validURL)
+                if (!validURL)
                     ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, SetupTOTP_Localization.SetupInvalidUrl);
                 else
                     ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, string.Empty);
             }
-            
+
             /* ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, SetupTOTP_Localization.SetupUrlMustContainHttp);
             if (ComboBoxTimeCorrectionSetup.Text.Contains(";"))
                 ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, SetupTOTP_Localization.SetupInvalidCharacter + " (;)");
             */
 
-            if (ErrorProviderSetup.GetError(TextBoxSeedSetup) != string.Empty || 
+            if (ErrorProviderSetup.GetError(TextBoxSeedSetup) != string.Empty ||
                 ErrorProviderSetup.GetError(NumericIntervalSetup) != string.Empty ||
                 ErrorProviderSetup.GetError(ComboBoxTimeCorrectionSetup) != string.Empty ||
-                ErrorProviderSetup.GetError(ComboBoxTimeCorrectionSetup) != string.Empty )
+                ErrorProviderSetup.GetError(ComboBoxTimeCorrectionSetup) != string.Empty)
                 return;
 
-            
+
 
             try
             {
                 entry.CreateBackup(_plugin.m_host.MainWindow.ActiveDatabase);
 
-                entry.Strings.Set(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, 
-                    TrayTOTP_Plugin_Localization.setdef_string_TOTPSeed_StringName), 
+                entry.Strings.Set(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName,
+                    TrayTOTP_Plugin_Localization.setdef_string_TOTPSeed_StringName),
                     new ProtectedString(true, TextBoxSeedSetup.Text)
                 );
 
@@ -140,15 +144,17 @@ namespace KeeTrayTOTP
 
                 if (RadioButtonLength6Setup.Checked)
                     format = "6";
+                else if (RadioButtonLength7Setup.Checked)
+                    format = "7";
                 else if (RadioButtonLength8Setup.Checked)
                     format = "8";
                 else if (RadioButtonSteamFormatSetup.Checked)
                     format = "S";
 
-                entry.Strings.Set(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, 
-                    TrayTOTP_Plugin_Localization.setdef_string_TOTPSettings_StringName), 
-                    new ProtectedString(false, 
-                        NumericIntervalSetup.Value.ToString() + ";" + format + 
+                entry.Strings.Set(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName,
+                    TrayTOTP_Plugin_Localization.setdef_string_TOTPSettings_StringName),
+                    new ProtectedString(false,
+                        NumericIntervalSetup.Value.ToString() + ";" + format +
                         (ComboBoxTimeCorrectionSetup.Text != string.Empty ? ";" : string.Empty) + ComboBoxTimeCorrectionSetup.Text)
                     );
 
