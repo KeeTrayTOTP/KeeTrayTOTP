@@ -678,7 +678,7 @@ namespace KeeTrayTOTP
                 }
                 try
                 {
-                    IsLengthValid = (Settings[1] == "6") || (Settings[1] == "8") || (Settings[1] == "S"); //Length
+                    IsLengthValid = (Settings[1] == "6") || (Settings[1] == "7") || (Settings[1] == "8") || (Settings[1] == "S"); //Length
                 }
                 catch (Exception)
                 {
