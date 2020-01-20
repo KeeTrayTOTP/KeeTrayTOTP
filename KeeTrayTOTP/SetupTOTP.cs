@@ -61,7 +61,7 @@ namespace KeeTrayTOTP
             if (_plugin.SeedCheck(entry)) TextBoxSeedSetup.Text = _plugin.SeedGet(entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
             ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); //Gets existings time corrections and adds them in the combobox.
 
-            HelpProviderSetup.SetHelpString(FinishSetupButton, SetupTOTP_Localization.SetupFinnish);
+            HelpProviderSetup.SetHelpString(FinishSetupButton, SetupTOTP_Localization.SetupFinish);
 
             ErrorProviderSetup.SetError(TextBoxSeedSetup, string.Empty);
             ErrorProviderSetup.SetError(NumericIntervalSetup, string.Empty);
@@ -93,8 +93,8 @@ namespace KeeTrayTOTP
                 ErrorProviderSetup.SetError(TextBoxSeedSetup, string.Empty);
 
             // Interval field
-            if ((NumericIntervalSetup.Value < 1) || (NumericIntervalSetup.Value > 60))
-                ErrorProviderSetup.SetError(NumericIntervalSetup, string.Format(SetupTOTP_Localization.SetupInterval1to60, Environment.NewLine));
+            if ((NumericIntervalSetup.Value < 1) || (NumericIntervalSetup.Value > 180))
+                ErrorProviderSetup.SetError(NumericIntervalSetup, string.Format(SetupTOTP_Localization.SetupInterval, Environment.NewLine));
             else
                 ErrorProviderSetup.SetError(NumericIntervalSetup, string.Empty);
 

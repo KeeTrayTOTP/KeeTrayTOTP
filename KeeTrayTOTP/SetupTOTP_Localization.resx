@@ -112,19 +112,19 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="SetupDelete" xml:space="preserve">
     <value>Deletes the current TOTP settings.</value>
   </data>
-  <data name="SetupFinnish" xml:space="preserve">
+  <data name="SetupFinish" xml:space="preserve">
     <value>Closes the wizard.</value>
   </data>
-  <data name="SetupInterval1to60" xml:space="preserve">
-    <value>Interval must be between{0}nand 60 inclusively!</value>
+  <data name="SetupInterval" xml:space="preserve">
+    <value>Interval must be between{0}nand 180 inclusively!</value>
     <comment>{0} must be Environment.NewLine</comment>
   </data>
   <data name="SetupInvalidCharacter" xml:space="preserve">
