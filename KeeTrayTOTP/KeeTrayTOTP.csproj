@@ -57,9 +57,16 @@
     </AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="KeePass, Version=2.41.0.38197, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\KeePass.2.41.0.38197\lib\net45\KeePass.exe</HintPath>
-    </Reference>
+    <PackageReference Include="KeePass">
+      <Version>2.43.0.36971</Version>
+      <ExcludeFromPlgx />
+    </PackageReference>
+    <PackageReference Include="PlgxTool">
+      <Version>1.0.0</Version>
+      <ExcludeFromPlgx />
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -239,7 +246,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="Resources\textfield_key.png" />
     <None Include="Test.kdbx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -306,12 +312,12 @@
     <Delete Files="$(OutDir)KeeTrayTOTP.dll" />
     <Delete Files="$(OutDir)Test.kdbx" />
   </Target>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+  <!--<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\PlgxTool.1.0.0\build\PlgxTool.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PlgxTool.1.0.0\build\PlgxTool.targets'))" />
-  </Target>
+  </Target>-->
   <Target Name="BuildPlgx">
     <WriteLinesToFile File="$(IntermediateOutputPath)PlgxConfig.xml" Lines="&lt;PlgxConfiguration&gt;$(PlgxConfiguration)&lt;/PlgxConfiguration&gt;" Overwrite="true" />
     <CreateProperty Value="mono" Condition="'$(MonoExec)' == '' And '$(OS)' != 'Windows_NT'">
