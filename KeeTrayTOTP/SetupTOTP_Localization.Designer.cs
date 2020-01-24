@@ -72,18 +72,18 @@ namespace KeeTrayTOTP {
         /// <summary>
         ///   Looks up a localized string similar to Closes the wizard..
         /// </summary>
-        internal static string SetupFinnish {
+        internal static string SetupFinish {
             get {
-                return ResourceManager.GetString("SetupFinnish", resourceCulture);
+                return ResourceManager.GetString("SetupFinish", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interval must be between{0}nand 60 inclusively!.
+        ///   Looks up a localized string similar to Interval must be between{0}nand 180 inclusively!.
         /// </summary>
-        internal static string SetupInterval1to60 {
+        internal static string SetupInterval {
             get {
-                return ResourceManager.GetString("SetupInterval1to60", resourceCulture);
+                return ResourceManager.GetString("SetupInterval", resourceCulture);
             }
         }
         
