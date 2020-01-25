@@ -16,7 +16,7 @@ jobs:
       uses: warrenbuckley/Setup-Nuget@v1
     
     - name: Setup VSTest.Console.exe
-      uses: malcolmnixon/Setup-VSTest@master
+      uses: malcolmnixon/Setup-VSTest@v1
 
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
