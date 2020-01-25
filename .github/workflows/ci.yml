@@ -1,0 +1,27 @@
+name: KeeTrayTOTP CI Build
+
+on:
+  push:
+    branches:
+      - 'master' 
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+
+    - name: nuget restore
+      run: nuget restore KeeTrayTOTP.sln
+
+    - name: Build plgx
+      run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
+
+    - name: Run tests
+      run: dotnet test
