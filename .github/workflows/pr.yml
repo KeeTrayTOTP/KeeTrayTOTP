@@ -1,4 +1,4 @@
-name: KeeTrayTOTP CI
+name: KeeTrayTOTP PR Build
 
 on: [pull_request]
 
@@ -19,7 +19,7 @@ jobs:
       run: nuget restore KeeTrayTOTP.sln
 
     - name: MSBuild
-      run: msbuild KeeTrayTOTP.sln
+      run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
 
     - name: Run tests
       run: dotnet test
