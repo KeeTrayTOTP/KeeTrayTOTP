@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeTrayTOTP", "KeeTrayTOTP\KeeTrayTOTP.csproj", "{BF4A8A1F-B9B6-499C-8756-810B44895B8A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KeeTrayTOTP.Tests", "KeeTrayTOTP.Tests\KeeTrayTOTP.Tests.csproj", "{7911FEEB-D902-49D1-8A55-CD761D66D58D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KeeTrayTOTP.Tests", "KeeTrayTOTP.Tests\KeeTrayTOTP.Tests.csproj", "{7911FEEB-D902-49D1-8A55-CD761D66D58D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,12 +41,12 @@ Global
 		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.Release|x86.Build.0 = Release|Any CPU
 		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|Any CPU.ActiveCfg = ReleasePlgx|Any CPU
 		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|Any CPU.Build.0 = ReleasePlgx|Any CPU
-		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|ARM.ActiveCfg = ReleasePlgx|Any CPU
-		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|ARM.Build.0 = ReleasePlgx|Any CPU
-		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x64.ActiveCfg = ReleasePlgx|Any CPU
-		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x64.Build.0 = ReleasePlgx|Any CPU
-		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x86.ActiveCfg = ReleasePlgx|Any CPU
-		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x86.Build.0 = ReleasePlgx|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|ARM.ActiveCfg = Release|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|ARM.Build.0 = Release|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x64.ActiveCfg = Release|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x64.Build.0 = Release|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x86.ActiveCfg = Release|Any CPU
+		{BF4A8A1F-B9B6-499C-8756-810B44895B8A}.ReleasePlgx|x86.Build.0 = Release|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -64,7 +64,6 @@ Global
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Release|x86.ActiveCfg = Release|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.Release|x86.Build.0 = Release|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|Any CPU.ActiveCfg = Release|Any CPU
-		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|Any CPU.Build.0 = Release|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|ARM.ActiveCfg = Release|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|ARM.Build.0 = Release|Any CPU
 		{7911FEEB-D902-49D1-8A55-CD761D66D58D}.ReleasePlgx|x64.ActiveCfg = Release|Any CPU
