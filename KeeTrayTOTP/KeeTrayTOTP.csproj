@@ -8,7 +8,6 @@
         <DotNetVersion>3.5</DotNetVersion>
       </Prerequisites>
     </PlgxConfiguration>
-    <PlgxToolDir>$(MSBuildProjectDirectory)\..\packages\PlgxTool.1.0.0\tools\</PlgxToolDir>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -22,39 +21,31 @@
     <AssemblyName>KeeTrayTOTP</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>
-    </TargetFrameworkProfile>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFrameworkProfile></TargetFrameworkProfile>
+    <NuGetPackageImportStamp></NuGetPackageImportStamp>
+    <ApplicationIcon>TOTP.ico</ApplicationIcon>
+    <SignAssembly>false</SignAssembly>
+    <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>TOTP.ico</ApplicationIcon>
-  </PropertyGroup>
-  <PropertyGroup>
-    <SignAssembly>false</SignAssembly>
-  </PropertyGroup>
-  <PropertyGroup>
-    <AssemblyOriginatorKeyFile>
-    </AssemblyOriginatorKeyFile>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleasePlgx|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\ReleasePlgx\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="KeePass">
@@ -278,29 +269,11 @@
     <None Include="Resources\bullet_lock.png" />
     <Content Include="TOTP.ico" />
   </ItemGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleasePlgx|AnyCPU' ">
-    <DebugType>none</DebugType>
-    <Optimize>True</Optimize>
-    <OutputPath>bin\ReleasePlgx</OutputPath>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(RunConfiguration)' == 'Default' ">
     <StartAction>Program</StartAction>
     <StartProgram>bin\Debug\KeePass.exe</StartProgram>
     <StartArguments>--debug --pw:test Test.kdbx</StartArguments>
     <StartWorkingDirectory>bin\Debug</StartWorkingDirectory>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Custom Command' ">
-    <StartAction>Program</StartAction>
-    <StartProgram>bin\Release\KeePass.exe</StartProgram>
-    <ConsolePause>false</ConsolePause>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Custom Command 3' ">
-    <StartAction>Program</StartAction>
-    <StartProgram>bin\ReleasePlgx\KeePass.exe</StartProgram>
-    <StartArguments>--debug --saveplgxcr</StartArguments>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
@@ -312,27 +285,4 @@
     <Delete Files="$(OutDir)KeeTrayTOTP.dll" />
     <Delete Files="$(OutDir)Test.kdbx" />
   </Target>
-  <!--<Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\PlgxTool.1.0.0\build\PlgxTool.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\PlgxTool.1.0.0\build\PlgxTool.targets'))" />
-  </Target>-->
-  <Target Name="BuildPlgx">
-    <WriteLinesToFile File="$(IntermediateOutputPath)PlgxConfig.xml" Lines="&lt;PlgxConfiguration&gt;$(PlgxConfiguration)&lt;/PlgxConfiguration&gt;" Overwrite="true" />
-    <CreateProperty Value="mono" Condition="'$(MonoExec)' == '' And '$(OS)' != 'Windows_NT'">
-      <Output TaskParameter="Value" PropertyName="MonoExec" />
-    </CreateProperty>
-    <Exec Command="$(MonoExec) &quot;$(PlgxToolDir)PlgxTool.exe&quot; --build --verbose --input=&quot;$(MSBuildProjectDirectory)&quot; --output=&quot;$(OutputPath).&quot; --config=&quot;$(IntermediateOutputPath)PlgxConfig.xml&quot;" Outputs="$(OutputPath)$(AssemblyName).plgx">
-      <Output TaskParameter="Outputs" ItemName="FileWrites" />
-    </Exec>
-    <WriteLinesToFile File="$(IntermediateOutputPath)$(CleanFile)" Lines="@(FileWrites->'%(FullPath)')" />
-  </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

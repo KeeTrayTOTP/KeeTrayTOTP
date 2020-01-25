@@ -1,9 +1,7 @@
-name: KeeTrayTOTP CI Build
+name: KeeTrayTOTP PR Build
 
-on:
-  push:
-    branches:
-      - 'master' 
+on: [pull_request]
+
 jobs:
   build:
     runs-on: windows-latest
@@ -20,8 +18,8 @@ jobs:
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
 
-    - name: Build plgx
-      run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
+    - name: MSBuild
+      run: msbuild KeeTrayTOTP.sln
 
     - name: Run tests
       run: dotnet test
