@@ -8,15 +8,22 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-
+    
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
     
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
+    
+    - name: Setup VSTest.Console.exe
+      uses: malcolmnixon/Setup-VSTest@master
 
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
 
     - name: MSBuild
       run: msbuild KeeTrayTOTP.sln
+
+    - name: VSTest.Console
+      working-directory: KeeTrayTOTP.Tests/bin/Debug
+      run: vstest.console KeeTrayTOTP.Tests.dll
