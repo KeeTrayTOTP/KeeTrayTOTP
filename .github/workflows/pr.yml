@@ -18,11 +18,14 @@ jobs:
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
 
-    - name: MSBuild
+    - name: MSBuild - Debug
       run: msbuild KeeTrayTOTP.sln /p:Configuration=Debug
 
     - name: Run tests
       run: dotnet test
 
-    - name: MSBuild
+    - name: Clean build output
+      run: msbuild KeeTrayTOTP.sln /t:Clean
+
+    - name: MSBuild - ReleasePlgx
       run: msbuild KeeTrayTOTP.sln /t:Rebuild /p:Configuration=ReleasePlgx
