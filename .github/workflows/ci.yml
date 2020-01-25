@@ -23,5 +23,3 @@ jobs:
     - name: Build plgx
       run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
 
-    - name: Run tests
-      run: dotnet test
