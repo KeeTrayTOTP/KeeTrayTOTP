@@ -25,4 +25,4 @@ jobs:
       run: dotnet test
 
     - name: MSBuild
-      run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
+      run: msbuild KeeTrayTOTP.sln /t:Rebuild /p:Configuration=ReleasePlgx
