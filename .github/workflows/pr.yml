@@ -1,0 +1,25 @@
+name: KeeTrayTOTP PR Build
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Setup MSBuild.exe
+      uses: warrenbuckley/Setup-MSBuild@v1
+    
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+
+    - name: nuget restore
+      run: nuget restore KeeTrayTOTP.sln
+
+    - name: MSBuild
+      run: msbuild KeeTrayTOTP.sln
+
+    - name: Run tests
+      run: dotnet test
