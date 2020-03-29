@@ -74,7 +74,7 @@ namespace KeeTrayTOTP
         /// </summary>
         internal const int setstat_int_EntryList_RefreshRate = 300;
         internal const int setstat_trim_text_length = 25;
-        public IReadOnlyList<string> setstat_allowed_lengths = new ReadOnlyCollection<string>(new[] { "6", "7", "8", "S" });
+        internal IReadOnlyList<string> setstat_allowed_lengths = new ReadOnlyCollection<string>(new[] { "6", "7", "8", "S" });
 
         /// <summary>
         /// Form Help Global Reference.
