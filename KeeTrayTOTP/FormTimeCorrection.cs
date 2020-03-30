@@ -56,10 +56,10 @@ namespace KeeTrayTOTP
                     if (plugin.SettingsCheck(pe)) //Checks that settings exists for this entry.
                     {
                         string[] Settings = plugin.SettingsGet(pe); //Gets the entry's totp settings.
-                        bool ValidInterval = false; bool ValidLength = false; bool ValidUrl = false;
-                        if (plugin.SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl)) //Validates the settings.
+                        bool validUrl;
+                        if (plugin.SettingsValidate(pe, out validUrl)) //Validates the settings.
                         {
-                            if (ValidUrl) //Makes sure the URL is also valid.
+                            if (validUrl) //Makes sure the URL is also valid.
                             {
                                 if (!ComboBoxUrlTimeCorrection.Items.Contains(Settings[2]) && plugin.TimeCorrections[Settings[2]] == null) //Checks if not already in combobox or is an existing time correction.
                                 {

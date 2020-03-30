@@ -22,4 +22,5 @@ jobs:
       run: msbuild KeeTrayTOTP.sln
 
     - name: Run tests
-      run: dotnet test
+      # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
+      run: dotnet test --no-build
