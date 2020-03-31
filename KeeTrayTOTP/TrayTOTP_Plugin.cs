@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text.RegularExpressions;
 using KeePass.App.Configuration;
 using KeePass.Plugins;
@@ -73,6 +74,7 @@ namespace KeeTrayTOTP
         /// </summary>
         internal const int setstat_int_EntryList_RefreshRate = 300;
         internal const int setstat_trim_text_length = 25;
+        internal IReadOnlyList<string> setstat_allowed_lengths = new ReadOnlyCollection<string>(new[] { "6", "7", "8", "S" });
 
         /// <summary>
         /// Form Help Global Reference.
@@ -620,8 +622,7 @@ namespace KeeTrayTOTP
                 {
                     if (SettingsCheck(e.Context.Entry) && SeedCheck(e.Context.Entry))
                     {
-                        bool ValidInterval = false; bool ValidLength = false; bool ValidUrl = false;
-                        if (SettingsValidate(e.Context.Entry, out ValidInterval, out ValidLength, out ValidUrl))
+                        if (SettingsValidate(e.Context.Entry))
                         {
                             string[] Settings = SettingsGet(e.Context.Entry);
 
@@ -702,45 +703,60 @@ namespace KeeTrayTOTP
         /// <returns>Error(s) while validating Interval or Length.</returns>
         internal bool SettingsValidate(PwEntry pe, out bool IsIntervalValid, out bool IsLengthValid, out bool IsUrlValid)
         {
-            bool SettingsValid = true;
+            bool settingsValid = true;
             try
             {
-                string[] Settings = SettingsGet(pe);
-                try
-                {
-                    IsIntervalValid = (Convert.ToInt16(Settings[0]) > 0) && (Convert.ToInt16(Settings[0]) < 61); //Interval
-                }
-                catch (Exception)
-                {
-                    IsIntervalValid = false;
-                    SettingsValid = false;
-                }
-                try
-                {
-                    IsLengthValid = (Settings[1] == "6") || (Settings[1] == "7") || (Settings[1] == "8") || (Settings[1] == "S"); //Length
-                }
-                catch (Exception)
-                {
-                    IsLengthValid = false;
-                    SettingsValid = false;
-                }
-                try
-                {
-                    IsUrlValid = (Settings[2].StartsWith("http://")) || (Settings[2].StartsWith("https://")); //Url
-                }
-                catch (Exception)
-                {
-                    IsUrlValid = false;
-                }
+                string[] settings = SettingsGet(pe);
+
+                IsIntervalValid = IntervalIsValid(settings);
+                IsLengthValid = LengthIsValid(settings);
+
+                settingsValid = IsIntervalValid && IsLengthValid;
+
+                IsUrlValid = UrlIsValid(settings);
             }
             catch (Exception)
             {
                 IsIntervalValid = false;
                 IsLengthValid = false;
                 IsUrlValid = false;
-                SettingsValid = false;
+                settingsValid = false;
             }
-            return SettingsValid;
+            return settingsValid;
+        }
+
+        private static bool UrlIsValid(string[] settings)
+        {
+            if (settings.Length < 3)
+                return false;
+            
+            return settings[2].StartsWith("http://") || settings[2].StartsWith("https://"); 
+        }
+
+        private bool LengthIsValid(string[] settings)
+        {
+            if (settings.Length < 2)
+                return false;
+
+            if (!setstat_allowed_lengths.Contains(settings[1]))
+                return false;
+
+            return true;
+        }
+
+        private bool IntervalIsValid(string[] settings)
+        {
+            if (settings.Length == 0)
+                return false;
+
+            short interval;
+            if (!short.TryParse(settings[0], out interval))
+                return false;
+
+            if (interval < 0 && interval < 180)
+                return false;
+
+            return true;
         }
 
         /// <summary>
@@ -803,8 +819,7 @@ namespace KeeTrayTOTP
         {
             if (SettingsCheck(pe) && SeedCheck(pe))
             {
-                bool ValidInterval; bool ValidLength; bool ValidUrl;
-                if (SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl))
+                if (SettingsValidate(pe))
                 {
                     string[] Settings = SettingsGet(pe);
 
