@@ -160,21 +160,21 @@ namespace KeeTrayTOTP
             // Provide a menu item for the main location(s)
             if (type == PluginMenuType.Main)
             {
-                var toMenuTrayTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strTrayTOTPPlugin);
+                var toMenuTrayTOTP = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin);
                 toMenuTrayTOTP.Image = Properties.Resources.TOTP;
 
-                var toSubMenuSettings = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strSettings);
+                var toSubMenuSettings = new ToolStripMenuItem(Localization.Strings.Settings);
                 toSubMenuSettings.Image = Properties.Resources.TOTP_Settings;
                 toSubMenuSettings.Click += OnMenuSettingsClick;
 
                 toMenuTrayTOTP.DropDownItems.Add(toSubMenuSettings);
                 var toSubMenuSeparator1 = new ToolStripSeparator();
                 toMenuTrayTOTP.DropDownItems.Add(toSubMenuSeparator1);
-                var toSubMenuHelp = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strHelp);
+                var toSubMenuHelp = new ToolStripMenuItem(Localization.Strings.Help);
                 toSubMenuHelp.Image = Properties.Resources.TOTP_Help;
                 toSubMenuHelp.Click += OnMenuHelpClick;
                 toMenuTrayTOTP.DropDownItems.Add(toSubMenuHelp);
-                var toSubMenuAbout = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strAbout + "...");
+                var toSubMenuAbout = new ToolStripMenuItem(Localization.Strings.About + "...");
                 toSubMenuAbout.Image = Properties.Resources.TOTP_Info;
                 toSubMenuAbout.Click += OnMenuAboutClick;
                 toMenuTrayTOTP.DropDownItems.Add(toSubMenuAbout);
@@ -183,18 +183,18 @@ namespace KeeTrayTOTP
             }
             else if (type == PluginMenuType.Entry)
             {
-                var enMenuTrayTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strTrayTOTPPlugin);
+                var enMenuTrayTOTP = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin);
                 enMenuTrayTOTP.Image = Properties.Resources.TOTP;
 
-                var enMenuCopyTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strCopyTOTP);
+                var enMenuCopyTOTP = new ToolStripMenuItem(Localization.Strings.CopyTOTP);
                 enMenuCopyTOTP.Image = Properties.Resources.TOTP;
                 enMenuCopyTOTP.ShortcutKeys = (Keys)Shortcut.CtrlT;
                 enMenuCopyTOTP.Click += OnEntryMenuTOTPClick;
-                var enMenuSetupTOTP = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strSetupTOTP);
+                var enMenuSetupTOTP = new ToolStripMenuItem(Localization.Strings.SetupTOTP);
                 enMenuSetupTOTP.Image = Properties.Resources.TOTP_Setup;
                 enMenuSetupTOTP.ShortcutKeys = (Keys)Shortcut.CtrlShiftI;
                 enMenuSetupTOTP.Click += OnEntryMenuSetupClick;
-                var enMenuShowQR = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strShowQR);
+                var enMenuShowQR = new ToolStripMenuItem(Localization.Strings.ShowQR);
                 enMenuShowQR.Image = Properties.Resources.TOTP_Setup;
                 enMenuShowQR.ShortcutKeys = (Keys)Shortcut.CtrlShiftJ;
                 enMenuShowQR.Click += OnEntryMenuShowQRClick;
@@ -260,7 +260,7 @@ namespace KeeTrayTOTP
 
             // Notify Icon Context Menus.
             m_host.MainWindow.TrayContextMenu.Opening += OnNotifyMenuOpening;
-            niMenuTitle = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strTrayTOTPPlugin);
+            niMenuTitle = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin);
             niMenuTitle.Image = Properties.Resources.TOTP;
             m_host.MainWindow.TrayContextMenu.Items.Insert(0, niMenuTitle);
             niMenuSeperator = new ToolStripSeparator();
@@ -468,7 +468,7 @@ namespace KeeTrayTOTP
                     }
                     else
                     {
-                        var NewMenu = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strNoTOTPFound);
+                        var NewMenu = new ToolStripMenuItem(Localization.Strings.NoTOTPSeedFound);
                         NewMenu.Image = Properties.Resources.TOTP_None;
                         niMenuList.Add(NewMenu);
                         m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuList[0]);
@@ -480,14 +480,14 @@ namespace KeeTrayTOTP
                 {
                     if (m_host.MainWindow.IsFileLocked(null))
                     {
-                        var NewMenu = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strDatabaseIsLocked);
+                        var NewMenu = new ToolStripMenuItem(Localization.Strings.DatabaseIsLocked);
                         NewMenu.Image = Properties.Resources.TOTP_Lock;
                         niMenuList.Add(NewMenu);
                         m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuList[0]);
                     }
                     else
                     {
-                        var NewMenu = new ToolStripMenuItem(TrayTOTP_Plugin_Localization.strDatabaseNotOpen);
+                        var NewMenu = new ToolStripMenuItem(Localization.Strings.DatabaseIsNotOpen);
                         NewMenu.Image = Properties.Resources.TOTP_Error;
                         niMenuList.Add(NewMenu);
                         m_host.MainWindow.TrayContextMenu.Items.Insert(1, niMenuList[0]);
@@ -572,7 +572,7 @@ namespace KeeTrayTOTP
                     {
                         if (Column.Type == AceColumnType.PluginExt)
                         {
-                            if (Column.CustomName == TrayTOTP_Plugin_Localization.strTOTP)
+                            if (Column.CustomName == Localization.Strings.TOTP)
                             {
                                 liColumnTOTPVisible = true;
                             }
@@ -639,20 +639,20 @@ namespace KeeTrayTOTP
                             else
                             {
                                 e.Text = string.Empty;
-                                MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadSeed + InvalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
+                                MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + InvalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
                             }
-                            if (TOTPGenerator.TimeCorrectionError) MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadUrl);
+                            if (TOTPGenerator.TimeCorrectionError) MessageService.ShowWarning(Localization.Strings.WarningBadURL);
                         }
                         else
                         {
                             e.Text = string.Empty;
-                            MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadSet);
+                            MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
                         }
                     }
                     else
                     {
                         e.Text = string.Empty;
-                        MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningNotSet);
+                        MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
                     }
                 }
             }
@@ -665,7 +665,7 @@ namespace KeeTrayTOTP
         /// <returns>Presence of Settings.</returns>
         internal bool SettingsCheck(PwEntry pe)
         {
-            return pe.Strings.Exists(m_host.CustomConfig.GetString(setname_string_TOTPSettings_StringName, TrayTOTP_Plugin_Localization.setdef_string_TOTPSettings_StringName));
+            return pe.Strings.Exists(m_host.CustomConfig.GetString(setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings));
         }
 
         /// <summary>
@@ -766,7 +766,7 @@ namespace KeeTrayTOTP
         /// <returns>String Array (Interval, Length, Url).</returns>
         internal string[] SettingsGet(PwEntry pe)
         {
-            return pe.Strings.Get(m_host.CustomConfig.GetString(setname_string_TOTPSettings_StringName, TrayTOTP_Plugin_Localization.setdef_string_TOTPSettings_StringName)).ReadString().Split(';');
+            return pe.Strings.Get(m_host.CustomConfig.GetString(setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings)).ReadString().Split(';');
         }
 
         /// <summary>
@@ -776,7 +776,7 @@ namespace KeeTrayTOTP
         /// <returns>Presence of the Seed.</returns>
         internal bool SeedCheck(PwEntry pe)
         {
-            return pe.Strings.Exists(m_host.CustomConfig.GetString(setname_string_TOTPSeed_StringName, TrayTOTP_Plugin_Localization.setdef_string_TOTPSeed_StringName));
+            return pe.Strings.Exists(m_host.CustomConfig.GetString(setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
         }
 
         /// <summary>
@@ -808,7 +808,7 @@ namespace KeeTrayTOTP
         /// <returns>Protected Seed.</returns>
         internal ProtectedString SeedGet(PwEntry pe)
         {
-            return pe.Strings.Get(m_host.CustomConfig.GetString(setname_string_TOTPSeed_StringName, TrayTOTP_Plugin_Localization.setdef_string_TOTPSeed_StringName));
+            return pe.Strings.Get(m_host.CustomConfig.GetString(setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
         }
 
         /// <summary>
@@ -837,18 +837,18 @@ namespace KeeTrayTOTP
                     }
                     else
                     {
-                        MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadSeed + InvalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
+                        MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + InvalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
                     }
-                    if (TOTPGenerator.TimeCorrectionError) MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadUrl);
+                    if (TOTPGenerator.TimeCorrectionError) MessageService.ShowWarning(Localization.Strings.WarningBadURL);
                 }
                 else
                 {
-                    MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningBadSet);
+                    MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
                 }
             }
             else
             {
-                MessageService.ShowWarning(TrayTOTP_Plugin_Localization.strWarningNotSet);
+                MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
             }
         }
 

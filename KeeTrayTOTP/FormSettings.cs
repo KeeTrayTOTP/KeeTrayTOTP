@@ -43,7 +43,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void FormSettings_Load(object sender, EventArgs e)
         {
-            Text = TrayTOTP_Plugin_Localization.strSettings + TrayTOTP_Plugin_Localization.strSpaceDashSpace + TrayTOTP_Plugin_Localization.strTrayTOTPPlugin; // Set form's name using constants.
+            Text = Localization.Strings.Settings + @" - " + Localization.Strings.TrayTOTPPlugin; // Set form's name using constants.
             Working(true, true); // Set controls depending on the state of action.
             WorkerLoad.RunWorkerAsync(); // Load Settings in form controls.
         }
@@ -77,7 +77,7 @@ namespace KeeTrayTOTP
 
         private void ButtonReset_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show(FormSettings_Localization.SettingsAskResetDefaultValues, TrayTOTP_Plugin_Localization.strTrayTOTPPlugin, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(Localization.Strings.SettingsAskResetDefaultValues, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 Working(true, false); //Set controls depending on the state of action.
                 WorkerReset.RunWorkerAsync();
@@ -107,16 +107,16 @@ namespace KeeTrayTOTP
                     CheckBoxAutoTypeFieldRename.Checked = false;
                     if (_plugin.m_host.MainWindow.IsFileLocked(null))
                     {
-                        MessageBox.Show(FormSettings_Localization.SettingsCurrentDatabaseLocked, TrayTOTP_Plugin_Localization.strTrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        MessageBox.Show(Localization.Strings.SettingsCurrentDatabaseLocked, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    MessageBox.Show(FormSettings_Localization.SettingsOpenDatabaseRequired, TrayTOTP_Plugin_Localization.strTrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Localization.Strings.SettingsOpenDatabaseRequired, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
                 if (!CheckBoxAutoTypeFieldName.Checked)
                 {
                     CheckBoxAutoTypeFieldRename.Checked = false;
-                    MessageBox.Show(FormSettings_Localization.SettingsEnableFieldRename, TrayTOTP_Plugin_Localization.strTrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(Localization.Strings.SettingsEnableFieldRename, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
             }
@@ -179,7 +179,7 @@ namespace KeeTrayTOTP
             ListViewTimeCorrectionList.Items.AddRange(_plugin.TimeCorrections.ToLVI());
             if (!_plugin.NetworkIsConnected)
             {
-                if (_networkWasConnected) MessageBox.Show(string.Format(FormSettings_Localization.SettingsNoInternetDetected, Environment.NewLine), TrayTOTP_Plugin_Localization.strTrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (_networkWasConnected) MessageBox.Show(string.Format(Localization.Strings.SettingsNoInternetDetected, Environment.NewLine), Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 ToolStripButtonAddTimeCorrection.Enabled = false;
                 ToolStripButtonPropertiesTimeCorrection.Enabled = false;
                 _networkWasConnected = false;
@@ -218,16 +218,16 @@ namespace KeeTrayTOTP
             ErrorProviderSettings.SetError(TextBoxAutoTypeFieldName, string.Empty);
             ErrorProviderSettings.SetError(ComboBoxTOTPSeedStringName, string.Empty);
             ErrorProviderSettings.SetError(ComboBoxTOTPSettingsStringName, string.Empty);
-            if (TextBoxAutoTypeFieldName.Text.Contains("{") || TextBoxAutoTypeFieldName.Text.Contains("}")) ErrorProviderSettings.SetError(TextBoxAutoTypeFieldName, FormSettings_Localization.SettingsInvalidCharacter);
+            if (TextBoxAutoTypeFieldName.Text.Contains("{") || TextBoxAutoTypeFieldName.Text.Contains("}")) ErrorProviderSettings.SetError(TextBoxAutoTypeFieldName, Localization.Strings.SettingsInvalidCharacter);
             if (ComboBoxTOTPSeedStringName.Text == ComboBoxTOTPSettingsStringName.Text)
             {
-                ErrorProviderSettings.SetError(ComboBoxTOTPSeedStringName, FormSettings_Localization.SettingsInvalidNameSetting);
-                ErrorProviderSettings.SetError(ComboBoxTOTPSettingsStringName, FormSettings_Localization.SettingsInvalidNameSeed);
+                ErrorProviderSettings.SetError(ComboBoxTOTPSeedStringName, Localization.Strings.SettingsInvalidNameSetting);
+                ErrorProviderSettings.SetError(ComboBoxTOTPSettingsStringName, Localization.Strings.SettingsInvalidNameSeed);
             }
             if (ErrorProviderSettings.GetError(TextBoxAutoTypeFieldName) != string.Empty) temp = true;
             if (ErrorProviderSettings.GetError(ComboBoxTOTPSeedStringName) != string.Empty) temp = true;
             if (ErrorProviderSettings.GetError(ComboBoxTOTPSettingsStringName) != string.Empty) temp = true;
-            if (temp) ErrorProviderSettings.SetError(ButtonOK, FormSettings_Localization.SettingsErrors);
+            if (temp) ErrorProviderSettings.SetError(ButtonOK, Localization.Strings.SettingsErrors);
             return temp;
         }
 
@@ -291,8 +291,8 @@ namespace KeeTrayTOTP
                     }
                 }
             }
-            ComboBoxTOTPSeedStringName.Text = _plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, TrayTOTP_Plugin_Localization.setdef_string_TOTPSeed_StringName);
-            ComboBoxTOTPSettingsStringName.Text = _plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, TrayTOTP_Plugin_Localization.setdef_string_TOTPSettings_StringName);
+            ComboBoxTOTPSeedStringName.Text = _plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed);
+            ComboBoxTOTPSettingsStringName.Text = _plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings);
             if (WorkerLoad.CancellationPending) e.Cancel = true;
         }
 
@@ -310,7 +310,7 @@ namespace KeeTrayTOTP
                 {
                     if (e.Result.ToString() == "Reset")
                     {
-                        MessageBox.Show(FormSettings_Localization.SettingsDefaultValuesRestored, TrayTOTP_Plugin_Localization.strTrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(Localization.Strings.SettingsDefaultValuesRestored, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
@@ -403,7 +403,7 @@ namespace KeeTrayTOTP
             // Auto-Type
             _plugin.m_host.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_AutoType_Enable, null);
             string OldAutoTypeFieldName = _plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_AutoType_FieldName, KeeTrayTOTPExt.setdef_string_AutoType_FieldName).ExtWithBrackets();
-            string NewAutoTypeFieldName = TrayTOTP_Plugin_Localization.strTOTP.ExtWithBrackets();
+            string NewAutoTypeFieldName = Localization.Strings.TOTP.ExtWithBrackets();
             KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Remove(OldAutoTypeFieldName);
             _plugin.m_host.MainWindow.ActiveDatabase.RootGroup.DefaultAutoTypeSequence = _plugin.m_host.MainWindow.ActiveDatabase.RootGroup.DefaultAutoTypeSequence.Replace(OldAutoTypeFieldName, NewAutoTypeFieldName);
             foreach (var group in _plugin.m_host.MainWindow.ActiveDatabase.RootGroup.GetGroups(true))

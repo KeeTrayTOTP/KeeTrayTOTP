@@ -48,7 +48,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void FormTimeCorrection_Load(object sender, EventArgs e)
         {
-            Text = TrayTOTP_Plugin_Localization.strTimeCorrection + TrayTOTP_Plugin_Localization.strSpaceDashSpace + TrayTOTP_Plugin_Localization.strTrayTOTPPlugin; //Sets the form's display text.
+            Text = Localization.Strings.TimeCorrection + @" - " + Localization.Strings.TrayTOTPPlugin; //Sets the form's display text.
             if (plugin.m_host.MainWindow.ActiveDatabase.IsOpen)
             {
                 foreach (var pe in plugin.m_host.MainWindow.ActiveDatabase.RootGroup.GetEntries(true)) //Goes through all entries to find existing urls but excludes existing time corrections.
@@ -124,14 +124,14 @@ namespace KeeTrayTOTP
                 if (e.Result.ToString() == "success") //Checks if thread was a success.
                 {
                     PictureBoxTimeCorrection.Image = ImageListErrorProvider.Images[0]; //Displays success icon.
-                    LabelStatusTimeCorrection.Text = FormTimeCorrection_Localization.TcSucces; //Diplays success message.
+                    LabelStatusTimeCorrection.Text = Localization.Strings.TcSucces; //Diplays success message.
                     ButtonOK.Enabled = true; //Enables the user to add the time correction.
                     ButtonVerify.Visible = false; //Hides the verification button.
                 }
                 if (e.Result.ToString() == "fail") //Checks if thread has failed.
                 {
                     PictureBoxTimeCorrection.Image = ImageListErrorProvider.Images[3]; //Displays failure icon.
-                    LabelStatusTimeCorrection.Text = FormTimeCorrection_Localization.TcConnectionFailed; //Diplays failure message.
+                    LabelStatusTimeCorrection.Text = Localization.Strings.TcConnectionFailed; //Diplays failure message.
                     ButtonVerify.Enabled = true; //Enables the user to retry the URL validation.
                     ComboBoxUrlTimeCorrection.Enabled = true; //Enables the user to modify the last URL that was attempted to validate.
                 }
@@ -139,7 +139,7 @@ namespace KeeTrayTOTP
             else
             {
                 PictureBoxTimeCorrection.Image = ImageListErrorProvider.Images[2]; //Displays cancellation icon.
-                LabelStatusTimeCorrection.Text = FormTimeCorrection_Localization.TcVerificationCancelled; //Diplays cancellation message.
+                LabelStatusTimeCorrection.Text = Localization.Strings.TcVerificationCancelled; //Diplays cancellation message.
                 ButtonVerify.Enabled = true; //Enables the user to retry the URL validation.
                 ComboBoxUrlTimeCorrection.Enabled = true; //Enables the user to modify the last URL that was attempted to validate.
             }
@@ -154,12 +154,12 @@ namespace KeeTrayTOTP
         private void ButtonVerify_Click(object sender, EventArgs e)
         {
             ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, string.Empty); //Clears input errors.
-            if (!ComboBoxUrlTimeCorrection.Text.StartsWith("http")) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, FormTimeCorrection_Localization.TcUrlMustContainHttp); //Verifies if the URL is valid.
-            if (!ComboBoxUrlTimeCorrection.Text.Contains("://")) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, FormTimeCorrection_Localization.TcUrlInvalid); //Verifies if the URL is valid.
-            if (plugin.TimeCorrections[ComboBoxUrlTimeCorrection.Text] != null) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, FormTimeCorrection_Localization.TcUrlExists); //Verifies if the URL is existing.
+            if (!ComboBoxUrlTimeCorrection.Text.StartsWith("http")) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlMustContainHttp); //Verifies if the URL is valid.
+            if (!ComboBoxUrlTimeCorrection.Text.Contains("://")) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlInvalid); //Verifies if the URL is valid.
+            if (plugin.TimeCorrections[ComboBoxUrlTimeCorrection.Text] != null) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlExists); //Verifies if the URL is existing.
             if (ErrorProviderTimeCorrection.GetError(ComboBoxUrlTimeCorrection) != string.Empty) return; //Prevents the validation if input has an error.
             PictureBoxTimeCorrection.Image = ImageListErrorProvider.Images[1]; //Displays working icon.
-            LabelStatusTimeCorrection.Text = FormTimeCorrection_Localization.TcPleaseWaitVerifying; //Diplays attempt message.
+            LabelStatusTimeCorrection.Text = Localization.Strings.TcPleaseWaitVerifying; //Diplays attempt message.
             ButtonVerify.Enabled = false; //Prevents the user to retry the URL validation.
             ComboBoxUrlTimeCorrection.Enabled = false; //Prevents the user to modify the URL.
             WorkerWaitForCheck.RunWorkerAsync(); //Starts the worker that handles the thread that handles the validation attempt.
