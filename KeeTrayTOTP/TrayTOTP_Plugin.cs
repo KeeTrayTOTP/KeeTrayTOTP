@@ -16,6 +16,7 @@ using KeePassLib;
 using KeePassLib.Utility;
 using KeePassLib.Security;
 using KeeTrayTOTP.Libraries;
+using KeeTrayTOTP.Localization;
 
 namespace KeeTrayTOTP
 {
@@ -513,7 +514,7 @@ namespace KeeTrayTOTP
             int i = 1;
             foreach (var tab in nonSelectedTabs)
             {
-                var item = new ToolStripMenuItem("Switch to " + tab.Text)
+                var item = new ToolStripMenuItem(string.Format(Strings.SwitchTo, tab.Text))
                 {
                     Tag = tab
                 };

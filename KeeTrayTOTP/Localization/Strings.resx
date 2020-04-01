@@ -234,6 +234,10 @@
   <data name="ShowQR" xml:space="preserve">
     <value>Show QR</value>
   </data>
+  <data name="SwitchTo" xml:space="preserve">
+    <value>Switch to {0}</value>
+    <comment>{0} is a database name</comment>
+  </data>
   <data name="TcConnectionFailed" xml:space="preserve">
     <value>The connection to the server failed.</value>
   </data>

@@ -403,6 +403,15 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Switch to {0}.
+        /// </summary>
+        internal static string SwitchTo {
+            get {
+                return ResourceManager.GetString("SwitchTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The connection to the server failed..
         /// </summary>
         internal static string TcConnectionFailed {
