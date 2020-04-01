@@ -72,16 +72,6 @@
     <Compile Include="FormAbout.Designer.cs">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAbout_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FormAbout_Localization.resx</DependentUpon>
-    </Compile>
-    <Compile Include="FormHelp_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FormHelp_Localization.resx</DependentUpon>
-    </Compile>
     <Compile Include="FormSettings_Localization.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -177,17 +167,9 @@
       <DependentUpon>FormAbout.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAbout_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FormAbout_Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormHelp.resx">
       <DependentUpon>FormHelp.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormHelp_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FormHelp_Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSettings.resx">
       <DependentUpon>FormSettings.cs</DependentUpon>
