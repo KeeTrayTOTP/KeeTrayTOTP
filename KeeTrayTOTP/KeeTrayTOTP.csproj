@@ -203,6 +203,11 @@
     <StartWorkingDirectory>bin\Debug</StartWorkingDirectory>
     <ConsolePause>false</ConsolePause>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <StartAction>Program</StartAction>
+    <StartProgram>$(MSBuildProjectDirectory)\$(OutputPath)KeePass.exe</StartProgram>
+    <StartArguments>Test.kdbx --pw:test</StartArguments>
+  </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'ReleasePlgx'">
     <CallTarget Targets="BuildPlgx" />
