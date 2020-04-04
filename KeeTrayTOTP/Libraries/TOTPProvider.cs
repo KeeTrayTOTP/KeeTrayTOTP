@@ -16,35 +16,35 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Duration of generation of each totp, in seconds.
         /// </summary>
-        private int duration;
+        private int _duration;
         public int Duration
         {
             get
             {
-                return this.duration;
+                return this._duration;
             }
             set
             {
                 if (!(value > 0)) throw new Exception("Invalid Duration."); //Throws an exception if the duration is invalid as the class cannot work without it.
-                this.duration = value; //Defines variable from argument.
+                this._duration = value; //Defines variable from argument.
             }
         }
 
         /// <summary>
         /// Length of the generated totp.
         /// </summary>
-        private int length;
+        private int _length;
         public int Length
         {
             get
             {
-                return this.length;
+                return this._length;
             }
             set
             {
                 //Throws an exception if the length is invalid as the class cannot work without it.
                 if (value < 4 || value > 8) throw new Exception("Invalid Length.");
-                this.length = value; //Defines variable from argument.
+                this._length = value; //Defines variable from argument.
             }
 
         }
@@ -53,41 +53,41 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// TOTP Encoder.
         /// </summary>
-        private Func<byte[], int, string> encoder;
+        private Func<byte[], int, string> _encoder;
         public Func<byte[], int, string> Encoder
         {
             get
             {
-                return this.encoder;
+                return this._encoder;
             }
             set
             {
-                this.encoder = value; //Defines variable from argument.
+                this._encoder = value; //Defines variable from argument.
             }
         }
 
         /// <summary>
         /// Sets the time span that is used to match the server's UTC time to ensure accurate generation of Time-based One Time Passwords.
         /// </summary>
-        private TimeSpan timeCorrection;
+        private TimeSpan _timeCorrection;
         public TimeSpan TimeCorrection
         {
             get
             {
-                return this.timeCorrection;
+                return this._timeCorrection;
             }
             set
             {
-                this.timeCorrection = value; //Defines variable from argument.
+                this._timeCorrection = value; //Defines variable from argument.
             }
         }
 
-        private bool timeCorrectionError;
+        private bool _timeCorrectionError;
         public bool TimeCorrectionError
         {
             get
             {
-                return this.timeCorrectionError;
+                return this._timeCorrectionError;
             } 
         }
 
@@ -109,31 +109,31 @@ namespace KeeTrayTOTP.Libraries
         /// Instanciates a new TOTP_Generator.
         /// </summary>
         /// <param name="initSettings">Saved Settings.</param>
-        public TOTPProvider(string[] Settings, ref TimeCorrectionCollection tcc)
+        public TOTPProvider(string[] settings, ref TimeCorrectionCollection tcc)
         {
-            this.duration = Convert.ToInt16(Settings[0]);
+            this._duration = Convert.ToInt16(settings[0]);
 
-            if (Settings[1] == "S")
+            if (settings[1] == "S")
             {
-                this.length = 5;
-                this.encoder = TOTPEncoder.steam;
+                this._length = 5;
+                this._encoder = TOTPEncoder.Steam;
             }
             else
             {
-                this.length = Convert.ToInt16(Settings[1]);
-                this.encoder = TOTPEncoder.rfc6238;
+                this._length = Convert.ToInt16(settings[1]);
+                this._encoder = TOTPEncoder.Rfc6238;
             }
 
-            if(Settings.Length > 2 && Settings[2] != String.Empty)
+            if(settings.Length > 2 && settings[2] != String.Empty)
             {
-                var tc = tcc[Settings[2]];
+                var tc = tcc[settings[2]];
 
                 if (tc != null)
                     this.TimeCorrection = tc.TimeCorrection;
                 else
                 {
                     this.TimeCorrection = TimeSpan.Zero;
-                    this.timeCorrectionError = false;
+                    this._timeCorrectionError = false;
                 }
             }
             else
@@ -151,7 +151,7 @@ namespace KeeTrayTOTP.Libraries
         {
             get
             {
-                return DateTime.UtcNow - timeCorrection; //Computes current time minus time correction giving the corrected time.
+                return DateTime.UtcNow - _timeCorrection; //Computes current time minus time correction giving the corrected time.
             }
         }
 
@@ -162,8 +162,8 @@ namespace KeeTrayTOTP.Libraries
         {
             get
             {
-                var n = (duration - (int)((Now - UnixEpoch).TotalSeconds % duration)); //Computes the seconds left before counter incrementation.
-                return n == 0 ? duration : n; //Returns timer value from 30 to 1.
+                var n = (_duration - (int)((Now - UnixEpoch).TotalSeconds % _duration)); //Computes the seconds left before counter incrementation.
+                return n == 0 ? _duration : n; //Returns timer value from 30 to 1.
             }
         }
 
@@ -174,8 +174,8 @@ namespace KeeTrayTOTP.Libraries
         {
             get
             {
-                var ElapsedSeconds = (long)Math.Floor((Now - UnixEpoch).TotalSeconds); //Compute current counter for current time.
-                return ElapsedSeconds / duration; //Applies specified interval to computed counter.
+                var elapsedSeconds = (long)Math.Floor((Now - UnixEpoch).TotalSeconds); //Compute current counter for current time.
+                return elapsedSeconds / _duration; //Applies specified interval to computed counter.
             }
         }
 
@@ -260,7 +260,7 @@ namespace KeeTrayTOTP.Libraries
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(totp);
 
-            return this.encoder(totp, length);
+            return this._encoder(totp, _length);
         }
 
     }

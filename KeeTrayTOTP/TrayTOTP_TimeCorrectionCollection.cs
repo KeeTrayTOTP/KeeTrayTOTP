@@ -15,20 +15,20 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Time Correction List.
         /// </summary>
-        private readonly List<TimeCorrectionProvider> TimeCorrections;
-        private bool _Enable;
+        private readonly List<TimeCorrectionProvider> _timeCorrections;
+        private bool _enable;
         /// <summary>
         /// Enables or disables the Time Correction verification for all the collection items.
         /// </summary>
         internal bool Enable
         {
-            get { return _Enable; }
+            get { return _enable; }
             set
             {
-                _Enable = value;
-                foreach (var TimeCorrection in TimeCorrections)
+                _enable = value;
+                foreach (var timeCorrection in _timeCorrections)
                 {
-                    TimeCorrection.Enable = value;
+                    timeCorrection.Enable = value;
                 }
             }
         }
@@ -36,17 +36,17 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Provides access to a specific collection item using the URL as a key.
         /// </summary>
-        /// <param name="URL">URL.</param>
+        /// <param name="url">URL.</param>
         /// <returns></returns>
-        internal TimeCorrectionProvider this[string URL]
+        internal TimeCorrectionProvider this[string url]
         {
             get
             {
-                foreach (var TimeCorrection in TimeCorrections)
+                foreach (var timeCorrection in _timeCorrections)
                 {
-                    if (TimeCorrection.Url == URL)
+                    if (timeCorrection.Url == url)
                     {
-                        return TimeCorrection;
+                        return timeCorrection;
                     }
                 }
                 return null;
@@ -57,35 +57,35 @@ namespace KeeTrayTOTP
         /// Handles Time Correction for TOTP Generators insuring generation accuracy.
         /// </summary>
         /// <param name="Plugin">Handle to the plugin's class.</param>
-        /// <param name="Enable">Enabled by Default.</param>
-        internal TimeCorrectionCollection(bool Enable = true)
+        /// <param name="enable">Enabled by Default.</param>
+        internal TimeCorrectionCollection(bool enable = true)
         {
-            _Enable = Enable;
-            TimeCorrections = new List<TimeCorrectionProvider>();
+            _enable = enable;
+            _timeCorrections = new List<TimeCorrectionProvider>();
         }
 
         /// <summary>
         /// Populates the Time Correction Collection with the URLs in the specified string.
         /// </summary>
-        /// <param name="URLs">URLs.</param>
-        internal void AddRangeFromString(string URLs)
+        /// <param name="urLs">URLs.</param>
+        internal void AddRangeFromString(string urLs)
         {
-            foreach (var URL in URLs.Split(';'))
+            foreach (var url in urLs.Split(';'))
             {
                 //Validating that url is not null.
-                if (URL != String.Empty)
+                if (url != String.Empty)
                 {
                     //Validating that this server is not already checked.
                     bool next = false;
-                    foreach (var TimeC in TimeCorrections)
+                    foreach (var timeC in _timeCorrections)
                     {
-                        if (TimeC.Url == URL)
+                        if (timeC.Url == url)
                         {
                             next = true;
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) TimeCorrections.Add(new TimeCorrectionProvider(URL, _Enable));
+                    if (!next) _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
                 }
             }
         }
@@ -93,25 +93,25 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Populates the Time Correction Collection with the URL list specified.
         /// </summary>
-        /// <param name="URLs">URLs.</param>
-        internal void AddRangeFromList(List<string> URLs)
+        /// <param name="urLs">URLs.</param>
+        internal void AddRangeFromList(List<string> urLs)
         {
-            foreach (var URL in URLs)
+            foreach (var url in urLs)
             {
                 //Validating that url is not null.
-                if (URL != String.Empty)
+                if (url != String.Empty)
                 {
                     //Validating that this server is not already checked.
                     bool next = false;
-                    foreach (var TimeC in TimeCorrections)
+                    foreach (var timeC in _timeCorrections)
                     {
-                        if (TimeC.Url == URL)
+                        if (timeC.Url == url)
                         {
                             next = true;
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) TimeCorrections.Add(new TimeCorrectionProvider(URL, _Enable));
+                    if (!next) _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
                 }
             }
         }
@@ -119,26 +119,26 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Clears the Time Correction Collection and populates it with the string specified.
         /// </summary>
-        /// <param name="URLs">URLs.</param>
-        internal void ResetThenAddRangeFromString(string URLs)
+        /// <param name="urLs">URLs.</param>
+        internal void ResetThenAddRangeFromString(string urLs)
         {
-            TimeCorrections.Clear();
-            foreach (string URL in URLs.Split(';'))
+            _timeCorrections.Clear();
+            foreach (string url in urLs.Split(';'))
             {
                 //Validating that url is not null.
-                if (URL != String.Empty)
+                if (url != String.Empty)
                 {
                     //Validating that this server is not already checked.
                     bool next = false;
-                    foreach (var TimeC in TimeCorrections)
+                    foreach (var timeC in _timeCorrections)
                     {
-                        if (TimeC.Url == URL)
+                        if (timeC.Url == url)
                         {
                             next = true;
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) TimeCorrections.Add(new TimeCorrectionProvider(URL, _Enable));
+                    if (!next) _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
                 }
             }
         }
@@ -146,26 +146,26 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Clears the Time Correction Collection and populates it with the Listviewitemcollection specified.
         /// </summary>
-        /// <param name="LVIs">ListViewItem Collection containing all Time Correction Servers.</param>
-        internal void ResetThenAddRangeFromLVIs(ListView.ListViewItemCollection LVIs)
+        /// <param name="lvIs">ListViewItem Collection containing all Time Correction Servers.</param>
+        internal void ResetThenAddRangeFromLvIs(ListView.ListViewItemCollection lvIs)
         {
-            TimeCorrections.Clear();
-            foreach (ListViewItem LVI in LVIs)
+            _timeCorrections.Clear();
+            foreach (ListViewItem lvi in lvIs)
             {
                 //Validating that url is not null.
-                if (LVI.Text != String.Empty)
+                if (lvi.Text != String.Empty)
                 {
                     //Validating that this server is not already checked.
                     bool next = false;
-                    foreach (var TimeC in TimeCorrections)
+                    foreach (var timeC in _timeCorrections)
                     {
-                        if (TimeC.Url == LVI.Text)
+                        if (timeC.Url == lvi.Text)
                         {
                             next = true;
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) TimeCorrections.Add(new TimeCorrectionProvider(LVI.Text, _Enable));
+                    if (!next) _timeCorrections.Add(new TimeCorrectionProvider(lvi.Text, _enable));
                 }
             }
         }
@@ -174,20 +174,20 @@ namespace KeeTrayTOTP
         /// Returns all URLs with their current timespan or connection status for adding to a listview.
         /// </summary>
         /// <returns>ListViewItem Array.</returns>
-        internal ListViewItem[] ToLVI()
+        internal ListViewItem[] ToLvi()
         {
             //Temporary Listviewitem List to facilitate building the array.
-            var LVIs = new List<ListViewItem>();
-            foreach (var TC in TimeCorrections)
+            var lvIs = new List<ListViewItem>();
+            foreach (var tc in _timeCorrections)
             {
                 //Create new Listviewitem to appear in Time Correction Settings Listview.
-                var LVI = new ListViewItem(TC.Url) { ImageIndex = TC.LastUpdateSucceded ? 0 : 2 };
-                LVI.SubItems.Add((TC.LastUpdateSucceded ? TC.TimeCorrection.ToString() : Localization.Strings.ConnectionFailed));
-                LVI.Tag = TC;
-                LVI.ToolTipText = (TC.LastUpdateSucceded ? String.Empty : TC.LastUpdateDateTime.ToString());
-                LVIs.Add(LVI);
+                var lvi = new ListViewItem(tc.Url) { ImageIndex = tc.LastUpdateSucceded ? 0 : 2 };
+                lvi.SubItems.Add((tc.LastUpdateSucceded ? tc.TimeCorrection.ToString() : Localization.Strings.ConnectionFailed));
+                lvi.Tag = tc;
+                lvi.ToolTipText = (tc.LastUpdateSucceded ? String.Empty : tc.LastUpdateDateTime.ToString());
+                lvIs.Add(lvi);
             }
-            return LVIs.ToArray();
+            return lvIs.ToArray();
         }
 
         /// <summary>
@@ -197,12 +197,12 @@ namespace KeeTrayTOTP
         internal object[] ToComboBox()
         {
             //Temporary string List to facilitate building the array.
-            var Return = new List<object>();
-            foreach (var TimeCorrection in TimeCorrections)
+            var @return = new List<object>();
+            foreach (var timeCorrection in _timeCorrections)
             {
-                Return.Add(TimeCorrection.Url);
+                @return.Add(timeCorrection.Url);
             }
-            return Return.ToArray();
+            return @return.ToArray();
         }
 
         /// <summary>
@@ -212,12 +212,12 @@ namespace KeeTrayTOTP
         internal string ToSetting()
         {
             //Temporary string to build the string from multiple strings.
-            var Return = String.Empty;
-            foreach (var TimeCorrection in TimeCorrections)
+            var @return = String.Empty;
+            foreach (var timeCorrection in _timeCorrections)
             {
-                Return = Return + TimeCorrection.Url + ";";
+                @return = @return + timeCorrection.Url + ";";
             }
-            return Return.TrimEnd(';');
+            return @return.TrimEnd(';');
         }
 
         /// <summary>
@@ -226,7 +226,7 @@ namespace KeeTrayTOTP
         /// <returns>Time Correction List Enumerator.</returns>
         public IEnumerator<TimeCorrectionProvider> GetEnumerator()
         {
-            return TimeCorrections.GetEnumerator();
+            return _timeCorrections.GetEnumerator();
         }
 
         /// <summary>
@@ -235,7 +235,7 @@ namespace KeeTrayTOTP
         /// <returns>Time Correction List Enumerator.</returns>
         IEnumerator IEnumerable.GetEnumerator()
         {
-            return TimeCorrections.GetEnumerator();
+            return _timeCorrections.GetEnumerator();
         }
     }
 }
