@@ -28,8 +28,8 @@ jobs:
       with:
         name: KeeTrayTOTP.plgx
         path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
-
-     - name: Create pre-release
+    
+    - name: Create prerelease
        uses: marvinpinto/action-automatic-releases@latest
        with:
          repo_token: "${{ secrets.GITHUB_TOKEN }}"
