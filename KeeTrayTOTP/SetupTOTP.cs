@@ -30,7 +30,7 @@ namespace KeeTrayTOTP
 
         private void SetupTOTP_Load(object sender, EventArgs e)
         {
-            Text = TrayTOTP_Plugin_Localization.strSetup + TrayTOTP_Plugin_Localization.strSpaceDashSpace + TrayTOTP_Plugin_Localization.strTrayTOTPPlugin; //Set form's name using constants.
+            Text = Localization.Strings.Setup + @" - " + Localization.Strings.TrayTOTPPlugin; //Set form's name using constants.
 
             if (_plugin.SettingsCheck(entry) || _plugin.SeedCheck(entry)) //Checks the the totp settings exists.
             {
@@ -51,7 +51,7 @@ namespace KeeTrayTOTP
                 if (ValidUrl) ComboBoxTimeCorrectionSetup.Text = Settings[2]; //Checks if url is valid and sets time correction textbox to the setting value.
 
                 DeleteSetupButton.Visible = true; //Shows the back button.
-                HelpProviderSetup.SetHelpString(DeleteSetupButton, SetupTOTP_Localization.SetupDelete);
+                HelpProviderSetup.SetHelpString(DeleteSetupButton, Localization.Strings.SetupDelete);
             }
             else
             {
@@ -61,7 +61,7 @@ namespace KeeTrayTOTP
             if (_plugin.SeedCheck(entry)) TextBoxSeedSetup.Text = _plugin.SeedGet(entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
             ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); //Gets existings time corrections and adds them in the combobox.
 
-            HelpProviderSetup.SetHelpString(FinishSetupButton, SetupTOTP_Localization.SetupFinish);
+            HelpProviderSetup.SetHelpString(FinishSetupButton, Localization.Strings.SetupFinish);
 
             ErrorProviderSetup.SetError(TextBoxSeedSetup, string.Empty);
             ErrorProviderSetup.SetError(NumericIntervalSetup, string.Empty);
@@ -86,21 +86,21 @@ namespace KeeTrayTOTP
 
             // TOTP Seed field
             if (TextBoxSeedSetup.Text == string.Empty) //If no TOTP Seed
-                ErrorProviderSetup.SetError(TextBoxSeedSetup, SetupTOTP_Localization.SetupSeedCantBeEmpty);
+                ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupSeedCantBeEmpty);
             else if (!TextBoxSeedSetup.Text.ExtWithoutSpaces().ExtIsBase32(out InvalidBase32Chars)) // TODO: Add support to other known formats
-                ErrorProviderSetup.SetError(TextBoxSeedSetup, SetupTOTP_Localization.SetupInvalidCharacter + "(" + InvalidBase32Chars + ")!");
+                ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupInvalidCharacter + "(" + InvalidBase32Chars + ")!");
             else
                 ErrorProviderSetup.SetError(TextBoxSeedSetup, string.Empty);
 
             // Interval field
             if ((NumericIntervalSetup.Value < 1) || (NumericIntervalSetup.Value > 180))
-                ErrorProviderSetup.SetError(NumericIntervalSetup, string.Format(SetupTOTP_Localization.SetupInterval, Environment.NewLine));
+                ErrorProviderSetup.SetError(NumericIntervalSetup, string.Format(Localization.Strings.SetupInterval, Environment.NewLine));
             else
                 ErrorProviderSetup.SetError(NumericIntervalSetup, string.Empty);
 
             // Format/Interval radios
             if (!RadioButtonLength6Setup.Checked && !RadioButtonLength7Setup.Checked && !RadioButtonLength8Setup.Checked && !RadioButtonSteamFormatSetup.Checked)
-                ErrorProviderSetup.SetError(RadioButtonLength8Setup, SetupTOTP_Localization.SetupLengthMandatory);
+                ErrorProviderSetup.SetError(RadioButtonLength8Setup, Localization.Strings.SetupLengthMandatory);
             else
                 ErrorProviderSetup.SetError(RadioButtonLength8Setup, string.Empty);
 
@@ -113,14 +113,14 @@ namespace KeeTrayTOTP
                 bool validURL = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
                               && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
                 if (!validURL)
-                    ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, SetupTOTP_Localization.SetupInvalidUrl);
+                    ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, Localization.Strings.SetupInvalidUrl);
                 else
                     ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, string.Empty);
             }
 
-            /* ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, SetupTOTP_Localization.SetupUrlMustContainHttp);
+            /* ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, Localization.Strings.SetupUrlMustContainHttp);
             if (ComboBoxTimeCorrectionSetup.Text.Contains(";"))
-                ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, SetupTOTP_Localization.SetupInvalidCharacter + " (;)");
+                ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, Localization.Strings.SetupInvalidCharacter + " (;)");
             */
 
             if (ErrorProviderSetup.GetError(TextBoxSeedSetup) != string.Empty ||
@@ -136,7 +136,7 @@ namespace KeeTrayTOTP
                 entry.CreateBackup(_plugin.m_host.MainWindow.ActiveDatabase);
 
                 entry.Strings.Set(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName,
-                    TrayTOTP_Plugin_Localization.setdef_string_TOTPSeed_StringName),
+                    Localization.Strings.TOTPSeed),
                     new ProtectedString(true, TextBoxSeedSetup.Text)
                 );
 
@@ -152,7 +152,7 @@ namespace KeeTrayTOTP
                     format = "S";
 
                 entry.Strings.Set(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName,
-                    TrayTOTP_Plugin_Localization.setdef_string_TOTPSettings_StringName),
+                    Localization.Strings.TOTPSettings),
                     new ProtectedString(false,
                         NumericIntervalSetup.Value.ToString() + ";" + format +
                         (ComboBoxTimeCorrectionSetup.Text != string.Empty ? ";" : string.Empty) + ComboBoxTimeCorrectionSetup.Text)
@@ -180,13 +180,13 @@ namespace KeeTrayTOTP
         private void ButtonDelete_Click(object sender, EventArgs e)
         {
             //if (_plugin.SettingsCheck(entry) || _plugin.SeedCheck(entry))
-            if (MessageBox.Show(SetupTOTP_Localization.SetupMessageAskDeleteCurrentEntry, TrayTOTP_Plugin_Localization.strTrayTOTPPlugin, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+            if (MessageBox.Show(Localization.Strings.SetupMessageAskDeleteCurrentEntry, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 try
                 {
                     entry.CreateBackup(_plugin.m_host.MainWindow.ActiveDatabase);
-                    entry.Strings.Remove(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, TrayTOTP_Plugin_Localization.setdef_string_TOTPSeed_StringName));
-                    entry.Strings.Remove(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, TrayTOTP_Plugin_Localization.setdef_string_TOTPSettings_StringName));
+                    entry.Strings.Remove(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
+                    entry.Strings.Remove(_plugin.m_host.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings));
                     entry.Touch(true);
                     _plugin.m_host.MainWindow.ActiveDatabase.Modified = true;
                 }

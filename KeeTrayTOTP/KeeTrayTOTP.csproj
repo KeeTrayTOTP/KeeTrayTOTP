@@ -1,5 +1,9 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <!-- KeePass PLGX Compiler only can build csharp projects up to csharp version 5 -->
+    <LangVersion>5</LangVersion>
+  </PropertyGroup>
   <PropertyGroup>
     <!-- For building .plgx -->
     <PlgxConfiguration>
@@ -72,43 +76,17 @@
     <Compile Include="FormAbout.Designer.cs">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAbout_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FormAbout_Localization.resx</DependentUpon>
-    </Compile>
-    <Compile Include="FormHelp_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FormHelp_Localization.resx</DependentUpon>
-    </Compile>
-    <Compile Include="FormSettings_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FormSettings_Localization.resx</DependentUpon>
-    </Compile>
     <Compile Include="QRCode.cs" />
     <Compile Include="QRCodeData.cs" />
     <Compile Include="QRCodeGenerator.cs" />
-    <Compile Include="SetupTOTP_Localization.Designer.cs">
-      <DependentUpon>SetupTOTP_Localization.resx</DependentUpon>
+    <Compile Include="Localization\Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="FormTimeCorrection_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>FormTimeCorrection_Localization.resx</DependentUpon>
+      <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
     <Compile Include="Libraries\Base32.cs" />
     <Compile Include="Libraries\TimeCorrectionProvider.cs" />
     <Compile Include="Libraries\TOTPEncoder.cs" />
-    <Compile Include="Setup.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Setup.Designer.cs">
-      <DependentUpon>Setup.cs</DependentUpon>
-    </Compile>
     <Compile Include="SetupTOTP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -123,11 +101,6 @@
     </Compile>
     <Compile Include="Stream4Methods.cs" />
     <Compile Include="TrayTOTP_CustomColumn.cs" />
-    <Compile Include="TrayTOTP_CustomColumn_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TrayTOTP_CustomColumn_Localization.resx</DependentUpon>
-    </Compile>
     <Compile Include="TrayTOTP_Extensions.cs" />
     <Compile Include="FormHelp.cs">
       <SubType>Form</SubType>
@@ -154,59 +127,24 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Libraries\TOTPProvider.cs" />
-    <Compile Include="TrayTOTP_Extensions_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TrayTOTP_Extensions_Localization.resx</DependentUpon>
-    </Compile>
     <Compile Include="TrayTOTP_Plugin.cs" />
-    <Compile Include="TrayTOTP_Plugin_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TrayTOTP_Plugin_Localization.resx</DependentUpon>
-    </Compile>
     <Compile Include="TrayTOTP_TimeCorrectionCollection.cs" />
-    <Compile Include="TrayTOTP_TimeCorrectionCollection_Localization.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>TrayTOTP_TimeCorrectionCollection_Localization.resx</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormAbout.resx">
       <DependentUpon>FormAbout.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAbout_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FormAbout_Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormHelp.resx">
       <DependentUpon>FormHelp.cs</DependentUpon>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormHelp_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FormHelp_Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="FormSettings.resx">
       <DependentUpon>FormSettings.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormSettings_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FormSettings_Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SetupTOTP_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>SetupTOTP_Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="FormTimeCorrection.resx">
       <DependentUpon>FormTimeCorrection.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormTimeCorrection_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>FormTimeCorrection_Localization.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -219,21 +157,10 @@
     <EmbeddedResource Include="ShowQR.resx">
       <DependentUpon>ShowQR.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="TrayTOTP_CustomColumn_Localization.resx">
+    <EmbeddedResource Include="Localization\Strings.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TrayTOTP_CustomColumn_Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TrayTOTP_Extensions_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TrayTOTP_Extensions_Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TrayTOTP_Plugin_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TrayTOTP_Plugin_Localization.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="TrayTOTP_TimeCorrectionCollection_Localization.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>TrayTOTP_TimeCorrectionCollection_Localization.Designer.cs</LastGenOutput>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -275,6 +202,11 @@
     <StartArguments>--debug --pw:test Test.kdbx</StartArguments>
     <StartWorkingDirectory>bin\Debug</StartWorkingDirectory>
     <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <StartAction>Program</StartAction>
+    <StartProgram>$(MSBuildProjectDirectory)\$(OutputPath)KeePass.exe</StartProgram>
+    <StartArguments>Test.kdbx --pw:test</StartArguments>
   </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'ReleasePlgx'">

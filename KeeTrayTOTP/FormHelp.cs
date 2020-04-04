@@ -38,7 +38,7 @@ namespace KeeTrayTOTP
         private void FormHelp_Load(object sender, EventArgs e)
         {
             Size = new Size(550, 350);
-            Text = TrayTOTP_Plugin_Localization.strHelp + TrayTOTP_Plugin_Localization.strSpaceDashSpace + TrayTOTP_Plugin_Localization.strTrayTOTPPlugin;
+            Text = Localization.Strings.Help + @" - " + Localization.Strings.TrayTOTPPlugin;
             foreach (Control ctl in SplitContainerHelp.Panel2.Controls)
             {
                 ctl.Location = new Point(3,3);

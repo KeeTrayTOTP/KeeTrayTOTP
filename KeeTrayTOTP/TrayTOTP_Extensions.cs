@@ -154,7 +154,7 @@ namespace KeeTrayTOTP
             }
             catch (Exception)
             {
-                InvalidChars = TrayTOTP_Extensions_Localization.Error;
+                InvalidChars = Localization.Strings.Error;
             }
             return InvalidChars == null;
         }
