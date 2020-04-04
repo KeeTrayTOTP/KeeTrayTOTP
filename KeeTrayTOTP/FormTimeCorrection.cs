@@ -13,33 +13,33 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Plugin Host.
         /// </summary>
-        private readonly KeeTrayTOTPExt plugin;
+        private readonly KeeTrayTOTPExt _plugin;
 
         /// <summary>
         /// Windows Form Constructor when creating new Time Correction.
         /// </summary>
-        /// <param name="Plugin">Plugin Host.</param>
-        internal FormTimeCorrection(KeeTrayTOTPExt Plugin)
+        /// <param name="plugin">Plugin Host.</param>
+        internal FormTimeCorrection(KeeTrayTOTPExt plugin)
         {
-            plugin = Plugin; //Defines variable from argument.
+            _plugin = plugin; //Defines variable from argument.
             InitializeComponent(); //Form Initialization.
         }
         /// <summary>
         /// Windows Form Constructor when modifying existing Time Correction.
         /// </summary>
-        /// <param name="Plugin">Plugin Host.</param>
-        /// <param name="URL">URL to modify.</param>
-        internal FormTimeCorrection(KeeTrayTOTPExt Plugin, string URL)
+        /// <param name="plugin">Plugin Host.</param>
+        /// <param name="url">URL to modify.</param>
+        internal FormTimeCorrection(KeeTrayTOTPExt plugin, string url)
         {
-            plugin = Plugin; //Defines variable from argument.
+            _plugin = plugin; //Defines variable from argument.
             InitializeComponent(); //Form Initialization.
-            ComboBoxUrlTimeCorrection.Text = URL; //Defines default value from argument.
+            ComboBoxUrlTimeCorrection.Text = url; //Defines default value from argument.
         }
 
         /// <summary>
         /// TimeCorrection Provider that validates the URL.
         /// </summary>
-        private volatile TimeCorrectionProvider TestTimeCorrection;
+        private volatile TimeCorrectionProvider _testTimeCorrection;
 
         /// <summary>
         /// Windows Form Load.
@@ -49,21 +49,21 @@ namespace KeeTrayTOTP
         private void FormTimeCorrection_Load(object sender, EventArgs e)
         {
             Text = Localization.Strings.TimeCorrection + @" - " + Localization.Strings.TrayTOTPPlugin; //Sets the form's display text.
-            if (plugin.m_host.MainWindow.ActiveDatabase.IsOpen)
+            if (_plugin.PluginHost.MainWindow.ActiveDatabase.IsOpen)
             {
-                foreach (var pe in plugin.m_host.MainWindow.ActiveDatabase.RootGroup.GetEntries(true)) //Goes through all entries to find existing urls but excludes existing time corrections.
+                foreach (var pe in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true)) //Goes through all entries to find existing urls but excludes existing time corrections.
                 {
-                    if (plugin.SettingsCheck(pe)) //Checks that settings exists for this entry.
+                    if (_plugin.SettingsCheck(pe)) //Checks that settings exists for this entry.
                     {
-                        string[] Settings = plugin.SettingsGet(pe); //Gets the entry's totp settings.
+                        string[] settings = _plugin.SettingsGet(pe); //Gets the entry's totp settings.
                         bool validUrl;
-                        if (plugin.SettingsValidate(pe, out validUrl)) //Validates the settings.
+                        if (_plugin.SettingsValidate(pe, out validUrl)) //Validates the settings.
                         {
                             if (validUrl) //Makes sure the URL is also valid.
                             {
-                                if (!ComboBoxUrlTimeCorrection.Items.Contains(Settings[2]) && plugin.TimeCorrections[Settings[2]] == null) //Checks if not already in combobox or is an existing time correction.
+                                if (!ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null) //Checks if not already in combobox or is an existing time correction.
                                 {
-                                    ComboBoxUrlTimeCorrection.Items.Add(Settings[2]); //Adds the URL to the combobox for quick adding.
+                                    ComboBoxUrlTimeCorrection.Items.Add(settings[2]); //Adds the URL to the combobox for quick adding.
                                 }
                             }
                         }
@@ -94,13 +94,13 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void WorkerWaitForCheck_DoWork(object sender, DoWorkEventArgs e)
         {
-            TestTimeCorrection = new TimeCorrectionProvider(ComboBoxUrlTimeCorrection.Text); //Creates a new Time Correction to validate the desired URL.
+            _testTimeCorrection = new TimeCorrectionProvider(ComboBoxUrlTimeCorrection.Text); //Creates a new Time Correction to validate the desired URL.
             while (!WorkerWaitForCheck.CancellationPending) //Waits for the validation to end or a cancellation.
             {
                 System.Threading.Thread.Sleep(100); //Waits
-                if (TestTimeCorrection.LastUpdateDateTime != DateTime.MinValue) //Checks if the validation has completed.
+                if (_testTimeCorrection.LastUpdateDateTime != DateTime.MinValue) //Checks if the validation has completed.
                 {
-                    if (TestTimeCorrection.LastUpdateSucceded) //Checks if the validation has succeeded.
+                    if (_testTimeCorrection.LastUpdateSucceded) //Checks if the validation has succeeded.
                     {
                         e.Result = "success"; //Returns the validation result success.
                         return; //Exits the loop as the validation was successful.
@@ -156,7 +156,7 @@ namespace KeeTrayTOTP
             ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, string.Empty); //Clears input errors.
             if (!ComboBoxUrlTimeCorrection.Text.StartsWith("http")) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlMustContainHttp); //Verifies if the URL is valid.
             if (!ComboBoxUrlTimeCorrection.Text.Contains("://")) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlInvalid); //Verifies if the URL is valid.
-            if (plugin.TimeCorrections[ComboBoxUrlTimeCorrection.Text] != null) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlExists); //Verifies if the URL is existing.
+            if (_plugin.TimeCorrections[ComboBoxUrlTimeCorrection.Text] != null) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlExists); //Verifies if the URL is existing.
             if (ErrorProviderTimeCorrection.GetError(ComboBoxUrlTimeCorrection) != string.Empty) return; //Prevents the validation if input has an error.
             PictureBoxTimeCorrection.Image = ImageListErrorProvider.Images[1]; //Displays working icon.
             LabelStatusTimeCorrection.Text = Localization.Strings.TcPleaseWaitVerifying; //Diplays attempt message.
