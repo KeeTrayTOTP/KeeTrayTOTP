@@ -20,6 +20,21 @@ jobs:
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
 
-    - name: Build plgx
+    - name: MSBuild (With Plgx)
       run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
 
+    - name: Upload plgx
+      uses: actions/upload-artifact@v1
+      with:
+        name: KeeTrayTOTP.plgx
+        path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
+
+    - name: Create prerelease
+      uses: "marvinpinto/action-automatic-releases@latest"
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: "latest"
+        prerelease: true
+        title: "Development Build"
+        files: |
+          *.plgx
