@@ -8,5 +8,5 @@
 [assembly: AssemblyCopyright("Copyright © Time Crash 2020")]
 [assembly: AssemblyTrademark("2020-01-29")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.101.*")]
-[assembly: AssemblyFileVersion("0.101.0.0")]
+[assembly: AssemblyVersion("0.102.*")]
+[assembly: AssemblyFileVersion("0.102.0.0")]
