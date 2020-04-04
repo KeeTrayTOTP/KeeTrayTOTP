@@ -11,4 +11,5 @@ For now this process is done manually.
    * Release title: Version Major.Minor-Beta (e.g. Version 0.101-Beta)
    * Gather the changes done since the last release, referencing issues / PR's and mentioning contributions.
    * Attach the `KeeTrayTOTP.plgx`
+   * Check the "This is a pre-release" checkbox.
 5. Create a PR containing the `AssemblyInfo.cs` and `version_manifest.txt` and merge it to master.
