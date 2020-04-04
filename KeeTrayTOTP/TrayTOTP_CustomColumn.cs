@@ -39,7 +39,7 @@ namespace KeeTrayTOTP
             /// <summary>
             /// Column Names, in the case this provider handles more than one column.
             /// </summary>
-            private readonly string[] ColumnName = new[] {TrayTOTP_CustomColumn_Localization.strTOTP};
+            private readonly string[] ColumnName = new[] {Localization.Strings.TOTP};
 
             /// <summary>
             /// Informs Keepass of the Column Names, in the case this provider handles more than one column.
@@ -83,11 +83,11 @@ namespace KeeTrayTOTP
                             return TOTPGenerator.GenerateByByte(
                                 Base32.Decode(plugin.SeedGet(pe).ReadString().ExtWithoutSpaces())) + (m_host.CustomConfig.GetBool(setname_bool_TOTPColumnTimer_Visible, true) ? TOTPGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
                         }
-                        return TrayTOTP_CustomColumn_Localization.strWarningBadSeed;
+                        return Localization.Strings.ErrorBadSeed;
                     }
-                    return TrayTOTP_CustomColumn_Localization.strWarningBadSet;
+                    return Localization.Strings.ErrorBadSettings;
                 }
-                return (plugin.SettingsCheck(pe) || plugin.SeedCheck(pe) ? TrayTOTP_CustomColumn_Localization.strWarningStorage : string.Empty);
+                return (plugin.SettingsCheck(pe) || plugin.SeedCheck(pe) ? Localization.Strings.ErrorStorage : string.Empty);
             }
 
             /// <summary>

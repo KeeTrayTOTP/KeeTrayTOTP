@@ -182,7 +182,7 @@ namespace KeeTrayTOTP
             {
                 //Create new Listviewitem to appear in Time Correction Settings Listview.
                 var LVI = new ListViewItem(TC.Url) { ImageIndex = TC.LastUpdateSucceded ? 0 : 2 };
-                LVI.SubItems.Add((TC.LastUpdateSucceded ? TC.TimeCorrection.ToString() : TrayTOTP_TimeCorrectionCollection_Localization.ConnectionFailed));
+                LVI.SubItems.Add((TC.LastUpdateSucceded ? TC.TimeCorrection.ToString() : Localization.Strings.ConnectionFailed));
                 LVI.Tag = TC;
                 LVI.ToolTipText = (TC.LastUpdateSucceded ? String.Empty : TC.LastUpdateDateTime.ToString());
                 LVIs.Add(LVI);

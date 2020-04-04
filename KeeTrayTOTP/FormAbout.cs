@@ -32,7 +32,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void FormAbout_Load(object sender, EventArgs e)
         {
-            Text = TrayTOTP_Plugin_Localization.strAbout + TrayTOTP_Plugin_Localization.strSpaceDashSpace + TrayTOTP_Plugin_Localization.strTrayTOTPPlugin;
+            Text = Localization.Strings.About + @" - " + Localization.Strings.TrayTOTPPlugin;
             ListViewAbout.Items[0].SubItems.Add(AssemblyTitle);
             ListViewAbout.Items[1].SubItems.Add(AssemblyCompany);
             ListViewAbout.Items[2].SubItems.Add(AssemblyVersion);
