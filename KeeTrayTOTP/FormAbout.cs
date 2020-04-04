@@ -37,7 +37,7 @@ namespace KeeTrayTOTP
             ListViewAbout.Items[1].SubItems.Add(AssemblyCompany);
             ListViewAbout.Items[2].SubItems.Add(AssemblyVersion);
             ListViewAbout.Items[3].SubItems.Add(AssemblyTrademark);
-            ListViewAbout.Items[4].SubItems.Add(KeeTrayTOTPExt.strEmail);
+            ListViewAbout.Items[4].SubItems.Add(KeeTrayTOTPExt.Email);
             LabelCopyright.Text = AssemblyCopyright;
         }
 

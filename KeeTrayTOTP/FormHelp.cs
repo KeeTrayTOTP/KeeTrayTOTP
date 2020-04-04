@@ -110,6 +110,7 @@ namespace KeeTrayTOTP
             }
             catch (Exception)
             {
+                // ignored
             }
         }
     }

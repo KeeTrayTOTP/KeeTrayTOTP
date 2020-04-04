@@ -10,69 +10,69 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Timer providing the delay between each time correction check.
         /// </summary>
-        private System.Timers.Timer _Timer;
+        private System.Timers.Timer _timer;
 
         /// <summary>
         /// Thread which handles the time correction check.
         /// </summary>
-        private System.Threading.Thread Task;
+        private System.Threading.Thread _task;
 
-        private bool _Enable;
+        private bool _enable;
         /// <summary>
         /// Defines weither or not the class will attempt to get time correction from the server.
         /// </summary>
-        public bool Enable { get { return _Enable; } set { _Enable = value; _Timer.Enabled = value; } }
+        public bool Enable { get { return _enable; } set { _enable = value; _timer.Enabled = value; } }
 
-        private static int _Interval = 60;
+        private static int _interval = 60;
         /// <summary>
         /// Gets or sets the interval in minutes between each online checks for time correction.
         /// </summary>
         /// <value>Time</value>
-        public static int Interval { get { return _Interval; } set { _Interval = value; } }
-        private long _IntervalStretcher;
+        public static int Interval { get { return _interval; } set { _interval = value; } }
+        private long _intervalStretcher;
 
-        private volatile string _Url;
+        private volatile string _url;
         /// <summary>
         /// Returns the URL this instance is using to checks for time correction.
         /// </summary>
-        public string Url { get { return _Url; } }
+        public string Url { get { return _url; } }
 
-        private TimeSpan _TimeCorrection;
+        private TimeSpan _timeCorrection;
         /// <summary>
         /// Returns the time span between server UTC time and this computer's UTC time of the last check for time correction.
         /// </summary>
-        public TimeSpan TimeCorrection { get { return _TimeCorrection; } }
+        public TimeSpan TimeCorrection { get { return _timeCorrection; } }
 
-        private DateTime _LastUpdateDateTime;
+        private DateTime _lastUpdateDateTime;
         /// <summary>
         /// Returns the date and time in universal format of the last online check for time correction.
         /// </summary>
-        public DateTime LastUpdateDateTime { get { return _LastUpdateDateTime; } }
+        public DateTime LastUpdateDateTime { get { return _lastUpdateDateTime; } }
 
-        private bool _LastUpdateSucceded = false;
+        private bool _lastUpdateSucceded = false;
         /// <summary>
         /// Returns true if the last check for time correction was successful.
         /// </summary>
-        public bool LastUpdateSucceded { get { return _LastUpdateSucceded; } }
+        public bool LastUpdateSucceded { get { return _lastUpdateSucceded; } }
 
         /// <summary>
         /// Instanciates a new TOTP_TimeCorrection using the specified URL to contact the server.
         /// </summary>
-        /// <param name="Url">URL of the server to get check.</param>
-        /// <param name="Enable">Enable or disable the time correction check.</param>
-        public TimeCorrectionProvider(string Url, bool Enable = true)
+        /// <param name="url">URL of the server to get check.</param>
+        /// <param name="enable">Enable or disable the time correction check.</param>
+        public TimeCorrectionProvider(string url, bool enable = true)
         {
-            if (Url == string.Empty) throw new Exception("Invalid URL."); //Throws exception if the URL is invalid as the class cannot work without it.
-            _Url = Url; //Defines variable from argument.
-            _Enable = Enable; //Defines variable from argument.
-            _LastUpdateDateTime = DateTime.MinValue; //Defines variable from non-constant default value.
-            _TimeCorrection = TimeSpan.Zero; //Defines variable from non-constant default value.
-            _Timer = new System.Timers.Timer(); //Instanciates timer.
-            _Timer.Elapsed += Timer_Elapsed; //Handles the timer event
-            _Timer.Interval = 1000; //Defines the timer interval to 1 seconds.
-            _Timer.Enabled = _Enable; //Defines the timer to run if the class is initially enabled.
-            Task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
-            if (_Enable) Task.Start(); //Starts the new thread if the class is initially enabled.
+            if (url == string.Empty) throw new Exception("Invalid URL."); //Throws exception if the URL is invalid as the class cannot work without it.
+            _url = url; //Defines variable from argument.
+            _enable = enable; //Defines variable from argument.
+            _lastUpdateDateTime = DateTime.MinValue; //Defines variable from non-constant default value.
+            _timeCorrection = TimeSpan.Zero; //Defines variable from non-constant default value.
+            _timer = new System.Timers.Timer(); //Instanciates timer.
+            _timer.Elapsed += Timer_Elapsed; //Handles the timer event
+            _timer.Interval = 1000; //Defines the timer interval to 1 seconds.
+            _timer.Enabled = _enable; //Defines the timer to run if the class is initially enabled.
+            _task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
+            if (_enable) _task.Start(); //Starts the new thread if the class is initially enabled.
         }
 
         /// <summary>
@@ -80,10 +80,10 @@ namespace KeeTrayTOTP.Libraries
         /// </summary>
         private void Timer_Elapsed(object sender, EventArgs e)
         {
-            _IntervalStretcher++; //Increments timer.
-            if (_IntervalStretcher >= (60 * _Interval)) //Checks if the specified delay has been reached.
+            _intervalStretcher++; //Increments timer.
+            if (_intervalStretcher >= (60 * _interval)) //Checks if the specified delay has been reached.
             {
-                _IntervalStretcher = 0; //Resets the timer.
+                _intervalStretcher = 0; //Resets the timer.
                 Task_Do(); //Attempts to run a new task
             }
         }
@@ -94,10 +94,10 @@ namespace KeeTrayTOTP.Libraries
         /// <returns>Informs if reinstanciation of the task has succeeded or not. Will fail if the thread is still active from a previous time correction check.</returns>
         private bool Task_Do()
         {
-            if (!Task.IsAlive) //Checks if the task is still running.
+            if (!_task.IsAlive) //Checks if the task is still running.
             {
-                Task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
-                Task.Start(); //Starts the new thread.
+                _task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
+                _task.Start(); //Starts the new thread.
                 return true; //Informs if successful
             }
             return false; //Informs if failed
@@ -110,32 +110,32 @@ namespace KeeTrayTOTP.Libraries
         {
             try
             {
-                var WebClient = new System.Net.WebClient(); //WebClient to connect to server.
-                WebClient.DownloadData(_Url); //Downloads the server's page using HTTP or HTTPS.
-                var DateHeader = WebClient.ResponseHeaders.Get("Date"); //Gets the date from the HTTP header of the downloaded page.
-                _TimeCorrection = DateTime.UtcNow - DateTime.Parse(DateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime(); //Compares the downloaded date to the systems date giving us a timespan.
-                _LastUpdateSucceded = true; //Informs that the date check has succeeded.
+                var webClient = new System.Net.WebClient(); //WebClient to connect to server.
+                webClient.DownloadData(_url); //Downloads the server's page using HTTP or HTTPS.
+                var dateHeader = webClient.ResponseHeaders.Get("Date"); //Gets the date from the HTTP header of the downloaded page.
+                _timeCorrection = DateTime.UtcNow - DateTime.Parse(dateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime(); //Compares the downloaded date to the systems date giving us a timespan.
+                _lastUpdateSucceded = true; //Informs that the date check has succeeded.
             }
             catch (Exception)
             {
-                _LastUpdateSucceded = false; //Informs that the date check has failed.
+                _lastUpdateSucceded = false; //Informs that the date check has failed.
             }
-            _LastUpdateDateTime = DateTime.Now; //Informs when the last update has been attempted (succeeded or not).
+            _lastUpdateDateTime = DateTime.Now; //Informs when the last update has been attempted (succeeded or not).
         }
 
         /// <summary>
         /// Perform a time correction check, may a few seconds.
         /// </summary>
-        /// <param name="ResetTimer">Resets the timer to 0. Occurs even if the attempt to attempt a new time correction fails.</param>
-        /// <param name="ForceCheck">Attempts to get time correction even if disabled.</param>
+        /// <param name="resetTimer">Resets the timer to 0. Occurs even if the attempt to attempt a new time correction fails.</param>
+        /// <param name="forceCheck">Attempts to get time correction even if disabled.</param>
         /// <returns>Informs if the time correction check was attempted or not. Will fail if the thread is still active from a previous time correction check.</returns>
-        public bool CheckNow(bool ResetTimer = true, bool ForceCheck = false)
+        public bool CheckNow(bool resetTimer = true, bool forceCheck = false)
         {
-            if (ResetTimer) //Checks if the timer should be reset.
+            if (resetTimer) //Checks if the timer should be reset.
             {
-                _IntervalStretcher = 0; //Resets the timer.
+                _intervalStretcher = 0; //Resets the timer.
             }
-            if (ForceCheck || _Enable) //Checks if this check is forced or if time correction is enabled.
+            if (forceCheck || _enable) //Checks if this check is forced or if time correction is enabled.
             {
                 return Task_Do(); //Attempts to run a new task and informs if attempt to attemp is a success of fail
             }

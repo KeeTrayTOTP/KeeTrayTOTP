@@ -19,34 +19,34 @@ namespace KeeTrayTOTP
             /// <summary>
             /// Reference to the plugin host for access to KeePass functions.
             /// </summary>
-            private readonly IPluginHost m_host;
+            private readonly IPluginHost _pluginHost;
 
             /// <summary>
             /// Reference to the main plugin class.
             /// </summary>
-            private readonly KeeTrayTOTPExt plugin;
+            private readonly KeeTrayTOTPExt _plugin;
 
             /// <summary>
             /// Provides support to add a custom column to KeePass, in this case the TOTP Provider Column.
             /// </summary>
-            /// <param name="Plugin">Handle to the plugin class.</param>
-            internal TrayTOTP_CustomColumn(KeeTrayTOTPExt Plugin)
+            /// <param name="plugin">Handle to the plugin class.</param>
+            internal TrayTOTP_CustomColumn(KeeTrayTOTPExt plugin)
             {
-                plugin = Plugin;
-                m_host = plugin.m_host;
+                _plugin = plugin;
+                _pluginHost = _plugin.PluginHost;
             }
 
             /// <summary>
             /// Column Names, in the case this provider handles more than one column.
             /// </summary>
-            private readonly string[] ColumnName = new[] {Localization.Strings.TOTP};
+            private readonly string[] _columnName = new[] {Localization.Strings.TOTP};
 
             /// <summary>
             /// Informs Keepass of the Column Names, in the case this provider handles more than one column.
             /// </summary>
             public override string[] ColumnNames
             {
-                get { return ColumnName; }
+                get { return _columnName; }
             }
 
             /// <summary>
@@ -60,56 +60,56 @@ namespace KeeTrayTOTP
             /// <summary>
             /// Tells KeePass what to display in the column.
             /// </summary>
-            /// <param name="strColumnName"></param>
+            /// <param name="columnName"></param>
             /// <param name="pe"></param>
             /// <returns>String displayed in the columns.</returns>
-            public override string GetCellData(string strColumnName, PwEntry pe)
+            public override string GetCellData(string columnName, PwEntry pe)
             {
-                if (strColumnName == null) throw new ArgumentNullException("strColumnName");
+                if (columnName == null) throw new ArgumentNullException("columnName");
                 if (pe == null) throw new ArgumentNullException("pe");
-                if (plugin.SettingsCheck(pe) && plugin.SeedCheck(pe))
+                if (_plugin.SettingsCheck(pe) && _plugin.SeedCheck(pe))
                 {
-                    bool ValidInterval;
-                    bool ValidLength;
-                    bool ValidUrl;
-                    if (plugin.SettingsValidate(pe, out ValidInterval, out ValidLength, out ValidUrl))
+                    bool validInterval;
+                    bool validLength;
+                    bool validUrl;
+                    if (_plugin.SettingsValidate(pe, out validInterval, out validLength, out validUrl))
                     {
-                        string[] Settings = plugin.SettingsGet(pe);
+                        string[] settings = _plugin.SettingsGet(pe);
                       
-                        TOTPProvider TOTPGenerator = new TOTPProvider(Settings, ref plugin.TimeCorrections);
+                        TOTPProvider totpGenerator = new TOTPProvider(settings, ref _plugin.TimeCorrections);
 
-                        if (plugin.SeedValidate(pe))
+                        if (_plugin.SeedValidate(pe))
                         {
-                            return TOTPGenerator.GenerateByByte(
-                                Base32.Decode(plugin.SeedGet(pe).ReadString().ExtWithoutSpaces())) + (m_host.CustomConfig.GetBool(setname_bool_TOTPColumnTimer_Visible, true) ? TOTPGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
+                            return totpGenerator.GenerateByByte(
+                                Base32.Decode(_plugin.SeedGet(pe).ReadString().ExtWithoutSpaces())) + (_pluginHost.CustomConfig.GetBool(setname_bool_TOTPColumnTimer_Visible, true) ? totpGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
                         }
                         return Localization.Strings.ErrorBadSeed;
                     }
                     return Localization.Strings.ErrorBadSettings;
                 }
-                return (plugin.SettingsCheck(pe) || plugin.SeedCheck(pe) ? Localization.Strings.ErrorStorage : string.Empty);
+                return (_plugin.SettingsCheck(pe) || _plugin.SeedCheck(pe) ? Localization.Strings.ErrorStorage : string.Empty);
             }
 
             /// <summary>
             /// Informs KeePass if PerformCellAction must be called when the cell is double clicked.
             /// </summary>
-            /// <param name="strColumnName">Column Name.</param>
+            /// <param name="columnName">Column Name.</param>
             /// <returns></returns>
-            public override bool SupportsCellAction(string strColumnName)
+            public override bool SupportsCellAction(string columnName)
             {
-                if (strColumnName == null) throw new ArgumentNullException("strColumnName");
+                if (columnName == null) throw new ArgumentNullException("columnName");
                 return true;
             }
 
             /// <summary>
             /// Happens when a cell of the column is double-clicked.
             /// </summary>
-            /// <param name="strColumnName">Column's name.</param>
+            /// <param name="columnName">Column's name.</param>
             /// <param name="pe">Entry associated with the clicked cell.</param>
-            public override void PerformCellAction(string strColumnName, PwEntry pe)
+            public override void PerformCellAction(string columnName, PwEntry pe)
             {
-                if (strColumnName == null) throw new ArgumentNullException("strColumnName");
-                if (m_host.CustomConfig.GetBool(setname_bool_TOTPColumnCopy_Enable, true)) plugin.TOTPCopyToClipboard(pe);
+                if (columnName == null) throw new ArgumentNullException("columnName");
+                if (_pluginHost.CustomConfig.GetBool(setname_bool_TOTPColumnCopy_Enable, true)) _plugin.TOTPCopyToClipboard(pe);
             }
         }
     }

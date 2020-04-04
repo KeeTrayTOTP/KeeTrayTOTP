@@ -10,111 +10,111 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Concatenates a space in front of the current string.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
+        /// <param name="extension">Current string.</param>
         /// <returns></returns>
-        internal static string ExtWithSpaceBefore(this string Extension)
+        internal static string ExtWithSpaceBefore(this string extension)
         {
-            return " " + Extension;
+            return " " + extension;
         }
 
         /// <summary>
         /// Concatenates the current string with space to the end.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
+        /// <param name="extension">Current string.</param>
         /// <returns></returns>
-        internal static string ExtWithSpaceAfter(this string Extension)
+        internal static string ExtWithSpaceAfter(this string extension)
         {
-            return Extension + " ";
+            return extension + " ";
         }
 
         /// <summary>
         /// Concatenates the current string with a bracket in front and to the end.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
+        /// <param name="extension">Current string.</param>
         /// <returns></returns>
-        internal static string ExtWithBrackets(this string Extension)
+        internal static string ExtWithBrackets(this string extension)
         {
-            return ExtWith(Extension, '{', '}');
+            return ExtWith(extension, '{', '}');
         }
 
         /// <summary>
         /// Concatenates the current string with a parenthesis in front and to the end.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
+        /// <param name="extension">Current string.</param>
         /// <returns></returns>
-        internal static string ExtWithParenthesis(this string Extension)
+        internal static string ExtWithParenthesis(this string extension)
         {
-            return ExtWith(Extension, '(', ')');
+            return ExtWith(extension, '(', ')');
         }
 
         /// <summary>
         /// Concatenates the current string with a character in front and another character to the end.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
-        /// <param name="Left">Front character.</param>
-        /// <param name="Right">End character.</param>
+        /// <param name="extension">Current string.</param>
+        /// <param name="left">Front character.</param>
+        /// <param name="right">End character.</param>
         /// <returns></returns>
-        internal static string ExtWith(this string Extension, char Left, char Right)
+        internal static string ExtWith(this string extension, char left, char right)
         {
-            return Left + Extension + Right;
+            return left + extension + right;
         }
 
         /// <summary>
         /// Remove all spaces from the current string.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
+        /// <param name="extension">Current string.</param>
         /// <returns></returns>
-        internal static string ExtWithoutSpaces(this string Extension)
+        internal static string ExtWithoutSpaces(this string extension)
         {
-            return Extension.ExtWithout(" ");
+            return extension.ExtWithout(" ");
         }
 
         /// <summary>
         /// Remove all specified characters from the current string.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
-        /// <param name="Chars">Characters to remove.</param>
+        /// <param name="extension">Current string.</param>
+        /// <param name="chars">Characters to remove.</param>
         /// <returns></returns>
-        internal static string ExtWithout(this string Extension, string Chars)
+        internal static string ExtWithout(this string extension, string chars)
         {
-            foreach (var Char in Chars)
+            foreach (var @char in chars)
             {
-                Extension = Extension.Replace(Char.ToString(), "");
+                extension = extension.Replace(@char.ToString(), "");
             }
-            return Extension;
+            return extension;
         }
 
         /// <summary>
         /// Converts the control's tag to text and splits it.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
-        /// <param name="Index">Split index.</param>
-        /// <param name="Seperator">Split seperators.</param>
+        /// <param name="extension">Current string.</param>
+        /// <param name="index">Split index.</param>
+        /// <param name="seperator">Split seperators.</param>
         /// <returns></returns>
-        internal static string ExtSplitFromTag(this System.Windows.Forms.Control Extension, int Index = 0, char Seperator = ';')
+        internal static string ExtSplitFromTag(this System.Windows.Forms.Control extension, int index = 0, char seperator = ';')
         {
-            return Extension.Tag.ToString().ExtSplit(Index, Seperator);
+            return extension.Tag.ToString().ExtSplit(index, seperator);
         }
 
         /// <summary>
         /// Splits the string and returns specified substring.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
-        /// <param name="Index">Split index.</param>
-        /// <param name="Seperator">Split seperators.</param>
+        /// <param name="extension">Current string.</param>
+        /// <param name="index">Split index.</param>
+        /// <param name="seperator">Split seperators.</param>
         /// <returns></returns>
-        internal static string ExtSplit(this string Extension, int Index, char Seperator = ';')
+        internal static string ExtSplit(this string extension, int index, char seperator = ';')
         {
-            if (Extension != string.Empty)
+            if (extension != string.Empty)
             {
                 try
                 {
-                    var Text = Extension;
-                    if (Text.Contains(Seperator.ToString()))
+                    var text = extension;
+                    if (text.Contains(seperator.ToString()))
                     {
-                        return Text.Split(Seperator)[Index];
+                        return text.Split(seperator)[index];
                     }
-                    return Text;
+                    return text;
                 }
                 catch (Exception)
                 {
@@ -127,36 +127,36 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Makes sure the string provided as a Seed is Base32. Invalid characters are available as out string.
         /// </summary>
-        /// <param name="Extension">Current string.</param>
-        /// <param name="InvalidChars">Invalid characters.</param>
+        /// <param name="extension">Current string.</param>
+        /// <param name="invalidChars">Invalid characters.</param>
         /// <returns>Validity of the string's characters for Base32 format.</returns>
-        internal static bool ExtIsBase32(this string Extension, out string InvalidChars)
+        internal static bool ExtIsBase32(this string extension, out string invalidChars)
         {
-            InvalidChars = null;
+            invalidChars = null;
             try
             {
-                foreach (var CurrentChar in Extension)
+                foreach (var currentChar in extension)
                 {
-                    var CurrentCharValue = Char.GetNumericValue(CurrentChar);
-                    if (Char.IsLetter(CurrentChar))
+                    var currentCharValue = char.GetNumericValue(currentChar);
+                    if (char.IsLetter(currentChar))
                     {
                         continue;
                     }
-                    if (Char.IsDigit(CurrentChar))
+                    if (char.IsDigit(currentChar))
                     {
-                        if ((CurrentCharValue > 1) && (CurrentCharValue < 8))
+                        if ((currentCharValue > 1) && (currentCharValue < 8))
                         {
                             continue;
                         }
                     }
-                    InvalidChars = (InvalidChars + CurrentCharValue.ToString().ExtWithSpaceBefore()).Trim();
+                    invalidChars = (invalidChars + currentCharValue.ToString().ExtWithSpaceBefore()).Trim();
                 }
             }
             catch (Exception)
             {
-                InvalidChars = Localization.Strings.Error;
+                invalidChars = Localization.Strings.Error;
             }
-            return InvalidChars == null;
+            return invalidChars == null;
         }
     }
 }
