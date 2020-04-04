@@ -18,9 +18,15 @@ jobs:
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
 
-    - name: MSBuild
-      run: msbuild KeeTrayTOTP.sln
+    - name: MSBuild (With Plgx)
+      run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
 
     - name: Run tests
       # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
       run: dotnet test --no-build
+
+    - name: Upload plgx
+      uses: actions/upload-artifact@v1
+      with:
+        name: KeeTrayTOTP.plgx
+        path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
