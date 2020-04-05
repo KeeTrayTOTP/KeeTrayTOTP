@@ -1,4 +1,6 @@
 # KeeTrayTOTP
+![KeeTrayTOTP Pre Release](https://github.com/victor-rds/KeeTrayTOTP/workflows/KeeTrayTOTP%20Pre%20Release/badge.svg?branch=master)
+![KeeTrayTOTP Tagged Release](https://github.com/victor-rds/KeeTrayTOTP/workflows/KeeTrayTOTP%20Tagged%20Release/badge.svg)
 
 This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.net/projects/traytotp-kp2/), but also want to use with Valve's Steam.
 
