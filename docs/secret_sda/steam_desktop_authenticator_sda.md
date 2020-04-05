@@ -10,7 +10,7 @@ In the first step download the [program files](https://github.com/Jessecar96/Ste
 
 Start the `Steam Desktop Authenticator.exe` executable, and follow the instructions of SDA to setup it as an authenticator for your Steam account, but when asking for an encryption passkey choose *Cancel*. We need the file unencrypted to extract the secret later:
 
-![step4-encrypt-decition](images/step4-encrypt-decition.png)
+![step4-encrypt-decision](images/step4-encrypt-decision.png)
 
 After that there is an additional confirmation step, which explains that this is a really bad idea. However, we will move the secret to our encrypted KeePass Database, so in this special case this is OK.
 
