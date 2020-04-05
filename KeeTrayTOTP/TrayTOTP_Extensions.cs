@@ -1,4 +1,5 @@
-﻿using System;
+﻿using KeePassLib;
+using System;
 
 namespace KeeTrayTOTP
 {
@@ -154,6 +155,16 @@ namespace KeeTrayTOTP
                 invalidChars = Localization.Strings.Error;
             }
             return invalidChars == null;
+        }
+
+        internal static bool IsExpired(this PwEntry passwordEntry)
+        {
+            if (!passwordEntry.Expires)
+            {
+                return false;
+            }
+
+            return passwordEntry.ExpiryTime <= DateTime.UtcNow;
         }
     }
 }

@@ -438,34 +438,31 @@ namespace KeeTrayTOTP
                 if (PluginHost.MainWindow.ActiveDatabase.IsOpen)
                 {
                     var trimTrayText = PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
-                    foreach (PwEntry entry in PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true))
+                    foreach (PwEntry entry in GetVisibleAndValidPasswordEntries())
                     {
-                        if (SettingsCheck(entry) && SeedCheck(entry))
+                        var entryTitle = entry.Strings.ReadSafe(PwDefs.TitleField);
+
+                        var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
+                        var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
+                        string trayTitle;
+                        if ((trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || (string.IsNullOrEmpty(entryUsername)))
                         {
-                            var entryTitle = entry.Strings.ReadSafe(PwDefs.TitleField);
-
-                            var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
-                            var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
-                            string trayTitle;
-                            if ((trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || (string.IsNullOrEmpty(entryUsername)))
-                            {
-                                trayTitle = entryTitle.ExtWithSpaceAfter();
-                            }
-                            else
-                            {
-                                trayTitle = entryTitle.ExtWithSpaceAfter() + entryUsername.ExtWithParenthesis();
-                            }
-                            PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
-
-                            var newMenu = new ToolStripMenuItem(trayTitle, Properties.Resources.TOTP_Key, OnNotifyMenuTOTPClick);
-                            newMenu.Tag = entry;
-                            if (!SettingsValidate(entry))
-                            {
-                                newMenu.Enabled = false;
-                                newMenu.Image = Properties.Resources.TOTP_Error;
-                            }
-                            _niMenuList.Add(newMenu);
+                            trayTitle = entryTitle.ExtWithSpaceAfter();
                         }
+                        else
+                        {
+                            trayTitle = entryTitle.ExtWithSpaceAfter() + entryUsername.ExtWithParenthesis();
+                        }
+                        PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
+
+                        var newMenu = new ToolStripMenuItem(trayTitle, Properties.Resources.TOTP_Key, OnNotifyMenuTOTPClick);
+                        newMenu.Tag = entry;
+                        if (!SettingsValidate(entry))
+                        {
+                            newMenu.Enabled = false;
+                            newMenu.Image = Properties.Resources.TOTP_Error;
+                        }
+                        _niMenuList.Add(newMenu);
                     }
                     if (_niMenuList.Count > 0)
                     {
@@ -511,6 +508,19 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
+        /// Get all the password entries in all groups and filter entries that are expired or have invalid TOTP settings.
+        /// </summary>
+        /// <returns></returns>
+        private IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries()
+        {
+            var entries = PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true);
+
+            return entries
+                .Where(entry => !entry.IsExpired())
+                .Where(entry => SettingsCheck(entry) && SeedCheck(entry));
+        }
+
+        /// <summary>
         /// Creates the necessary menu items to switch to another database
         /// </summary>
         /// <param name="items"></param>
@@ -528,7 +538,7 @@ namespace KeeTrayTOTP
                 };
                 item.Click += SwitchToOtherDatabase;
                 items.Add(item);
-                
+
                 PluginHost.MainWindow.TrayContextMenu.Items.Insert(i++, item);
             }
         }
@@ -719,7 +729,7 @@ namespace KeeTrayTOTP
         /// <returns>Error(s) while validating Interval or Length.</returns>
         internal bool SettingsValidate(PwEntry pe, out bool isIntervalValid, out bool isLengthValid, out bool isUrlValid)
         {
-            bool settingsValid = true;
+            bool settingsValid;
             try
             {
                 string[] settings = SettingsGet(pe);
