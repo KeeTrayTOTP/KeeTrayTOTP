@@ -17,7 +17,7 @@ The latest release can be found [here](https://github.com/victor-rds/KeeTrayTOTP
 * [Keepass 2.31](http://keepass.info/)
 * .NET 4.5 or superior
 
-## So, why do this? 
+## Why was this fork created
 Various reasons, first and most important: I don't want to use another application only for steam! KeePass and Tray TOTP (with some modifications) are more than capable enough to handle this task.
 
 Second: for education, working with another developer's code, specially in a language you're not familiar with, its a difficult task but not uncommon situation.
