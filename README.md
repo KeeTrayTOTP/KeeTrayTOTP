@@ -2,7 +2,7 @@
 
 This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.net/projects/traytotp-kp2/), but also want to use with Valve's Steam.
 
-> This is a fork of the Tray TOTP Plugin for KeePass2. Originally developed by [Morphlin](http://sourceforge.net/u/morphlin/profile/). The source code and plugin can be found at http://sourceforge.net/projects/traytotp-kp2/
+> This is a fork of the Tray TOTP Plugin for KeePass2. Originally developed by [Morphlin](http://sourceforge.net/u/morphlin/profile/). The source code and plugin can be found on [sourceforge](http://sourceforge.net/projects/traytotp-kp2/)
 
 Most of consumer TOTPs use the RFC6238 output style, sadly some companies (eg.: Valve) decided not to adhere to the standard and instead build their own format.
 
