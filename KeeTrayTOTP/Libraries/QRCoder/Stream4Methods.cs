@@ -25,7 +25,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 namespace QRCoder.Framework4._0Methods
 {
-    class Stream4Methods
+    static class Stream4Methods
     {
         public static void CopyTo(System.IO.Stream input, System.IO.Stream output)
         {
