@@ -1,13 +1,17 @@
 # KeeTrayTOTP
 Fork of the Tray TOTP Plugin for KeePass2.
 
-Original work developed by the [Morphlin](http://sourceforge.net/u/morphlin/profile/) the source code and plugin can be found at http://sourceforge.net/projects/traytotp-kp2/
-
+> Original work developed by the [Morphlin](http://sourceforge.net/u/morphlin/profile/) the source code and plugin can be found at http://sourceforge.net/projects/traytotp-kp2/
+> 
 Most of consumer TOTPs use the RFC6238 output style, sadly some companies (eg.: Valve) decided not to adhere to the standard and instead build their own format.
 
 In the case of Steam Mobile Authenticator the new output format was reverse engineered by various developers, and alternatives to it started popping up, most do pretty good job and can by themselves recover the TOTP secret (which is no easy task given Valve's implementation).
 
 This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.net/projects/traytotp-kp2/), but also want to use with Valve's Steam.
+
+## Releases
+
+The latest release can be found [here](https://github.com/victor-rds/KeeTrayTOTP/releases)
 
 ## Dependencies
 * [Keepass 2.31](http://keepass.info/)
