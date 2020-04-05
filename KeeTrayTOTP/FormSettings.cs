@@ -179,7 +179,11 @@ namespace KeeTrayTOTP
             ListViewTimeCorrectionList.Items.AddRange(_plugin.TimeCorrections.ToLvi());
             if (!_plugin.NetworkIsConnected)
             {
-                if (_networkWasConnected) MessageBox.Show(string.Format(Localization.Strings.SettingsNoInternetDetected, Environment.NewLine), Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                if (_networkWasConnected)
+                {
+                    MessageBox.Show(string.Format(Localization.Strings.SettingsNoInternetDetected, Environment.NewLine), Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+
                 ToolStripButtonAddTimeCorrection.Enabled = false;
                 ToolStripButtonPropertiesTimeCorrection.Enabled = false;
                 _networkWasConnected = false;
@@ -194,7 +198,11 @@ namespace KeeTrayTOTP
 
         private void ButtonOK_Click(object sender, EventArgs e)
         {
-            if (HasErrors()) return;
+            if (HasErrors())
+            {
+                return;
+            }
+
             Working(true, true); //Set controls depending on the state of action.
             WorkerSave.RunWorkerAsync("OK");
         }
@@ -206,7 +214,11 @@ namespace KeeTrayTOTP
 
         private void ButtonApply_Click(object sender, EventArgs e)
         {
-            if (HasErrors()) return;
+            if (HasErrors())
+            {
+                return;
+            }
+
             Working(true, true); //Set controls depending on the state of action.
             WorkerSave.RunWorkerAsync();
         }
@@ -218,16 +230,36 @@ namespace KeeTrayTOTP
             ErrorProviderSettings.SetError(TextBoxAutoTypeFieldName, string.Empty);
             ErrorProviderSettings.SetError(ComboBoxTOTPSeedStringName, string.Empty);
             ErrorProviderSettings.SetError(ComboBoxTOTPSettingsStringName, string.Empty);
-            if (TextBoxAutoTypeFieldName.Text.Contains("{") || TextBoxAutoTypeFieldName.Text.Contains("}")) ErrorProviderSettings.SetError(TextBoxAutoTypeFieldName, Localization.Strings.SettingsInvalidCharacter);
+            if (TextBoxAutoTypeFieldName.Text.Contains("{") || TextBoxAutoTypeFieldName.Text.Contains("}"))
+            {
+                ErrorProviderSettings.SetError(TextBoxAutoTypeFieldName, Localization.Strings.SettingsInvalidCharacter);
+            }
+
             if (ComboBoxTOTPSeedStringName.Text == ComboBoxTOTPSettingsStringName.Text)
             {
                 ErrorProviderSettings.SetError(ComboBoxTOTPSeedStringName, Localization.Strings.SettingsInvalidNameSetting);
                 ErrorProviderSettings.SetError(ComboBoxTOTPSettingsStringName, Localization.Strings.SettingsInvalidNameSeed);
             }
-            if (ErrorProviderSettings.GetError(TextBoxAutoTypeFieldName) != string.Empty) temp = true;
-            if (ErrorProviderSettings.GetError(ComboBoxTOTPSeedStringName) != string.Empty) temp = true;
-            if (ErrorProviderSettings.GetError(ComboBoxTOTPSettingsStringName) != string.Empty) temp = true;
-            if (temp) ErrorProviderSettings.SetError(ButtonOK, Localization.Strings.SettingsErrors);
+            if (ErrorProviderSettings.GetError(TextBoxAutoTypeFieldName) != string.Empty)
+            {
+                temp = true;
+            }
+
+            if (ErrorProviderSettings.GetError(ComboBoxTOTPSeedStringName) != string.Empty)
+            {
+                temp = true;
+            }
+
+            if (ErrorProviderSettings.GetError(ComboBoxTOTPSettingsStringName) != string.Empty)
+            {
+                temp = true;
+            }
+
+            if (temp)
+            {
+                ErrorProviderSettings.SetError(ButtonOK, Localization.Strings.SettingsErrors);
+            }
+
             return temp;
         }
 
@@ -293,7 +325,10 @@ namespace KeeTrayTOTP
             }
             ComboBoxTOTPSeedStringName.Text = _plugin.PluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed);
             ComboBoxTOTPSettingsStringName.Text = _plugin.PluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings);
-            if (WorkerLoad.CancellationPending) e.Cancel = true;
+            if (WorkerLoad.CancellationPending)
+            {
+                e.Cancel = true;
+            }
         }
 
         private void WorkerLoad_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -372,7 +407,10 @@ namespace KeeTrayTOTP
             //Storage
             _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, ComboBoxTOTPSeedStringName.Text);
             _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, ComboBoxTOTPSettingsStringName.Text);
-            if (WorkerSave.CancellationPending) e.Cancel = true;
+            if (WorkerSave.CancellationPending)
+            {
+                e.Cancel = true;
+            }
         }
 
         private void WorkerSave_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -385,7 +423,13 @@ namespace KeeTrayTOTP
             else
             {
                 Working(false, true); //Set controls depending on the state of action.
-                if (e.Result != null) if (e.Result.ToString() == "OK") DialogResult = DialogResult.OK;
+                if (e.Result != null)
+                {
+                    if (e.Result.ToString() == "OK")
+                    {
+                        DialogResult = DialogResult.OK;
+                    }
+                }
             }
         }
 

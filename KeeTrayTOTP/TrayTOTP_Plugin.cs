@@ -250,7 +250,11 @@ namespace KeeTrayTOTP
         public override bool Initialize(IPluginHost host)
         {
             // Internalize Host Handle.
-            if (host == null) return false;
+            if (host == null)
+            {
+                return false;
+            }
+
             PluginHost = host;
 
             // Instantiate Help Form.
@@ -389,7 +393,11 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnEntryMenuShowQRClick(object sender, EventArgs e)
         {
-            if (PluginHost.MainWindow.GetSelectedEntriesCount() != 1) return;
+            if (PluginHost.MainWindow.GetSelectedEntriesCount() != 1)
+            {
+                return;
+            }
+
             var entry = PluginHost.MainWindow.GetSelectedEntry(true);
 
             if (!SeedCheck(entry))
@@ -558,12 +566,16 @@ namespace KeeTrayTOTP
         {
             ToolStripMenuItem tsi = sender as ToolStripMenuItem;
             if (tsi == null)
+            {
                 return;
+            }
 
             PwEntry pe = tsi.Tag as PwEntry;
 
             if (pe != null)
+            {
                 TOTPCopyToClipboard(pe);
+            }
         }
 
         /// <summary>
@@ -652,7 +664,10 @@ namespace KeeTrayTOTP
                                 e.Text = string.Empty;
                                 MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
                             }
-                            if (totpGenerator.TimeCorrectionError) MessageService.ShowWarning(Localization.Strings.WarningBadURL);
+                            if (totpGenerator.TimeCorrectionError)
+                            {
+                                MessageService.ShowWarning(Localization.Strings.WarningBadURL);
+                            }
                         }
                         else
                         {
@@ -739,18 +754,24 @@ namespace KeeTrayTOTP
         private static bool UrlIsValid(string[] settings)
         {
             if (settings.Length < 3)
+            {
                 return false;
+            }
 
-            return settings[2].StartsWith("http://") || settings[2].StartsWith("https://");
+            return settings[2].StartsWith("http://") || settings[2].StartsWith("https://"); 
         }
 
         private bool LengthIsValid(string[] settings)
         {
             if (settings.Length < 2)
+            {
                 return false;
+            }
 
             if (!setstat_allowed_lengths.Contains(settings[1]))
+            {
                 return false;
+            }
 
             return true;
         }
@@ -758,14 +779,20 @@ namespace KeeTrayTOTP
         private bool IntervalIsValid(string[] settings)
         {
             if (settings.Length == 0)
+            {
                 return false;
+            }
 
             short interval;
             if (!short.TryParse(settings[0], out interval))
+            {
                 return false;
+            }
 
             if (interval < 0 && interval < 180)
+            {
                 return false;
+            }
 
             return true;
         }
@@ -850,7 +877,10 @@ namespace KeeTrayTOTP
                     {
                         MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
                     }
-                    if (totpGenerator.TimeCorrectionError) MessageService.ShowWarning(Localization.Strings.WarningBadURL);
+                    if (totpGenerator.TimeCorrectionError)
+                    {
+                        MessageService.ShowWarning(Localization.Strings.WarningBadURL);
+                    }
                 }
                 else
                 {

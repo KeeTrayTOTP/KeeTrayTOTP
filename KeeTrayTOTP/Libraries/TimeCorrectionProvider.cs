@@ -62,7 +62,11 @@ namespace KeeTrayTOTP.Libraries
         /// <param name="enable">Enable or disable the time correction check.</param>
         public TimeCorrectionProvider(string url, bool enable = true)
         {
-            if (url == string.Empty) throw new Exception("Invalid URL."); //Throws exception if the URL is invalid as the class cannot work without it.
+            if (url == string.Empty)
+            {
+                throw new Exception("Invalid URL."); //Throws exception if the URL is invalid as the class cannot work without it.
+            }
+
             _url = url; //Defines variable from argument.
             _enable = enable; //Defines variable from argument.
             _lastUpdateDateTime = DateTime.MinValue; //Defines variable from non-constant default value.
@@ -72,7 +76,10 @@ namespace KeeTrayTOTP.Libraries
             _timer.Interval = 1000; //Defines the timer interval to 1 seconds.
             _timer.Enabled = _enable; //Defines the timer to run if the class is initially enabled.
             _task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
-            if (_enable) _task.Start(); //Starts the new thread if the class is initially enabled.
+            if (_enable)
+            {
+                _task.Start(); //Starts the new thread if the class is initially enabled.
+            }
         }
 
         /// <summary>

@@ -91,13 +91,24 @@ namespace QRCoder
             var dataLength = eccInfo.TotalDataCodewords * 8;
             var lengthDiff = dataLength - bitString.Length;
             if (lengthDiff > 0)
+            {
                 bitString += new string('0', Math.Min(lengthDiff, 4));
+            }
+
             if ((bitString.Length % 8) != 0)
+            {
                 bitString += new string('0', 8 - (bitString.Length % 8));
+            }
+
             while (bitString.Length < dataLength)
+            {
                 bitString += "1110110000010001";
+            }
+
             if (bitString.Length > dataLength)
+            {
                 bitString = bitString.Substring(0, dataLength);
+            }
 
             //Calculate error correction words
             var codeWordWithECC = new List<CodewordBlock>();
@@ -142,16 +153,24 @@ namespace QRCoder
             for (var i = 0; i < Math.Max(eccInfo.CodewordsInGroup1, eccInfo.CodewordsInGroup2); i++)
             {
                 foreach (var codeBlock in codeWordWithECC)
+                {
                     if (codeBlock.CodeWords.Count > i)
+                    {
                         interleavedWordsSb.Append(codeBlock.CodeWords[i]);
+                    }
+                }
             }
 
 
             for (var i = 0; i < eccInfo.ECCPerBlock; i++)
             {
                 foreach (var codeBlock in codeWordWithECC)
+                {
                     if (codeBlock.ECCWords.Count > i)
+                    {
                         interleavedWordsSb.Append(codeBlock.ECCWords[i]);
+                    }
+                }
             }
             interleavedWordsSb.Append(new string('0', this.remainderBits[version - 1]));
             var interleavedData = interleavedWordsSb.ToString();
@@ -195,7 +214,10 @@ namespace QRCoder
                 var sb = new StringBuilder();
                 generator = generator.PadRight(fStrEcc.Length, '0');
                 for (var i = 0; i < fStrEcc.Length; i++)
+                {
                     sb.Append((Convert.ToInt32(fStrEcc[i]) ^ Convert.ToInt32(generator[i])).ToString());
+                }
+
                 fStrEcc = sb.ToString().TrimStart('0');
             }
             fStrEcc = fStrEcc.PadLeft(10, '0');
@@ -203,7 +225,10 @@ namespace QRCoder
 
             var sbMask = new StringBuilder();
             for (var i = 0; i < fStr.Length; i++)
+            {
                 sbMask.Append((Convert.ToInt32(fStr[i]) ^ Convert.ToInt32(fStrMask[i])).ToString());
+            }
+
             return sbMask.ToString();
         }
 
@@ -218,7 +243,10 @@ namespace QRCoder
                 var sb = new StringBuilder();
                 generator = generator.PadRight(vStrEcc.Length, '0');
                 for (var i = 0; i < vStrEcc.Length; i++)
+                {
                     sb.Append((Convert.ToInt32(vStrEcc[i]) ^ Convert.ToInt32(generator[i])).ToString());
+                }
+
                 vStrEcc = sb.ToString().TrimStart('0');
             }
             vStrEcc = vStrEcc.PadLeft(12, '0');
@@ -233,11 +261,20 @@ namespace QRCoder
             {
                 var quietLine = new bool[qrCode.ModuleMatrix.Count + 8];
                 for (var i = 0; i < quietLine.Length; i++)
+                {
                     quietLine[i] = false;
+                }
+
                 for (var i = 0; i < 4; i++)
+                {
                     qrCode.ModuleMatrix.Insert(0, new BitArray(quietLine));
+                }
+
                 for (var i = 0; i < 4; i++)
+                {
                     qrCode.ModuleMatrix.Add(new BitArray(quietLine));
+                }
+
                 for (var i = 4; i < qrCode.ModuleMatrix.Count - 4; i++)
                 {
                     bool[] quietPart = { false, false, false, false };
@@ -254,7 +291,9 @@ namespace QRCoder
                 if (inp.Length > 0)
                 {
                     for (int i = inp.Length - 1; i >= 0; i--)
+                    {
                         newStr += inp[i];
+                    }
                 }
                 return newStr;
             }
@@ -301,7 +340,10 @@ namespace QRCoder
 
                 foreach (var pattern in methods)
                 {
-                    if (pattern.Name.Length != 8 || pattern.Name.Substring(0, 7) != "Pattern") continue;
+                    if (pattern.Name.Length != 8 || pattern.Name.Substring(0, 7) != "Pattern")
+                    {
+                        continue;
+                    }
 
                     var qrTemp = new QRCodeData(version);
                     for (var y = 0; y < size; y++)
@@ -369,7 +411,10 @@ namespace QRCoder
                 for (var x = size - 1; x >= 0; x = x - 2)
                 {
                     if (x == 6)
+                    {
                         x = 5;
+                    }
+
                     for (var yMod = 1; yMod <= size; yMod++)
                     {
                         int y;
@@ -377,17 +422,27 @@ namespace QRCoder
                         {
                             y = size - yMod;
                             if (datawords.Count > 0 && !IsBlocked(new Rectangle(x, y, 1, 1), blockedModules))
+                            {
                                 qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
+                            }
+
                             if (datawords.Count > 0 && x > 0 && !IsBlocked(new Rectangle(x - 1, y, 1, 1), blockedModules))
+                            {
                                 qrCode.ModuleMatrix[y][x - 1] = datawords.Dequeue();
+                            }
                         }
                         else
                         {
                             y = yMod - 1;
                             if (datawords.Count > 0 && !IsBlocked(new Rectangle(x, y, 1, 1), blockedModules))
+                            {
                                 qrCode.ModuleMatrix[y][x] = datawords.Dequeue();
+                            }
+
                             if (datawords.Count > 0 && x > 0 && !IsBlocked(new Rectangle(x - 1, y, 1, 1), blockedModules))
+                            {
                                 qrCode.ModuleMatrix[y][x - 1] = datawords.Dequeue();
+                            }
                         }
                     }
                     up = !up;
@@ -467,7 +522,9 @@ namespace QRCoder
                         }
                     }
                     if (blocked)
+                    {
                         continue;
+                    }
 
                     for (var x = 0; x < 5; x++)
                     {
@@ -511,7 +568,9 @@ namespace QRCoder
                 foreach (var blockedMod in blockedModules)
                 {
                     if (Intersects(blockedMod, r1))
+                    {
                         isBlocked = true;
+                    }
                 }
                 return isBlocked;
             }
@@ -576,24 +635,44 @@ namespace QRCoder
                         for (var x = 0; x < size; x++)
                         {
                             if (qrCode.ModuleMatrix[y][x] == lastValRow)
+                            {
                                 modInRow++;
+                            }
                             else
+                            {
                                 modInRow = 1;
+                            }
+
                             if (modInRow == 5)
+                            {
                                 score1 += 3;
+                            }
                             else if (modInRow > 5)
+                            {
                                 score1++;
+                            }
+
                             lastValRow = qrCode.ModuleMatrix[y][x];
 
 
                             if (qrCode.ModuleMatrix[x][y] == lastValColumn)
+                            {
                                 modInColumn++;
+                            }
                             else
+                            {
                                 modInColumn = 1;
+                            }
+
                             if (modInColumn == 5)
+                            {
                                 score1 += 3;
+                            }
                             else if (modInColumn > 5)
+                            {
                                 score1++;
+                            }
+
                             lastValColumn = qrCode.ModuleMatrix[x][y];
                         }
                     }
@@ -607,7 +686,9 @@ namespace QRCoder
                             if (qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y][x + 1] &&
                                 qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y + 1][x] &&
                                 qrCode.ModuleMatrix[y][x] == qrCode.ModuleMatrix[y + 1][x + 1])
+                            {
                                 score2 += 3;
+                            }
                         }
                     }
 
@@ -673,9 +754,15 @@ namespace QRCoder
                     //Penalty 4
                     double blackModules = 0;
                     foreach (var row in qrCode.ModuleMatrix)
+                    {
                         foreach (bool bit in row)
+                        {
                             if (bit)
+                            {
                                 blackModules++;
+                            }
+                        }
+                    }
 
                     var percent = (blackModules / (qrCode.ModuleMatrix.Count * qrCode.ModuleMatrix.Count)) * 100;
                     var prevMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 50) / 5;
@@ -695,12 +782,16 @@ namespace QRCoder
             var generatorPolynom = this.CalculateGeneratorPolynom(eccWords);
 
             for (var i = 0; i < messagePolynom.PolyItems.Count; i++)
+            {
                 messagePolynom.PolyItems[i] = new PolynomItem(messagePolynom.PolyItems[i].Coefficient,
                     messagePolynom.PolyItems[i].Exponent + eccWords);
+            }
 
             for (var i = 0; i < generatorPolynom.PolyItems.Count; i++)
+            {
                 generatorPolynom.PolyItems[i] = new PolynomItem(generatorPolynom.PolyItems[i].Coefficient,
                     generatorPolynom.PolyItems[i].Exponent + (messagePolynom.PolyItems.Count - 1));
+            }
 
             var leadTermSource = messagePolynom;
             for (var i = 0; (leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0); i++)
@@ -725,11 +816,14 @@ namespace QRCoder
         {
             var newPoly = new Polynom();
             for (var i = 0; i < poly.PolyItems.Count; i++)
+            {
                 newPoly.PolyItems.Add(
                     new PolynomItem(
                         (poly.PolyItems[i].Coefficient != 0
                             ? this.GetAlphaExpFromIntVal(poly.PolyItems[i].Coefficient)
                             : 0), poly.PolyItems[i].Exponent));
+            }
+
             return newPoly;
         }
 
@@ -737,7 +831,10 @@ namespace QRCoder
         {
             var newPoly = new Polynom();
             for (var i = 0; i < poly.PolyItems.Count; i++)
+            {
                 newPoly.PolyItems.Add(new PolynomItem(this.GetIntValFromAlphaExp(poly.PolyItems[i].Coefficient), poly.PolyItems[i].Exponent));
+            }
+
             return newPoly;
         }
 
@@ -763,17 +860,23 @@ namespace QRCoder
             EncodingMode result = EncodingMode.Numeric;
 
             if (forceUtf8)
+            {
                 return EncodingMode.Byte;
+            }
 
             foreach (char c in plainText)
             {
                 if (numTable.Contains(c))
+                {
                     continue;
+                }
 
                 result = EncodingMode.Alphanumeric;
 
                 if (!alphanumEncTable.Contains(c))
+                {
                     return EncodingMode.Byte;
+                }
             }
 
             return result;
@@ -846,33 +949,55 @@ namespace QRCoder
             if (version < 10)
             {
                 if (encMode.Equals(EncodingMode.Numeric))
+                {
                     return 10;
+                }
                 else if (encMode.Equals(EncodingMode.Alphanumeric))
+                {
                     return 9;
+                }
                 else
+                {
                     return 8;
+                }
             }
             else if (version < 27)
             {
                 if (encMode.Equals(EncodingMode.Numeric))
+                {
                     return 12;
+                }
                 else if (encMode.Equals(EncodingMode.Alphanumeric))
+                {
                     return 11;
+                }
                 else if (encMode.Equals(EncodingMode.Byte))
+                {
                     return 16;
+                }
                 else
+                {
                     return 10;
+                }
             }
             else
             {
                 if (encMode.Equals(EncodingMode.Numeric))
+                {
                     return 14;
+                }
                 else if (encMode.Equals(EncodingMode.Alphanumeric))
+                {
                     return 13;
+                }
                 else if (encMode.Equals(EncodingMode.Byte))
+                {
                     return 16;
+                }
                 else
+                {
                     return 12;
+                }
             }
         }
 
@@ -983,7 +1108,9 @@ namespace QRCoder
             var codeText = string.Empty;
 
             if (this.IsValidISO(plainText) && !forceUtf8)
+            {
                 codeBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(plainText);
+            }
             else
             {
                 switch (eciMode)
@@ -1003,7 +1130,9 @@ namespace QRCoder
             }
 
             foreach (var b in codeBytes)
+            {
                 codeText += DecToBin(b, 8);
+            }
 
             return codeText;
         }
@@ -1131,7 +1260,9 @@ namespace QRCoder
                             {
                                 var p = new Point(this.alignmentPatternBaseValues[i + x] - 2, this.alignmentPatternBaseValues[i + y] - 2);
                                 if (!points.Contains(p))
+                                {
                                     points.Add(p);
+                                }
                             }
                         }
                     }

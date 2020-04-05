@@ -40,7 +40,11 @@ namespace KeeTrayTOTP
                 bool validLength;
                 bool validUrl;
                 _plugin.SettingsValidate(_entry, out validInterval, out validLength, out validUrl); //Validates the settings value.
-                if (validInterval) NumericIntervalSetup.Value = Convert.ToDecimal(settings[0]); //Checks if interval is valid and sets interval numeric to the setting value.
+                if (validInterval)
+                {
+                    NumericIntervalSetup.Value = Convert.ToDecimal(settings[0]); //Checks if interval is valid and sets interval numeric to the setting value.
+                }
+
                 if (validLength) //Checks if length is valid.
                 {
                     // Select the correct radio button
@@ -49,7 +53,10 @@ namespace KeeTrayTOTP
                     RadioButtonLength8Setup.Checked = settings[1] == "8";
                     RadioButtonSteamFormatSetup.Checked = settings[1] == "S";
                 }
-                if (validUrl) ComboBoxTimeCorrectionSetup.Text = settings[2]; //Checks if url is valid and sets time correction textbox to the setting value.
+                if (validUrl)
+                {
+                    ComboBoxTimeCorrectionSetup.Text = settings[2]; //Checks if url is valid and sets time correction textbox to the setting value.
+                }
 
                 DeleteSetupButton.Visible = true; //Shows the back button.
                 HelpProviderSetup.SetHelpString(DeleteSetupButton, Localization.Strings.SetupDelete);
@@ -59,7 +66,11 @@ namespace KeeTrayTOTP
                 DeleteSetupButton.Visible = false; //Hides the back button.
             }
 
-            if (_plugin.SeedCheck(_entry)) TextBoxSeedSetup.Text = _plugin.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
+            if (_plugin.SeedCheck(_entry))
+            {
+                TextBoxSeedSetup.Text = _plugin.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
+            }
+
             ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); //Gets existings time corrections and adds them in the combobox.
 
             HelpProviderSetup.SetHelpString(FinishSetupButton, Localization.Strings.SetupFinish);
@@ -87,23 +98,37 @@ namespace KeeTrayTOTP
 
             // TOTP Seed field
             if (TextBoxSeedSetup.Text == string.Empty) //If no TOTP Seed
+            {
                 ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupSeedCantBeEmpty);
+            }
             else if (!TextBoxSeedSetup.Text.ExtWithoutSpaces().ExtIsBase32(out invalidBase32Chars)) // TODO: Add support to other known formats
+            {
                 ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupInvalidCharacter + "(" + invalidBase32Chars + ")!");
+            }
             else
+            {
                 ErrorProviderSetup.SetError(TextBoxSeedSetup, string.Empty);
+            }
 
             // Interval field
             if ((NumericIntervalSetup.Value < 1) || (NumericIntervalSetup.Value > 180))
+            {
                 ErrorProviderSetup.SetError(NumericIntervalSetup, string.Format(Localization.Strings.SetupInterval, Environment.NewLine));
+            }
             else
+            {
                 ErrorProviderSetup.SetError(NumericIntervalSetup, string.Empty);
+            }
 
             // Format/Interval radios
             if (!RadioButtonLength6Setup.Checked && !RadioButtonLength7Setup.Checked && !RadioButtonLength8Setup.Checked && !RadioButtonSteamFormatSetup.Checked)
+            {
                 ErrorProviderSetup.SetError(RadioButtonLength8Setup, Localization.Strings.SetupLengthMandatory);
+            }
             else
+            {
                 ErrorProviderSetup.SetError(RadioButtonLength8Setup, string.Empty);
+            }
 
             // Time Correction Field
             if (ComboBoxTimeCorrectionSetup.Text != string.Empty)
@@ -111,26 +136,24 @@ namespace KeeTrayTOTP
                 string uriName = ComboBoxTimeCorrectionSetup.Text;
 
                 Uri uriResult;
-                bool validUrl = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult)
-                              && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+                bool validUrl = Uri.TryCreate(uriName, UriKind.Absolute, out uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
                 if (!validUrl)
+                {
                     ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, Localization.Strings.SetupInvalidUrl);
+                }
                 else
+                {
                     ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, string.Empty);
+                }
             }
-
-            /* ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, Localization.Strings.SetupUrlMustContainHttp);
-            if (ComboBoxTimeCorrectionSetup.Text.Contains(";"))
-                ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, Localization.Strings.SetupInvalidCharacter + " (;)");
-            */
 
             if (ErrorProviderSetup.GetError(TextBoxSeedSetup) != string.Empty ||
                 ErrorProviderSetup.GetError(NumericIntervalSetup) != string.Empty ||
                 ErrorProviderSetup.GetError(ComboBoxTimeCorrectionSetup) != string.Empty ||
                 ErrorProviderSetup.GetError(ComboBoxTimeCorrectionSetup) != string.Empty)
+            {
                 return;
-
-
+            }
 
             try
             {
@@ -144,13 +167,21 @@ namespace KeeTrayTOTP
                 string format = "";
 
                 if (RadioButtonLength6Setup.Checked)
+                {
                     format = "6";
+                }
                 else if (RadioButtonLength7Setup.Checked)
+                {
                     format = "7";
+                }
                 else if (RadioButtonLength8Setup.Checked)
+                {
                     format = "8";
+                }
                 else if (RadioButtonSteamFormatSetup.Checked)
+                {
                     format = "S";
+                }
 
                 _entry.Strings.Set(_plugin.PluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName,
                     Localization.Strings.TOTPSettings),

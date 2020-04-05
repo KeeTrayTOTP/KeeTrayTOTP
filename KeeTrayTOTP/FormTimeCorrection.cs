@@ -154,10 +154,26 @@ namespace KeeTrayTOTP
         private void ButtonVerify_Click(object sender, EventArgs e)
         {
             ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, string.Empty); //Clears input errors.
-            if (!ComboBoxUrlTimeCorrection.Text.StartsWith("http")) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlMustContainHttp); //Verifies if the URL is valid.
-            if (!ComboBoxUrlTimeCorrection.Text.Contains("://")) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlInvalid); //Verifies if the URL is valid.
-            if (_plugin.TimeCorrections[ComboBoxUrlTimeCorrection.Text] != null) ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlExists); //Verifies if the URL is existing.
-            if (ErrorProviderTimeCorrection.GetError(ComboBoxUrlTimeCorrection) != string.Empty) return; //Prevents the validation if input has an error.
+            if (!ComboBoxUrlTimeCorrection.Text.StartsWith("http"))
+            {
+                ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlMustContainHttp); //Verifies if the URL is valid.
+            }
+
+            if (!ComboBoxUrlTimeCorrection.Text.Contains("://"))
+            {
+                ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlInvalid); //Verifies if the URL is valid.
+            }
+
+            if (_plugin.TimeCorrections[ComboBoxUrlTimeCorrection.Text] != null)
+            {
+                ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlExists); //Verifies if the URL is existing.
+            }
+
+            if (ErrorProviderTimeCorrection.GetError(ComboBoxUrlTimeCorrection) != string.Empty)
+            {
+                return; //Prevents the validation if input has an error.
+            }
+
             PictureBoxTimeCorrection.Image = ImageListErrorProvider.Images[1]; //Displays working icon.
             LabelStatusTimeCorrection.Text = Localization.Strings.TcPleaseWaitVerifying; //Diplays attempt message.
             ButtonVerify.Enabled = false; //Prevents the user to retry the URL validation.
