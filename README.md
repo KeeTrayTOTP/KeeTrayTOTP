@@ -14,7 +14,7 @@ This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.n
 * .NET 4.5 or superior
 
 ## So, why do this? 
-Variou reasons, first and most important: I don't want to use another application only for steam! KeePass and Tray TOTP (with some modifications) are more than capable enough to handle this task.
+Various reasons, first and most important: I don't want to use another application only for steam! KeePass and Tray TOTP (with some modifications) are more than capable enough to handle this task.
 
 Second: for education, working with another developer's code , specially in a language you're not familiar with, its a difficult task but not  uncommon situation.
 
