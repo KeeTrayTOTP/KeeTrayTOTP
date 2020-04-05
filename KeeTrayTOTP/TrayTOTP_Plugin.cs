@@ -439,7 +439,7 @@ namespace KeeTrayTOTP
                             var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
                             var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
                             string trayTitle;
-                            if (trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length)
+                            if ((trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || (string.IsNullOrEmpty(entryUsername)))
                             {
                                 trayTitle = entryTitle.ExtWithSpaceAfter();
                             }
