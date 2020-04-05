@@ -24,7 +24,9 @@ Second: for education, working with another developer's code, specially in a lan
 
 Third: I wanted only to make a slightly modification, then I needed to make a new setting options, change the way plugin generate in order to add another step, some rewriting later, too much was changed for simply patch, so I decided to create my own fork and made more changes.
 
-### Steam TOTP Secret?!
+## Obtaining secrets
+
+### Steam TOTP Secret
 There is no easy way to get it, there are various complications. Since Steam doesn't setup like most services (using QR Codes), the easiest way is to have through a rooted android phone.
 
 Another way would be using totp generators that support Steam like [Windows Authenticator](https://github.com/winauth/winauth) and [Steam Desktop Authenticator](https://github.com/Jessecar96/SteamDesktopAuthenticator), as far as I know, they emulate the mobile app API calls in order to generate a new TOTP Secret, one could use them to obtain the secret (never tried though), also this have the drawback of disabling the mobile app.
