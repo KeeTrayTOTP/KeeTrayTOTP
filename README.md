@@ -11,7 +11,7 @@ This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.n
 
 ## Releases
 
-The latest release can be found [here](https://github.com/victor-rds/KeeTrayTOTP/releases)
+The latest release can be found [here](https://github.com/victor-rds/KeeTrayTOTP/releases).
 
 ## Dependencies
 * [Keepass 2.31](http://keepass.info/)
