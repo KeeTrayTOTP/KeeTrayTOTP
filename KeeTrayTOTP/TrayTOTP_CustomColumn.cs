@@ -65,8 +65,16 @@ namespace KeeTrayTOTP
             /// <returns>String displayed in the columns.</returns>
             public override string GetCellData(string columnName, PwEntry pe)
             {
-                if (columnName == null) throw new ArgumentNullException("columnName");
-                if (pe == null) throw new ArgumentNullException("pe");
+                if (columnName == null)
+                {
+                    throw new ArgumentNullException("columnName");
+                }
+
+                if (pe == null)
+                {
+                    throw new ArgumentNullException("pe");
+                }
+
                 if (_plugin.SettingsCheck(pe) && _plugin.SeedCheck(pe))
                 {
                     bool validInterval;
@@ -97,7 +105,11 @@ namespace KeeTrayTOTP
             /// <returns></returns>
             public override bool SupportsCellAction(string columnName)
             {
-                if (columnName == null) throw new ArgumentNullException("columnName");
+                if (columnName == null)
+                {
+                    throw new ArgumentNullException("columnName");
+                }
+
                 return true;
             }
 
@@ -108,8 +120,15 @@ namespace KeeTrayTOTP
             /// <param name="pe">Entry associated with the clicked cell.</param>
             public override void PerformCellAction(string columnName, PwEntry pe)
             {
-                if (columnName == null) throw new ArgumentNullException("columnName");
-                if (_pluginHost.CustomConfig.GetBool(setname_bool_TOTPColumnCopy_Enable, true)) _plugin.TOTPCopyToClipboard(pe);
+                if (columnName == null)
+                {
+                    throw new ArgumentNullException("columnName");
+                }
+
+                if (_pluginHost.CustomConfig.GetBool(setname_bool_TOTPColumnCopy_Enable, true))
+                {
+                    _plugin.TOTPCopyToClipboard(pe);
+                }
             }
         }
     }

@@ -142,12 +142,9 @@ namespace KeeTrayTOTP
                     {
                         continue;
                     }
-                    if (char.IsDigit(currentChar))
+                    if (char.IsDigit(currentChar) && (currentCharValue > 1) && (currentCharValue < 8))
                     {
-                        if ((currentCharValue > 1) && (currentCharValue < 8))
-                        {
-                            continue;
-                        }
+                        continue;
                     }
                     invalidChars = (invalidChars + currentCharValue.ToString().ExtWithSpaceBefore()).Trim();
                 }

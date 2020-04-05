@@ -135,8 +135,9 @@ namespace QRCoder
                         }
                     }
                     else
+                    {
                         gfx.FillRectangle(lightBrush, new Rectangle(x - offset, y - offset, pixelsPerModule, pixelsPerModule));
-
+                    }
                 }
             }
 

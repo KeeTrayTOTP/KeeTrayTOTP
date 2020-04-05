@@ -32,9 +32,14 @@ namespace KeeTrayTOTP.Libraries
         public static string Encode(byte[] data)
         {
             if (data == null)
+            {
                 throw new ArgumentNullException();
+            }
+
             if (data.Length == 0)
+            {
                 throw new ArgumentNullException();
+            }
 
             // The output character count is calculated in 40 bit blocks.  That is because the least
             // common blocks size for both binary (8 bit) and base 32 (5 bit) is 40.  Padding must be used
@@ -64,7 +69,9 @@ namespace KeeTrayTOTP.Libraries
 
             // If we didn't finish, write the last current working char.
             if (currentPosition != outputCharacterCount)
+            {
                 outputBuffer[currentPosition++] = EncodingChars[workingValue];
+            }
 
             // RFC 4648 specifies that padding up to the end of the next 40 bit block must be provided
             // Since the outputCharacterCount does account for the paddingCharacters, fill it out.
@@ -85,13 +92,17 @@ namespace KeeTrayTOTP.Libraries
         public static byte[] Decode(string base32)
         {
             if (string.IsNullOrEmpty(base32))
+            {
                 throw new ArgumentNullException();
+            }
 
             var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd('=');
             foreach (var c in unpaddedBase32)
             {
                 if (EncodingChars.IndexOf(c) < 0)
+                {
                     throw new ArgumentException("Base32 contains illegal characters.");
+                }
             }
 
             // we have already removed the padding so this will tell us how many actual bytes there should be.

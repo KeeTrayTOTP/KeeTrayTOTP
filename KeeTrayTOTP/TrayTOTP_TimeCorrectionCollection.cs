@@ -85,7 +85,10 @@ namespace KeeTrayTOTP
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
+                    if (!next)
+                    {
+                        _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
+                    }
                 }
             }
         }
@@ -111,7 +114,10 @@ namespace KeeTrayTOTP
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
+                    if (!next)
+                    {
+                        _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
+                    }
                 }
             }
         }
@@ -138,7 +144,10 @@ namespace KeeTrayTOTP
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
+                    if (!next)
+                    {
+                        _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
+                    }
                 }
             }
         }
@@ -165,7 +174,10 @@ namespace KeeTrayTOTP
                         }
                     }
                     //Adding server to time correction collection.
-                    if (!next) _timeCorrections.Add(new TimeCorrectionProvider(lvi.Text, _enable));
+                    if (!next)
+                    {
+                        _timeCorrections.Add(new TimeCorrectionProvider(lvi.Text, _enable));
+                    }
                 }
             }
         }

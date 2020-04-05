@@ -25,7 +25,11 @@ namespace KeeTrayTOTP.Libraries
             }
             set
             {
-                if (!(value > 0)) throw new Exception("Invalid Duration."); //Throws an exception if the duration is invalid as the class cannot work without it.
+                if (!(value > 0))
+                {
+                    throw new Exception("Invalid Duration."); //Throws an exception if the duration is invalid as the class cannot work without it.
+                }
+
                 this._duration = value; //Defines variable from argument.
             }
         }
@@ -43,7 +47,11 @@ namespace KeeTrayTOTP.Libraries
             set
             {
                 //Throws an exception if the length is invalid as the class cannot work without it.
-                if (value < 4 || value > 8) throw new Exception("Invalid Length.");
+                if (value < 4 || value > 8)
+                {
+                    throw new Exception("Invalid Length.");
+                }
+
                 this._length = value; //Defines variable from argument.
             }
 
@@ -129,7 +137,9 @@ namespace KeeTrayTOTP.Libraries
                 var tc = tcc[settings[2]];
 
                 if (tc != null)
+                {
                     this.TimeCorrection = tc.TimeCorrection;
+                }
                 else
                 {
                     this.TimeCorrection = TimeSpan.Zero;
@@ -249,7 +259,9 @@ namespace KeeTrayTOTP.Libraries
             byte[] codeInterval = BitConverter.GetBytes((ulong)Counter);
 
             if (BitConverter.IsLittleEndian)
+            {
                 Array.Reverse(codeInterval);
+            }
 
             byte[] hash = hmac.ComputeHash(codeInterval); //Generates hash from key using counter.
             hmac.Clear(); //Clear hash instance securing the key.
@@ -258,7 +270,9 @@ namespace KeeTrayTOTP.Libraries
 
             Array.Copy(hash, start, totp, 0, 4);
             if (BitConverter.IsLittleEndian)
+            {
                 Array.Reverse(totp);
+            }
 
             return this._encoder(totp, _length);
         }

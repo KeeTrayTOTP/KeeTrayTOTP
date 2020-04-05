@@ -43,7 +43,9 @@ namespace QRCoder
             var size = ModulesPerSideFromVersion(version);
             this.ModuleMatrix = new List<BitArray>();
             for (var i = 0; i < size; i++)
+            {
                 this.ModuleMatrix.Add(new BitArray(size));
+            }
         }
         public QRCodeData(byte[] rawData, Compression compressMode)
         {
@@ -80,7 +82,9 @@ namespace QRCoder
             }
 
             if (bytes[0] != 0x51 || bytes[1] != 0x52 || bytes[2] != 0x52)
-                throw new Exception("Invalid raw data file. Filetype doesn't match \"QRR\".");            
+            {
+                throw new Exception("Invalid raw data file. Filetype doesn't match \"QRR\".");
+            }
 
             //Set QR code version
             var sideLen = (int)bytes[4];
