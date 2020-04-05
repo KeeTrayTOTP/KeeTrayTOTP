@@ -1,15 +1,17 @@
-name: KeeTrayTOTP CI Build
+name: "KeeTrayTOTP Tagged Release"
 
+# Trigger on tags starting with v
 on:
   push:
-    branches:
-      - 'master' 
+    tags:
+      - "v*"
+
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
     
     - name: Setup MSBuild.exe
       uses: warrenbuckley/Setup-MSBuild@v1
@@ -29,12 +31,10 @@ jobs:
         name: KeeTrayTOTP.plgx
         path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
 
-    - name: Create prerelease
+    - name: Create release
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        automatic_release_tag: "latest"
-        prerelease: true
-        title: "Development Build"
+        prerelease: false
         files: |
-          *.plgx
+           **/KeeTrayTOTP.plgx
