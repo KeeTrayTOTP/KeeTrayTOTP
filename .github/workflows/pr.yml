@@ -27,7 +27,7 @@ jobs:
 
     - name: Run tests
       # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
-      run: dotnet test --no-build --nologo
+      run: dotnet test --no-build
 
     - name: MSBuild (With Plgx)
       run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
