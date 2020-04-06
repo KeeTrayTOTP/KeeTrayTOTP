@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
@@ -271,6 +271,8 @@ namespace KeeTrayTOTP
             _niMenuSeperator = new ToolStripSeparator();
             PluginHost.MainWindow.TrayContextMenu.Items.Insert(1, _niMenuSeperator);
 
+            PluginHost.MainWindow.TrayContextMenu.Opened += OnTrayContextMenuOpened;
+
             // Register auto-type function.
             if (PluginHost.CustomConfig.GetBool(setname_bool_AutoType_Enable, true))
             {
@@ -293,6 +295,13 @@ namespace KeeTrayTOTP
             TimeCorrections.AddRangeFromList(PluginHost.CustomConfig.GetString(setname_string_TimeCorrection_List, string.Empty).Split(';').ToList());
 
             return true;
+        }
+
+        private void OnTrayContextMenuOpened(object sender, EventArgs e)
+        {
+            var contextMenuStrip = (ContextMenuStrip)sender;
+            var dropDownLocationCalculator = new DropDownLocationCalculator(contextMenuStrip.Size);
+            contextMenuStrip.Location = dropDownLocationCalculator.CalculateLocationForDropDown(Cursor.Position);
         }
 
         /// <summary>
@@ -913,6 +922,7 @@ namespace KeeTrayTOTP
 
             // Remove Notify Icon menus.
             PluginHost.MainWindow.TrayContextMenu.Opening -= OnNotifyMenuOpening;
+            PluginHost.MainWindow.TrayContextMenu.Opened -= OnTrayContextMenuOpened;
             PluginHost.MainWindow.TrayContextMenu.Items.Remove(_niMenuTitle);
             _niMenuTitle.Dispose();
             foreach (var menu in _niMenuList)
