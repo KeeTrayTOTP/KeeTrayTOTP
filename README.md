@@ -1,6 +1,6 @@
 # KeeTrayTOTP
-![KeeTrayTOTP Pre Release](https://github.com/victor-rds/KeeTrayTOTP/workflows/KeeTrayTOTP%20Pre%20Release/badge.svg?branch=master)
-![KeeTrayTOTP Tagged Release](https://github.com/victor-rds/KeeTrayTOTP/workflows/KeeTrayTOTP%20Tagged%20Release/badge.svg)
+![KeeTrayTOTP Pre Release](https://github.com/KeeTrayTOTP/KeeTrayTOTP/workflows/KeeTrayTOTP%20Pre%20Release/badge.svg?branch=master)
+![KeeTrayTOTP Tagged Release](https://github.com/KeeTrayTOTP/KeeTrayTOTP/workflows/KeeTrayTOTP%20Tagged%20Release/badge.svg)
 
 This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.net/projects/traytotp-kp2/), but also want to use with Valve's Steam.
 
@@ -12,7 +12,7 @@ In the case of Steam Mobile Authenticator the new output format was reverse engi
 
 ## Releases
 
-The latest release can be found [here](https://github.com/victor-rds/KeeTrayTOTP/releases).
+The latest release can be found [here](https://github.com/KeeTrayTOTP/KeeTrayTOTP/releases).
 
 ## Dependencies
 
