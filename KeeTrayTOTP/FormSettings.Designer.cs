@@ -787,6 +787,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_seetings form_";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSettings_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormSettings_FormClosed);
             this.Load += new System.EventHandler(this.FormSettings_Load);
             this.TabControlSettings.ResumeLayout(false);
             this.TabPageContextMenus.ResumeLayout(false);

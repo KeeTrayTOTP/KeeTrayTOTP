@@ -229,6 +229,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "_time correction_";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormTimeCorrection_FormClosing);
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormTimeCorrection_FormClosed);
             this.Load += new System.EventHandler(this.FormTimeCorrection_Load);
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxTimeCorrection)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxAbout)).EndInit();
