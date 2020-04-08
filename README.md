@@ -22,7 +22,7 @@ The latest release can be found [here](https://github.com/KeeTrayTOTP/KeeTrayTOT
 ## Documentation
 
 * Obtaining Steam Secrets
-  * Via [Steam Desktop Authenticator](./secret_sda/steam_desktop_authenticator_sda.md) (by [@raabf](https://github.com/raabf))
+  * Via [Steam Desktop Authenticator](./docs/secret_sda/steam_desktop_authenticator_sda.md) (by [@raabf](https://github.com/raabf))
   * Via [Rooted android phone](./docs/secret_rooted_phone/index.md) (by [@DarkDaskin](https://github.com/DarkDaskin))
   * Via [iOS backup](./docs/secret_ios_backup/index.md)
 * [Release](docs/release.md)
