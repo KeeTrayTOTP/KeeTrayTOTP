@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using KeePass.UI;
 using KeePassLib;
 using KeePassLib.Security;
 
@@ -31,6 +32,8 @@ namespace KeeTrayTOTP
 
         private void SetupTOTP_Load(object sender, EventArgs e)
         {
+            GlobalWindowManager.AddWindow(this);
+
             Text = Localization.Strings.Setup + @" - " + Localization.Strings.TrayTOTPPlugin; //Set form's name using constants.
 
             if (_plugin.SettingsCheck(_entry) || _plugin.SeedCheck(_entry)) //Checks the the totp settings exists.
@@ -228,6 +231,11 @@ namespace KeeTrayTOTP
                 DialogResult = DialogResult.OK;
                 Close();
             }
+        }
+
+        private void SetupTOTP_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GlobalWindowManager.RemoveWindow(this);
         }
     }
 }

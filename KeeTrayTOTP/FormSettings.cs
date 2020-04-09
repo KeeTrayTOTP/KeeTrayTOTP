@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using KeePass.UI;
 
 namespace KeeTrayTOTP
 {
@@ -43,6 +44,8 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void FormSettings_Load(object sender, EventArgs e)
         {
+            GlobalWindowManager.AddWindow(this);
+
             Text = Localization.Strings.Settings + @" - " + Localization.Strings.TrayTOTPPlugin; // Set form's name using constants.
             Working(true, true); // Set controls depending on the state of action.
             WorkerLoad.RunWorkerAsync(); // Load Settings in form controls.
@@ -478,6 +481,11 @@ namespace KeeTrayTOTP
         private void WorkerReset_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             WorkerLoad.RunWorkerAsync("Reset");
+        }
+
+        private void FormSettings_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GlobalWindowManager.RemoveWindow(this);
         }
     }
 }

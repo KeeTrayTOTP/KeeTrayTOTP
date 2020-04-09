@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Windows.Forms;
+using KeePass.UI;
 using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
@@ -48,6 +49,8 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void FormTimeCorrection_Load(object sender, EventArgs e)
         {
+            GlobalWindowManager.AddWindow(this);
+
             Text = Localization.Strings.TimeCorrection + @" - " + Localization.Strings.TrayTOTPPlugin; //Sets the form's display text.
             if (_plugin.PluginHost.MainWindow.ActiveDatabase.IsOpen)
             {
@@ -199,6 +202,11 @@ namespace KeeTrayTOTP
         private void ButtonCancel_Click(object sender, EventArgs e)
         {
             //Dialog Result = Cancel
+        }
+
+        private void FormTimeCorrection_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GlobalWindowManager.RemoveWindow(this);
         }
     }
 }

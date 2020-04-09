@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
+using KeePass.UI;
 using QRCoder;
 
 namespace KeeTrayTOTP
@@ -15,6 +16,8 @@ namespace KeeTrayTOTP
 
         private void ShowQR_Load(object sender, EventArgs e)
         {
+            GlobalWindowManager.AddWindow(this);
+
             GenerateQRCode();
         }
 
@@ -47,6 +50,11 @@ namespace KeeTrayTOTP
             }
 
             return base.ProcessDialogKey(keyData);
+        }
+
+        private void ShowQR_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GlobalWindowManager.RemoveWindow(this);
         }
     }
 }

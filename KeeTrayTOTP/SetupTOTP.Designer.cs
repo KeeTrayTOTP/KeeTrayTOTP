@@ -418,6 +418,7 @@
             this.Name = "SetupTOTP";
             this.ShowInTaskbar = false;
             this.Text = "SetupTOTP";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.SetupTOTP_FormClosed);
             this.Load += new System.EventHandler(this.SetupTOTP_Load);
             ((System.ComponentModel.ISupportInitialize)(this.PictureBoxAbout)).EndInit();
             this.InfoPanel.ResumeLayout(false);

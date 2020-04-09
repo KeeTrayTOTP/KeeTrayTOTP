@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Windows.Forms;
+using KeePass.UI;
 
 namespace KeeTrayTOTP
 {
@@ -32,6 +33,8 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void FormAbout_Load(object sender, EventArgs e)
         {
+            GlobalWindowManager.AddWindow(this);
+
             Text = Localization.Strings.About + @" - " + Localization.Strings.TrayTOTPPlugin;
             ListViewAbout.Items[0].SubItems.Add(AssemblyTitle);
             ListViewAbout.Items[1].SubItems.Add(AssemblyCompany);
@@ -150,6 +153,11 @@ namespace KeeTrayTOTP
                 }
                 return ((AssemblyCompanyAttribute)attributes[0]).Company;
             }
+        }
+
+        private void FormAbout_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            GlobalWindowManager.RemoveWindow(this);
         }
     }
 }

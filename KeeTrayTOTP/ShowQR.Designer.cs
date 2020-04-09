@@ -129,6 +129,7 @@
             this.Name = "ShowQR";
             this.ShowInTaskbar = false;
             this.Text = "ShowQR";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ShowQR_FormClosed);
             this.Load += new System.EventHandler(this.ShowQR_Load);
             ((System.ComponentModel.ISupportInitialize)(this.QROutputPicture)).EndInit();
             this.ResumeLayout(false);
