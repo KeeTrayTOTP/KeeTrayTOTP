@@ -49,7 +49,7 @@ namespace KeeTrayTOTP.Libraries
         /// </summary>
         public DateTime LastUpdateDateTime { get { return _lastUpdateDateTime; } }
 
-        private bool _lastUpdateSucceded = false;
+        private bool _lastUpdateSucceded;
         /// <summary>
         /// Returns true if the last check for time correction was successful.
         /// </summary>

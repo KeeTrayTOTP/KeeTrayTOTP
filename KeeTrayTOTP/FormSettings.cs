@@ -16,7 +16,7 @@ namespace KeeTrayTOTP
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private delegate void SafeCallDelegate(object sender, DoWorkEventArgs e);
-        
+
         /// <summary>
         /// Plugin Host.
         /// </summary>

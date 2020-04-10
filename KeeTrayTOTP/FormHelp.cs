@@ -41,7 +41,7 @@ namespace KeeTrayTOTP
             Text = Localization.Strings.Help + @" - " + Localization.Strings.TrayTOTPPlugin;
             foreach (Control ctl in SplitContainerHelp.Panel2.Controls)
             {
-                ctl.Location = new Point(3,3);
+                ctl.Location = new Point(3, 3);
                 ctl.Size = new Size(SplitContainerHelp.Panel2.Width - 3, SplitContainerHelp.Panel2.Height - 3);
             }
             TreeViewHelp.ExpandAll();
