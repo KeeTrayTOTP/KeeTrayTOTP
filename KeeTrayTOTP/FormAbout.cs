@@ -50,16 +50,8 @@ namespace KeeTrayTOTP
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTitleAttribute), false);
-                if (attributes.Length > 0)
-                {
-                    var titleAttribute = (AssemblyTitleAttribute)attributes[0];
-                    if (titleAttribute.Title != string.Empty)
-                    {
-                        return titleAttribute.Title;
-                    }
-                }
-                return System.IO.Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().CodeBase);
+                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyTitleAttribute>();
+                return attribute != null ? attribute.Title : null;
             }
         }
 
@@ -70,7 +62,9 @@ namespace KeeTrayTOTP
         {
             get
             {
-                return Assembly.GetExecutingAssembly().GetName().Version.ToString();
+                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>();
+                return attribute != null ? attribute.InformationalVersion: null;
+
             }
         }
 
@@ -81,12 +75,9 @@ namespace KeeTrayTOTP
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyDescriptionAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-                return ((AssemblyDescriptionAttribute)attributes[0]).Description;
+                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyDescriptionAttribute>();
+                return attribute != null ? attribute.Description : null;
+
             }
         }
 
@@ -97,12 +88,8 @@ namespace KeeTrayTOTP
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyProductAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-                return ((AssemblyProductAttribute)attributes[0]).Product;
+                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>();
+                return attribute != null ? attribute.Product : null;
             }
         }
 
