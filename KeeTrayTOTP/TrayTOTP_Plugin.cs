@@ -31,9 +31,9 @@ namespace KeeTrayTOTP
         internal IPluginHost PluginHost = null;
 
         /// <summary>
-        /// Tray TOTP Support Email
+        /// Tray TOTP Support Url
         /// </summary>
-        internal const string Email = "victor.rds@protonmail.ch";
+        internal const string SupportUrl = "https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues";
 
         /// <summary>
         /// Constants (keepass form object names).

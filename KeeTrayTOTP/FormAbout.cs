@@ -21,7 +21,6 @@ namespace KeeTrayTOTP
         /// <param name="plugin">Plugin Host.</param>
         internal FormAbout(KeeTrayTOTPExt plugin)
         {
-
             _plugin = plugin;
             InitializeComponent();
         }
@@ -35,12 +34,12 @@ namespace KeeTrayTOTP
         {
             GlobalWindowManager.AddWindow(this);
 
-            Text = Localization.Strings.About + @" - " + Localization.Strings.TrayTOTPPlugin;
+            Text = Localization.Strings.About + " - " + Localization.Strings.TrayTOTPPlugin;
             ListViewAbout.Items[0].SubItems.Add(AssemblyTitle);
             ListViewAbout.Items[1].SubItems.Add(AssemblyCompany);
             ListViewAbout.Items[2].SubItems.Add(AssemblyVersion);
             ListViewAbout.Items[3].SubItems.Add(AssemblyTrademark);
-            ListViewAbout.Items[4].SubItems.Add(KeeTrayTOTPExt.Email);
+            ListViewAbout.Items[4].SubItems.Add(KeeTrayTOTPExt.SupportUrl);
             LabelCopyright.Text = AssemblyCopyright;
         }
 
