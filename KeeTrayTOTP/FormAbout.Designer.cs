@@ -32,7 +32,7 @@
             System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Company");
             System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Version");
             System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("Build Date");
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Contact");
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Support");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAbout));
             this.LabelTitleAbout = new System.Windows.Forms.Label();
             this.LabelBannerAbout = new System.Windows.Forms.Label();
@@ -85,15 +85,15 @@
             this.ListViewAbout.Size = new System.Drawing.Size(410, 133);
             this.ListViewAbout.TabIndex = 0;
             this.ListViewAbout.UseCompatibleStateImageBehavior = false;
-            this.ListViewAbout.View = System.Windows.Forms.View.Tile;
+            this.ListViewAbout.View = System.Windows.Forms.View.Details;
             // 
             // columnHeader1
             // 
-            this.columnHeader1.Width = 165;
+            this.columnHeader1.Width = 100;
             // 
             // columnHeader2
             // 
-            this.columnHeader2.Width = 216;
+            this.columnHeader2.Width = 300;
             // 
             // ButtonClose
             // 

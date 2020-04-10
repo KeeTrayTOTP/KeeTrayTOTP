@@ -34,7 +34,7 @@ namespace KeeTrayTOTP
         {
             GlobalWindowManager.AddWindow(this);
 
-            Text = Localization.Strings.About + @" - " + Localization.Strings.TrayTOTPPlugin;
+            Text = Localization.Strings.About + " - " + Localization.Strings.TrayTOTPPlugin;
             ListViewAbout.Items[0].SubItems.Add(AssemblyTitle);
             ListViewAbout.Items[1].SubItems.Add(AssemblyCompany);
             ListViewAbout.Items[2].SubItems.Add(AssemblyVersion);
