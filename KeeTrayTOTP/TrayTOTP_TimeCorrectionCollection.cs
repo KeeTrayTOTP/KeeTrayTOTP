@@ -164,10 +164,10 @@ namespace KeeTrayTOTP
             foreach (var tc in _timeCorrections)
             {
                 //Create new Listviewitem to appear in Time Correction Settings Listview.
-                var lvi = new ListViewItem(tc.Url) { ImageIndex = tc.LastUpdateSucceded ? 0 : 2 };
-                lvi.SubItems.Add((tc.LastUpdateSucceded ? tc.TimeCorrection.ToString() : Localization.Strings.ConnectionFailed));
+                var lvi = new ListViewItem(tc.Url) { ImageIndex = tc.LastUpdateSucceeded ? 0 : 2 };
+                lvi.SubItems.Add((tc.LastUpdateSucceeded ? tc.TimeCorrection.ToString() : Localization.Strings.ConnectionFailed));
                 lvi.Tag = tc;
-                lvi.ToolTipText = (tc.LastUpdateSucceded ? String.Empty : tc.LastUpdateDateTime.ToString());
+                lvi.ToolTipText = (tc.LastUpdateSucceeded ? String.Empty : tc.LastUpdateDateTime.ToString());
                 lvIs.Add(lvi);
             }
             return lvIs.ToArray();

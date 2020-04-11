@@ -103,7 +103,7 @@ namespace KeeTrayTOTP
                 System.Threading.Thread.Sleep(100); //Waits
                 if (_testTimeCorrection.LastUpdateDateTime != DateTime.MinValue) //Checks if the validation has completed.
                 {
-                    if (_testTimeCorrection.LastUpdateSucceded) //Checks if the validation has succeeded.
+                    if (_testTimeCorrection.LastUpdateSucceeded) //Checks if the validation has succeeded.
                     {
                         e.Result = "success"; //Returns the validation result success.
                         return; //Exits the loop as the validation was successful.
