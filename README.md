@@ -1,6 +1,9 @@
 # KeeTrayTOTP
-![KeeTrayTOTP Pre Release](https://github.com/KeeTrayTOTP/KeeTrayTOTP/workflows/KeeTrayTOTP%20Pre%20Release/badge.svg?branch=master)
 ![KeeTrayTOTP Tagged Release](https://github.com/KeeTrayTOTP/KeeTrayTOTP/workflows/KeeTrayTOTP%20Tagged%20Release/badge.svg)
+![KeeTrayTOTP Pre Release](https://github.com/KeeTrayTOTP/KeeTrayTOTP/workflows/KeeTrayTOTP%20Pre%20Release/badge.svg?branch=master)
+[![Latest Release](https://img.shields.io/github/release/KeeTrayTOTP/KeeTrayTOTP.svg)](https://github.com/KeeTrayTOTP/KeeTrayTOTP/releases/latest)
+[![Total Downloads](https://img.shields.io/github/downloads/KeeTrayTOTP/KeeTrayTOTP/total.svg?maxAge=86400)](https://github.com/KeeTrayTOTP/KeeTrayTOTP/releases/latest)
+[![GitHub license](https://img.shields.io/github/license/KeeTrayTOTP/KeeTrayTOTP)](https://github.com/KeeTrayTOTP/KeeTrayTOTP/blob/master/LICENSE)
 
 This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.net/projects/traytotp-kp2/), but also want to use with Valve's Steam.
 
