@@ -36,7 +36,7 @@ namespace QRCoder
     public class QRCodeData : IDisposable
     {
         public List<BitArray> ModuleMatrix { get; set; }
-        
+
         public QRCodeData(int version)
         {
             this.Version = version;
@@ -63,8 +63,8 @@ namespace QRCoder
                             Stream4Methods.CopyTo(dstream, output);
                         }
                         bytes = new List<byte>(output.ToArray());
-                    }                    
-                }                    
+                    }
+                }
             }
             else if (compressMode.Equals(Compression.GZip))
             {
@@ -99,9 +99,9 @@ namespace QRCoder
                 for (int i = 7; i >= 0; i--)
                 {
                     modules.Enqueue((b & (1 << i)) != 0);
-                }               
+                }
             }
-            
+
             //Build module matrix
             this.ModuleMatrix = new List<BitArray>();
             for (int y = 0; y < sideLen; y++)
@@ -112,7 +112,6 @@ namespace QRCoder
                     this.ModuleMatrix[y][x] = modules.Dequeue();
                 }
             }
-            
         }
 
         public byte[] GetRawData(Compression compressMode)
@@ -120,8 +119,8 @@ namespace QRCoder
             var bytes = new List<byte>();
 
             //Add header - signature ("QRR")
-            bytes.AddRange(new byte[]{ 0x51, 0x52, 0x52, 0x00 });
-            
+            bytes.AddRange(new byte[] { 0x51, 0x52, 0x52, 0x00 });
+
             //Add header - rowsize
             bytes.Add((byte)ModuleMatrix.Count);
 
@@ -173,12 +172,12 @@ namespace QRCoder
                     }
                     rawData = output.ToArray();
                 }
-            }           
+            }
             return rawData;
         }
 
         public int Version { get; private set; }
-        
+
         private static int ModulesPerSideFromVersion(int version)
         {
             return 21 + (version - 1) * 4;
@@ -188,7 +187,6 @@ namespace QRCoder
         {
             this.ModuleMatrix = null;
             this.Version = 0;
-            
         }
 
         public enum Compression

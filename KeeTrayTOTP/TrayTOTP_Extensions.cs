@@ -86,18 +86,6 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Converts the control's tag to text and splits it.
-        /// </summary>
-        /// <param name="extension">Current string.</param>
-        /// <param name="index">Split index.</param>
-        /// <param name="seperator">Split seperators.</param>
-        /// <returns></returns>
-        internal static string ExtSplitFromTag(this System.Windows.Forms.Control extension, int index = 0, char seperator = ';')
-        {
-            return extension.Tag.ToString().ExtSplit(index, seperator);
-        }
-
-        /// <summary>
         /// Splits the string and returns specified substring.
         /// </summary>
         /// <param name="extension">Current string.</param>

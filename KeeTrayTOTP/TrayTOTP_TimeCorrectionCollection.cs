@@ -10,7 +10,7 @@ namespace KeeTrayTOTP
     /// <summary>
     /// Time_Correction Collection.
     /// </summary>
-    public class TimeCorrectionCollection : IEnumerable<TimeCorrectionProvider>
+    public class TimeCorrectionCollection
     {
         /// <summary>
         /// Time Correction List.
@@ -62,35 +62,6 @@ namespace KeeTrayTOTP
         {
             _enable = enable;
             _timeCorrections = new List<TimeCorrectionProvider>();
-        }
-
-        /// <summary>
-        /// Populates the Time Correction Collection with the URLs in the specified string.
-        /// </summary>
-        /// <param name="urLs">URLs.</param>
-        internal void AddRangeFromString(string urLs)
-        {
-            foreach (var url in urLs.Split(';'))
-            {
-                //Validating that url is not null.
-                if (url != String.Empty)
-                {
-                    //Validating that this server is not already checked.
-                    bool next = false;
-                    foreach (var timeC in _timeCorrections)
-                    {
-                        if (timeC.Url == url)
-                        {
-                            next = true;
-                        }
-                    }
-                    //Adding server to time correction collection.
-                    if (!next)
-                    {
-                        _timeCorrections.Add(new TimeCorrectionProvider(url, _enable));
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -230,24 +201,6 @@ namespace KeeTrayTOTP
                 @return = @return + timeCorrection.Url + ";";
             }
             return @return.TrimEnd(';');
-        }
-
-        /// <summary>
-        /// Support the enumeration of the collection to handle [foreach (var VARIABLE in...].
-        /// </summary>
-        /// <returns>Time Correction List Enumerator.</returns>
-        public IEnumerator<TimeCorrectionProvider> GetEnumerator()
-        {
-            return _timeCorrections.GetEnumerator();
-        }
-
-        /// <summary>
-        /// Support the enumeration of the collection to handle [foreach (TimeCorrection_Provider VARIABLE in...].
-        /// </summary>
-        /// <returns>Time Correction List Enumerator.</returns>
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return _timeCorrections.GetEnumerator();
         }
     }
 }

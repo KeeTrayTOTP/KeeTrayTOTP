@@ -5,7 +5,7 @@ using System;
 namespace KeeTrayTOTP.Tests
 {
     [TestClass]
-    public     class ExpiryTests
+    public class ExpiryTests
     {
         [TestMethod]
         public void IsExpired_ShouldReturnTrue_WhenExpiresIsTrueAndExpiryTimeInThePast()
