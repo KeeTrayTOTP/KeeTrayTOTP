@@ -154,7 +154,7 @@ namespace KeeTrayTOTP.Libraries
             b[4] = (byte)(n >> 24);
             b[5] = (byte)(n >> 16);
             b[6] = (byte)(n >> 8);
-            b[7] = (byte)(n);
+            b[7] = (byte)n;
 
             return b;
         }

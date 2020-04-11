@@ -63,7 +63,7 @@ namespace QRCoder
             this.CreateAlignmentPatternTable();
         }
 
-        public QRCodeData CreateQrCode(string plainText, ErrorCorrectionCode eccLevel = QRCodeGenerator.ErrorCorrectionCode.Q, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1)
+        public QRCodeData CreateQrCode(string plainText, ErrorCorrectionLevel eccLevel = QRCodeGenerator.ErrorCorrectionLevel.Q, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1)
         {
             EncodingMode encoding = GetEncodingFromPlaintext(plainText, forceUtf8);
             var codedText = this.PlainTextToBinary(plainText, encoding, eciMode, utf8BOM, forceUtf8);
@@ -197,12 +197,12 @@ namespace QRCoder
             return qr;
         }
 
-        private static string GetFormatString(ErrorCorrectionCode level, int maskVersion)
+        private static string GetFormatString(ErrorCorrectionLevel level, int maskVersion)
         {
             var generator = "10100110111";
             var fStrMask = "101010000010010";
 
-            var fStr = (level == ErrorCorrectionCode.L) ? "01" : (level == ErrorCorrectionCode.M) ? "00" : (level == ErrorCorrectionCode.Q) ? "11" : "10";
+            var fStr = (level == ErrorCorrectionLevel.L) ? "01" : (level == ErrorCorrectionLevel.M) ? "00" : (level == ErrorCorrectionLevel.Q) ? "11" : "10";
             fStr += DecToBin(maskVersion, 3);
             var fStrEcc = fStr.PadRight(15, '0').TrimStart('0');
             while (fStrEcc.Length > 10)
@@ -324,7 +324,7 @@ namespace QRCoder
                 }
             }
 
-            public static int MaskCode(ref QRCodeData qrCode, int version, ref List<Rectangle> blockedModules, ErrorCorrectionCode eccLevel)
+            public static int MaskCode(ref QRCodeData qrCode, int version, ref List<Rectangle> blockedModules, ErrorCorrectionLevel eccLevel)
             {
                 var patternName = string.Empty;
                 var patternScore = 0;
@@ -713,7 +713,7 @@ namespace QRCoder
                         }
                     }
 
-                    var percent = (blackModules / (qrCode.ModuleMatrix.Count * qrCode.ModuleMatrix.Count)) * 100;
+                    var percent = blackModules / (qrCode.ModuleMatrix.Count * qrCode.ModuleMatrix.Count) * 100;
                     var prevMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 50) / 5;
                     var nextMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 45) / 5;
                     var score4 = Math.Min(prevMultipleOf5, nextMultipleOf5) * 10;
@@ -742,7 +742,7 @@ namespace QRCoder
             }
 
             var leadTermSource = messagePolynom;
-            for (var i = 0; (leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0); i++)
+            for (var i = 0; leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0; i++)
             {
                 if (leadTermSource.PolyItems[0].Coefficient == 0)
                 {
@@ -767,9 +767,9 @@ namespace QRCoder
             {
                 newPoly.PolyItems.Add(
                     new PolynomItem(
-                        (poly.PolyItems[i].Coefficient != 0
+                        poly.PolyItems[i].Coefficient != 0
                             ? this.GetAlphaExpFromIntVal(poly.PolyItems[i].Coefficient)
-                            : 0), poly.PolyItems[i].Exponent));
+                            : 0, poly.PolyItems[i].Exponent));
             }
 
             return newPoly;
@@ -786,14 +786,14 @@ namespace QRCoder
             return newPoly;
         }
 
-        private int GetVersion(int length, EncodingMode encMode, ErrorCorrectionCode eccLevel)
+        private int GetVersion(int length, EncodingMode encMode, ErrorCorrectionLevel errorCorrectionLevel)
         {
             return this.capacityTable
-                .Where(x => x.Details.Any(y => y.ErrorCorrectionLevel == eccLevel && y.CapacityDict[encMode] >= Convert.ToInt32(length)))
+                .Where(x => x.Details.Any(y => y.ErrorCorrectionLevel == errorCorrectionLevel && y.CapacityDict[encMode] >= Convert.ToInt32(length)))
                 .Select(x => new
                 {
                     version = x.Version,
-                    capacity = x.Details.Single(y => y.ErrorCorrectionLevel == eccLevel).CapacityDict[encMode]
+                    capacity = x.Details.Single(y => y.ErrorCorrectionLevel == errorCorrectionLevel).CapacityDict[encMode]
                 }).Min(x => x.version);
         }
 
@@ -936,7 +936,7 @@ namespace QRCoder
 
         private bool IsUtf8(EncodingMode encoding, string plainText)
         {
-            return (encoding == EncodingMode.Byte && !this.IsValidISO(plainText));
+            return encoding == EncodingMode.Byte && !this.IsValidISO(plainText);
         }
 
         private bool IsValidISO(string input)
@@ -1098,7 +1098,7 @@ namespace QRCoder
                     var polItemRes = new PolynomItem
                     (
                         ShrinkAlphaExp(polItemBase.Coefficient + polItemMulti.Coefficient),
-                        (polItemBase.Exponent + polItemMulti.Exponent)
+                        polItemBase.Exponent + polItemMulti.Exponent
                     );
                     resultPolynom.PolyItems.Add(polItemRes);
                 }
@@ -1115,8 +1115,8 @@ namespace QRCoder
             }
             resultPolynom.PolyItems.RemoveAll(x => toGlue.Contains(x.Exponent));
             resultPolynom.PolyItems.AddRange(gluedPolynoms);
-            resultPolynom.PolyItems = resultPolynom.PolyItems.OrderByDescending(x => x.Exponent).ToList();
-            return resultPolynom;
+
+            return new Polynom(resultPolynom.PolyItems.OrderByDescending(x => x.Exponent));
         }
 
         private int GetIntValFromAlphaExp(int exp)
@@ -1188,7 +1188,7 @@ namespace QRCoder
                 {
                     new ErrorCorrectionCodeInfo(
                         (i+24) / 24,
-                        ErrorCorrectionCode.L,
+                        ErrorCorrectionLevel.L,
                         this.capacityECCBaseValues[i],
                         this.capacityECCBaseValues[i+1],
                         this.capacityECCBaseValues[i+2],
@@ -1198,7 +1198,7 @@ namespace QRCoder
                     new ErrorCorrectionCodeInfo
                     (
                         version: (i + 24) / 24,
-                        errorCorrectionLevel: ErrorCorrectionCode.M,
+                        errorCorrectionLevel: ErrorCorrectionLevel.M,
                         totalDataCodewords: this.capacityECCBaseValues[i+6],
                         eccPerBlock: this.capacityECCBaseValues[i+7],
                         blocksInGroup1: this.capacityECCBaseValues[i+8],
@@ -1209,7 +1209,7 @@ namespace QRCoder
                     new ErrorCorrectionCodeInfo
                     (
                         version: (i + 24) / 24,
-                        errorCorrectionLevel: ErrorCorrectionCode.Q,
+                        errorCorrectionLevel: ErrorCorrectionLevel.Q,
                         totalDataCodewords: this.capacityECCBaseValues[i+12],
                         eccPerBlock: this.capacityECCBaseValues[i+13],
                         blocksInGroup1: this.capacityECCBaseValues[i+14],
@@ -1220,7 +1220,7 @@ namespace QRCoder
                     new ErrorCorrectionCodeInfo
                     (
                         version: (i + 24) / 24,
-                        errorCorrectionLevel: ErrorCorrectionCode.H,
+                        errorCorrectionLevel: ErrorCorrectionLevel.H,
                         totalDataCodewords: this.capacityECCBaseValues[i+18],
                         eccPerBlock: this.capacityECCBaseValues[i+19],
                         blocksInGroup1: this.capacityECCBaseValues[i+20],
@@ -1243,7 +1243,7 @@ namespace QRCoder
                     new List<VersionInfoDetails>
                     {
                         new VersionInfoDetails(
-                             ErrorCorrectionCode.L,
+                             ErrorCorrectionLevel.L,
                              new Dictionary<EncodingMode,int>(){
                                  { EncodingMode.Numeric, this.capacityBaseValues[i] },
                                  { EncodingMode.Alphanumeric, this.capacityBaseValues[i+1] },
@@ -1252,7 +1252,7 @@ namespace QRCoder
                             }
                         ),
                         new VersionInfoDetails(
-                             ErrorCorrectionCode.M,
+                             ErrorCorrectionLevel.M,
                              new Dictionary<EncodingMode,int>(){
                                  { EncodingMode.Numeric, this.capacityBaseValues[i+4] },
                                  { EncodingMode.Alphanumeric, this.capacityBaseValues[i+5] },
@@ -1261,7 +1261,7 @@ namespace QRCoder
                              }
                         ),
                         new VersionInfoDetails(
-                             ErrorCorrectionCode.Q,
+                             ErrorCorrectionLevel.Q,
                              new Dictionary<EncodingMode,int>(){
                                  { EncodingMode.Numeric, this.capacityBaseValues[i+8] },
                                  { EncodingMode.Alphanumeric, this.capacityBaseValues[i+9] },
@@ -1270,7 +1270,7 @@ namespace QRCoder
                              }
                         ),
                         new VersionInfoDetails(
-                             ErrorCorrectionCode.H,
+                             ErrorCorrectionLevel.H,
                              new Dictionary<EncodingMode,int>(){
                                  { EncodingMode.Numeric, this.capacityBaseValues[i+12] },
                                  { EncodingMode.Alphanumeric, this.capacityBaseValues[i+13] },
@@ -1312,7 +1312,7 @@ namespace QRCoder
         /// <summary>
         /// Error correction level. These define the tolerance levels for how much of the code can be lost before the code cannot be recovered.
         /// </summary>
-        public enum ErrorCorrectionCode
+        public enum ErrorCorrectionLevel
         {
             /// <summary>
             /// 7% may be lost before recovery is not possible
@@ -1373,7 +1373,7 @@ namespace QRCoder
 
         private struct ErrorCorrectionCodeInfo
         {
-            public ErrorCorrectionCodeInfo(int version, ErrorCorrectionCode errorCorrectionLevel, int totalDataCodewords, int eccPerBlock, int blocksInGroup1,
+            public ErrorCorrectionCodeInfo(int version, ErrorCorrectionLevel errorCorrectionLevel, int totalDataCodewords, int eccPerBlock, int blocksInGroup1,
                 int codewordsInGroup1, int blocksInGroup2, int codewordsInGroup2)
                 : this()
             {
@@ -1387,7 +1387,7 @@ namespace QRCoder
                 this.CodewordsInGroup2 = codewordsInGroup2;
             }
             public int Version { get; private set; }
-            public ErrorCorrectionCode ErrorCorrectionLevel { get; private set; }
+            public ErrorCorrectionLevel ErrorCorrectionLevel { get; private set; }
             public int TotalDataCodewords { get; private set; }
             public int ECCPerBlock { get; private set; }
             public int BlocksInGroup1 { get; private set; }
@@ -1410,14 +1410,14 @@ namespace QRCoder
 
         private struct VersionInfoDetails
         {
-            public VersionInfoDetails(ErrorCorrectionCode errorCorrectionLevel, Dictionary<EncodingMode, int> capacityDict)
+            public VersionInfoDetails(ErrorCorrectionLevel errorCorrectionLevel, Dictionary<EncodingMode, int> capacityDict)
                 : this()
             {
                 this.ErrorCorrectionLevel = errorCorrectionLevel;
                 this.CapacityDict = capacityDict;
             }
 
-            public ErrorCorrectionCode ErrorCorrectionLevel { get; private set; }
+            public ErrorCorrectionLevel ErrorCorrectionLevel { get; private set; }
             public Dictionary<EncodingMode, int> CapacityDict { get; private set; }
         }
 
@@ -1453,18 +1453,12 @@ namespace QRCoder
                 this.PolyItems = new List<PolynomItem>();
             }
 
-            public List<PolynomItem> PolyItems { get; set; }
-
-            public override string ToString()
+            public Polynom(IEnumerable<PolynomItem> items)
             {
-                var sb = new StringBuilder();
-                foreach (var polyItem in this.PolyItems)
-                {
-                    sb.Append("a^" + polyItem.Coefficient + "*x^" + polyItem.Exponent + " + ");
-                }
-
-                return sb.ToString().TrimEnd(new[] { ' ', '+' });
+                this.PolyItems = new List<PolynomItem>(items);
             }
+
+            public List<PolynomItem> PolyItems { get; private set; }
         }
 
         private class Point

@@ -89,7 +89,7 @@ namespace KeeTrayTOTP
                 }
                 return Localization.Strings.ErrorBadSettings;
             }
-            return (_plugin.SettingsCheck(pe) || _plugin.SeedCheck(pe) ? Localization.Strings.ErrorStorage : string.Empty);
+            return _plugin.SettingsCheck(pe) || _plugin.SeedCheck(pe) ? Localization.Strings.ErrorStorage : string.Empty;
         }
 
         /// <summary>
