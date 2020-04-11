@@ -1,0 +1,13 @@
+on:
+  push:
+    paths:
+    - '*.md'
+    - '/docs/**'
+name: Check markdown links
+jobs:
+  markdown-link-check:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: md-linkcheck
+      uses: ./
