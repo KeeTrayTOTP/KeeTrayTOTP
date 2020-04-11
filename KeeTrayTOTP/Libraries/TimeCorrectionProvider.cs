@@ -31,11 +31,10 @@ namespace KeeTrayTOTP.Libraries
         public static int Interval { get { return _interval; } set { _interval = value; } }
         private long _intervalStretcher;
 
-        private volatile readonly string _url;
         /// <summary>
         /// Returns the URL this instance is using to checks for time correction.
         /// </summary>
-        public string Url { get { return _url; } }
+        public string Url { get; private set; }
 
         private TimeSpan _timeCorrection;
         /// <summary>
@@ -62,12 +61,12 @@ namespace KeeTrayTOTP.Libraries
         /// <param name="enable">Enable or disable the time correction check.</param>
         public TimeCorrectionProvider(string url, bool enable = true)
         {
-            if (url == string.Empty)
+            if (string.IsNullOrEmpty(url))
             {
                 throw new Exception("Invalid URL."); //Throws exception if the URL is invalid as the class cannot work without it.
             }
 
-            _url = url; //Defines variable from argument.
+            Url = url; //Defines variable from argument.
             _enable = enable; //Defines variable from argument.
             _lastUpdateDateTime = DateTime.MinValue; //Defines variable from non-constant default value.
             _timeCorrection = TimeSpan.Zero; //Defines variable from non-constant default value.
@@ -117,11 +116,13 @@ namespace KeeTrayTOTP.Libraries
         {
             try
             {
-                var webClient = new System.Net.WebClient(); //WebClient to connect to server.
-                webClient.DownloadData(_url); //Downloads the server's page using HTTP or HTTPS.
-                var dateHeader = webClient.ResponseHeaders.Get("Date"); //Gets the date from the HTTP header of the downloaded page.
-                _timeCorrection = DateTime.UtcNow - DateTime.Parse(dateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime(); //Compares the downloaded date to the systems date giving us a timespan.
-                _lastUpdateSucceeded = true; //Informs that the date check has succeeded.
+                using (var webClient = new System.Net.WebClient())
+                {
+                    webClient.DownloadData(Url); //Downloads the server's page using HTTP or HTTPS.
+                    var dateHeader = webClient.ResponseHeaders.Get("Date"); //Gets the date from the HTTP header of the downloaded page.
+                    _timeCorrection = DateTime.UtcNow - DateTime.Parse(dateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime(); //Compares the downloaded date to the systems date giving us a timespan.
+                    _lastUpdateSucceeded = true; //Informs that the date check has succeeded.
+                }
             }
             catch (Exception)
             {
