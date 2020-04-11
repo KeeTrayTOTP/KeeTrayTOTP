@@ -23,12 +23,12 @@ namespace KeeTrayTOTP
     /// <summary>
     /// Main Plugin Class
     /// </summary>
-    public sealed partial class KeeTrayTOTPExt : Plugin
+    public sealed class KeeTrayTOTPExt : Plugin
     {
         /// <summary>
         /// Plugin host Global Reference for access to KeePass functions.
         /// </summary>
-        internal IPluginHost PluginHost = null;
+        internal IPluginHost PluginHost;
 
         /// <summary>
         /// Tray TOTP Support Url
@@ -94,46 +94,34 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Notify Icon Context Menu Separator.
         /// </summary>
-        private ToolStripSeparator _niMenuSeperator = null;
+        private ToolStripSeparator _niMenuSeperator;
 
         /// <summary>
         /// Entries Column TOTP.
         /// </summary>
-        private TrayTOTP_CustomColumn _liColumnTotp = null;
+        private TrayTOTP_CustomColumn _liColumnTotp;
 
         /// <summary>
         /// Entry List Column Count.
         /// </summary>
-        private int _liColumnsCount = 0;
+        private int _liColumnsCount;
         /// <summary>
         /// Entry List Column TOTP visibility.
         /// </summary>
-        private bool _liColumnTotpVisible = false;
+        private bool _liColumnTotpVisible;
         /// <summary>
         /// Entry Groups last selected group.
         /// </summary>
-        private PwGroup _liGroupsPreviousSelected = null;
+        private PwGroup _liGroupsPreviousSelected;
         /// <summary>
         /// Entry Column TOTP has TOTPs.
         /// </summary>
-        private bool _liColumnTotpContains = false;
+        private bool _liColumnTotpContains;
 
         /// <summary>
         /// Entries Refresh Timer.
         /// </summary>
         private Timer _liRefreshTimer = new Timer();
-
-        /// <summary>
-        /// Entries Refresh Timer.
-        /// </summary>
-        internal int LiRefreshTimerInterval
-        {
-            set
-            {
-                _liRefreshTimer.Interval = value;
-                _liRefreshTimer.Enabled = true;
-            }
-        }
 
         /// <summary>
         /// Entries Refresh Timer Previous Counter to Prevent Useless Refresh.
@@ -209,8 +197,7 @@ namespace KeeTrayTOTP
                     enMenuCopyTotp.Enabled = false;
                     enMenuSetupTotp.Enabled = false;
 
-                    bool boolCopy = PluginHost.CustomConfig.GetBool(setname_bool_EntryContextCopy_Visible, true);
-                    enMenuCopyTotp.Visible = boolCopy;
+                    enMenuCopyTotp.Visible = PluginHost.CustomConfig.GetBool(setname_bool_EntryContextCopy_Visible, true);
 
                     if (PluginHost.MainWindow.GetSelectedEntriesCount() == 1)
                     {
@@ -227,8 +214,7 @@ namespace KeeTrayTOTP
                         enMenuSetupTotp.Enabled = true;
                     }
 
-                    bool boolSetup = PluginHost.CustomConfig.GetBool(setname_bool_EntryContextSetup_Visible, true);
-                    enMenuSetupTotp.Visible = boolSetup;
+                    enMenuSetupTotp.Visible = PluginHost.CustomConfig.GetBool(setname_bool_EntryContextSetup_Visible, true);
                 };
 
                 enMenuTrayTotp.DropDownClosed += delegate (object sender, EventArgs e)
@@ -712,7 +698,8 @@ namespace KeeTrayTOTP
         {
             bool validInterval;
             bool validLength;
-            bool validUrl; //Dummies
+            bool validUrl;
+
             return SettingsValidate(pe, out validInterval, out validLength, out validUrl);
         }
 
@@ -725,6 +712,7 @@ namespace KeeTrayTOTP
         internal bool SettingsValidate(PwEntry pe, out bool isUrlValid)
         {
             bool validInterval; bool validLength; //Dummies
+
             return SettingsValidate(pe, out validInterval, out validLength, out isUrlValid);
         }
 
@@ -767,7 +755,7 @@ namespace KeeTrayTOTP
                 return false;
             }
 
-            return settings[2].StartsWith("http://") || settings[2].StartsWith("https://"); 
+            return settings[2].StartsWith("http://") || settings[2].StartsWith("https://");
         }
 
         private bool LengthIsValid(string[] settings)
@@ -862,7 +850,7 @@ namespace KeeTrayTOTP
         /// Copies the specified entry's generated TOTP to the clipboard using the KeePass's clipboard function.
         /// </summary>
         /// <param name="pe">Password Entry.</param>
-        private void TOTPCopyToClipboard(PwEntry pe)
+        internal void TOTPCopyToClipboard(PwEntry pe)
         {
             if (SettingsCheck(pe) && SeedCheck(pe))
             {

@@ -147,7 +147,6 @@ namespace QRCoder
                                 );
             }
 
-
             //Interleave code words
             var interleavedWordsSb = new StringBuilder();
             for (var i = 0; i < Math.Max(eccInfo.CodewordsInGroup1, eccInfo.CodewordsInGroup2); i++)
@@ -161,7 +160,6 @@ namespace QRCoder
                 }
             }
 
-
             for (var i = 0; i < eccInfo.ECCPerBlock; i++)
             {
                 foreach (var codeBlock in codeWordWithECC)
@@ -174,7 +172,6 @@ namespace QRCoder
             }
             interleavedWordsSb.Append(new string('0', this.remainderBits[version - 1]));
             var interleavedData = interleavedWordsSb.ToString();
-
 
             //Place interleaved data on module matrix
             var qr = new QRCodeData(version);
@@ -195,7 +192,6 @@ namespace QRCoder
                 var versionString = GetVersionString(version);
                 ModulePlacer.PlaceVersion(ref qr, versionString);
             }
-
 
             ModulePlacer.AddQuietZone(ref qr);
             return qr;
@@ -328,7 +324,6 @@ namespace QRCoder
                 }
             }
 
-
             public static int MaskCode(ref QRCodeData qrCode, int version, ref List<Rectangle> blockedModules, ECCLevel eccLevel)
             {
                 var patternName = string.Empty;
@@ -336,9 +331,7 @@ namespace QRCoder
 
                 var size = qrCode.ModuleMatrix.Count;
 
-                var methods = typeof(MaskPattern).GetMethods();
-
-                foreach (var pattern in methods)
+                foreach (var pattern in typeof(MaskPattern).GetMethods())
                 {
                     if (pattern.Name.Length != 8 || pattern.Name.Substring(0, 7) != "Pattern")
                     {
@@ -352,7 +345,6 @@ namespace QRCoder
                         {
                             qrTemp.ModuleMatrix[y][x] = qrCode.ModuleMatrix[y][x];
                         }
-
                     }
 
                     var patternNameFragment = pattern.Name.Substring(7, 1);
@@ -397,7 +389,6 @@ namespace QRCoder
                 }
                 return Convert.ToInt32(patternMethod.Name.Substring(patternMethod.Name.Length - 1, 1)) - 1;
             }
-
 
             public static void PlaceDataWords(ref QRCodeData qrCode, string data, ref List<Rectangle> blockedModules)
             {
@@ -654,7 +645,6 @@ namespace QRCoder
 
                             lastValRow = qrCode.ModuleMatrix[y][x];
 
-
                             if (qrCode.ModuleMatrix[x][y] == lastValColumn)
                             {
                                 modInColumn++;
@@ -676,7 +666,6 @@ namespace QRCoder
                             lastValColumn = qrCode.ModuleMatrix[x][y];
                         }
                     }
-
 
                     //Penalty 2
                     for (var y = 0; y < size - 1; y++)
@@ -772,7 +761,6 @@ namespace QRCoder
                     return score1 + score2 + score3 + score4;
                 }
             }
-
         }
 
         private List<string> CalculateECCWords(string bitString, ECCInfo eccInfo)
@@ -840,7 +828,7 @@ namespace QRCoder
 
         private int GetVersion(int length, EncodingMode encMode, ECCLevel eccLevel)
         {
-            var version = this.capacityTable.Where(
+            return this.capacityTable.Where(
                 x => x.Details.Count(
                     y => (y.ErrorCorrectionLevel == eccLevel
                           && y.CapacityDict[encMode] >= Convert.ToInt32(length)
@@ -852,7 +840,6 @@ namespace QRCoder
                   capacity = x.Details.Single(y => y.ErrorCorrectionLevel == eccLevel)
                                             .CapacityDict[encMode]
               }).Min(x => x.version);
-            return version;
         }
 
         private EncodingMode GetEncodingFromPlaintext(string plainText, bool forceUtf8)
@@ -892,7 +879,6 @@ namespace QRCoder
             }
             return messagePol;
         }
-
 
         private Polynom CalculateGeneratorPolynom(int numEccWords)
         {
@@ -1045,7 +1031,6 @@ namespace QRCoder
                 var dec = Convert.ToInt32(plainText.Substring(0, 3));
                 codeText += DecToBin(dec, 10);
                 plainText = plainText.Substring(3);
-
             }
             if (plainText.Length == 2)
             {
@@ -1069,7 +1054,6 @@ namespace QRCoder
                 var dec = this.alphanumEncDict[token[0]] * 45 + this.alphanumEncDict[token[1]];
                 codeText += DecToBin(dec, 11);
                 plainText = plainText.Substring(2);
-
             }
             if (plainText.Length > 0)
             {
@@ -1081,8 +1065,7 @@ namespace QRCoder
         private string PlainTextToBinaryECI(string plainText)
         {
             var codeText = string.Empty;
-            byte[] _bytes = Encoding.GetEncoding("ascii").GetBytes(plainText);
-            foreach (byte _byte in _bytes)
+            foreach (byte _byte in Encoding.GetEncoding("ascii").GetBytes(plainText))
             {
                 codeText += DecToBin(_byte, 8);
             }
@@ -1137,7 +1120,6 @@ namespace QRCoder
             return codeText;
         }
 
-
         private Polynom XORPolynoms(Polynom messagePolynom, Polynom resPolynom)
         {
             var resultPolynom = new Polynom();
@@ -1168,7 +1150,6 @@ namespace QRCoder
             return resultPolynom;
         }
 
-
         private Polynom MultiplyGeneratorPolynomByLeadterm(Polynom genPolynom, PolynomItem leadTerm, int lowerExponentBy)
         {
             var resultPolynom = new Polynom();
@@ -1183,7 +1164,6 @@ namespace QRCoder
             }
             return resultPolynom;
         }
-
 
         private Polynom MultiplyAlphaPolynoms(Polynom polynomBase, Polynom polynomMultiplier)
         {
@@ -1236,8 +1216,7 @@ namespace QRCoder
         {
             this.alphanumEncDict = new Dictionary<char, int>();
             //alphanumEncTable.ToList().Select((x, i) => new { Chr = x, Index = i }).ToList().ForEach(x => this.alphanumEncDict.Add(x.Chr, x.Index));
-            var resList = alphanumEncTable.ToList().Select((x, i) => new { Chr = x, Index = i }).ToList();
-            foreach (var res in resList)
+            foreach (var res in alphanumEncTable.ToList().Select((x, i) => new { Chr = x, Index = i }).ToList())
             {
                 this.alphanumEncDict.Add(res.Chr, res.Index);
             }
@@ -1276,7 +1255,6 @@ namespace QRCoder
                 );
             }
         }
-
 
         private void CreateCapacityECCTable()
         {

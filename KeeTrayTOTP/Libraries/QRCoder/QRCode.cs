@@ -26,14 +26,13 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 using System.Drawing;
 using System.Drawing.Drawing2D;
 
-
 namespace QRCoder
 {
     using System;
 
-    public class QRCode : IDisposable
+    public sealed class QRCode : IDisposable
     {
-        protected QRCodeData QrCodeData { get; set; }
+        public QRCodeData QrCodeData { get; private set; }
 
         public void Dispose()
         {
@@ -112,12 +111,10 @@ namespace QRCoder
             var lightBrush = new SolidBrush(lightColor);
             var darkBrush = new SolidBrush(darkColor);
 
-
             for (var x = 0; x < size + offset; x = x + pixelsPerModule)
             {
                 for (var y = 0; y < size + offset; y = y + pixelsPerModule)
                 {
-
                     var module = this.QrCodeData.ModuleMatrix[(y + pixelsPerModule) / pixelsPerModule - 1][(x + pixelsPerModule) / pixelsPerModule - 1];
                     if (module)
                     {

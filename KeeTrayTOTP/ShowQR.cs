@@ -30,9 +30,7 @@ namespace KeeTrayTOTP
             {
                 var qrCodeData = qrGenerator.CreateQrCode(code, QRCodeGenerator.ECCLevel.Q);
                 var qrCode = new QRCode(qrCodeData);
-                var qrCodeImage = qrCode.GetGraphic(6);
-
-                QROutputPicture.Image = qrCodeImage;
+                QROutputPicture.Image = qrCode.GetGraphic(6);
             }
         }
 

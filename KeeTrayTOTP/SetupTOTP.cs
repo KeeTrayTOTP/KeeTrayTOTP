@@ -4,7 +4,6 @@ using KeePass.UI;
 using KeePassLib;
 using KeePassLib.Security;
 
-
 namespace KeeTrayTOTP
 {
     public partial class SetupTOTP : Form
@@ -82,7 +81,6 @@ namespace KeeTrayTOTP
             ErrorProviderSetup.SetError(NumericIntervalSetup, string.Empty);
             ErrorProviderSetup.SetError(RadioButtonLength8Setup, string.Empty);
             ErrorProviderSetup.SetError(ComboBoxTimeCorrectionSetup, string.Empty);
-
         }
 
         private void CheckBoxSeedVisibility_CheckedChanged(object sender, EventArgs e)
