@@ -192,7 +192,7 @@ namespace KeeTrayTOTP
                 enMenuTrayTotp.DropDownItems.Add(enMenuSetupTotp);
                 enMenuTrayTotp.DropDownItems.Add(enMenuShowQr);
 
-                enMenuTrayTotp.DropDownOpening += delegate (object sender, EventArgs e)
+                enMenuTrayTotp.DropDownOpening += (object sender, EventArgs e) =>
                 {
                     enMenuCopyTotp.Enabled = false;
                     enMenuSetupTotp.Enabled = false;
@@ -214,7 +214,7 @@ namespace KeeTrayTOTP
                     enMenuSetupTotp.Visible = PluginHost.CustomConfig.GetBool(setname_bool_EntryContextSetup_Visible, true);
                 };
 
-                enMenuTrayTotp.DropDownClosed += delegate (object sender, EventArgs e)
+                enMenuTrayTotp.DropDownClosed += (object sender, EventArgs e) =>
                 {
                     enMenuCopyTotp.Enabled = true;
                 };
