@@ -249,7 +249,7 @@
             // 
             // CheckBoxTOTPColumnClipboard
             // 
-            this.HelpProviderSettings.SetHelpString(this.CheckBoxTOTPColumnClipboard, "Controls weither or not when you double-click on the TOTP Column in the entry lis" +
+            this.HelpProviderSettings.SetHelpString(this.CheckBoxTOTPColumnClipboard, "Controls whether or not when you double-click on the TOTP Column in the entry lis" +
         "t KeePass will copy the generated TOTP to the clipboard.");
             this.CheckBoxTOTPColumnClipboard.Location = new System.Drawing.Point(19, 70);
             this.CheckBoxTOTPColumnClipboard.Name = "CheckBoxTOTPColumnClipboard";

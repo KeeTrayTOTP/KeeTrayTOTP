@@ -20,7 +20,7 @@ namespace KeeTrayTOTP.Libraries
         private bool _enable;
 
         /// <summary>
-        /// Defines weither or not the class will attempt to get time correction from the server.
+        /// Defines whether or not the class will attempt to get time correction from the server.
         /// </summary>
         public bool Enable { get { return _enable; } set { _enable = value; _timer.Enabled = value; } }
 
