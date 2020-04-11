@@ -4,10 +4,12 @@
 [![Latest Release](https://img.shields.io/github/release/KeeTrayTOTP/KeeTrayTOTP.svg)](https://github.com/KeeTrayTOTP/KeeTrayTOTP/releases/latest)
 [![Total Downloads](https://img.shields.io/github/downloads/KeeTrayTOTP/KeeTrayTOTP/total.svg?maxAge=86400)](https://github.com/KeeTrayTOTP/KeeTrayTOTP/releases/latest)
 [![GitHub license](https://img.shields.io/github/license/KeeTrayTOTP/KeeTrayTOTP)](https://github.com/KeeTrayTOTP/KeeTrayTOTP/blob/master/LICENSE)
+[![first-timers-only](https://img.shields.io/badge/first--timers--only-friendly-blue.svg?style=flat-square)](https://www.firsttimersonly.com/)
+
 
 This plugin is for those who already use [Tray TOTP Plugin](http://sourceforge.net/projects/traytotp-kp2/), but also want to use with Valve's Steam.
 
-> This is a fork of the Tray TOTP Plugin for KeePass2. Originally developed by [Morphlin](http://sourceforge.net/u/morphlin/profile/). The source code and plugin can be found on [sourceforge](http://sourceforge.net/projects/traytotp-kp2/)
+> This is a fork of the Tray TOTP Plugin for KeePass2. Originally developed by [Morphlin](http://sourceforge.net/u/morphlin/profile/). The original source code and plugin can be found on [sourceforge](http://sourceforge.net/projects/traytotp-kp2/).
 
 Most of consumer TOTP's use the RFC6238 output style, sadly some companies (eg. Valve) decided not to adhere to the standard and instead build their own format.
 
