@@ -6,8 +6,10 @@
     <TestProjectType>UnitTest</TestProjectType>
     <AssemblyTitle>KeeTrayTOTP.Tests</AssemblyTitle>
     <Product>KeeTrayTOTP.Tests</Product>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy))</Copyright>
     <OutputPath>bin\$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugType>full</DebugType>
@@ -21,7 +23,6 @@
     <PackageReference Include="MSTest.TestFramework" Version="2.1.1" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
