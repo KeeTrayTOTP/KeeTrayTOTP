@@ -202,13 +202,10 @@ namespace KeeTrayTOTP
                     if (PluginHost.MainWindow.GetSelectedEntriesCount() == 1)
                     {
                         var currentEntry = PluginHost.MainWindow.GetSelectedEntry(true);
-                        if (SettingsCheck(currentEntry) && SeedCheck(currentEntry))
+                        if (SettingsCheck(currentEntry) && SeedCheck(currentEntry) && SettingsValidate(currentEntry))
                         {
-                            if (SettingsValidate(currentEntry))
-                            {
-                                enMenuCopyTotp.Enabled = true;
-                                enMenuCopyTotp.Tag = currentEntry;
-                            }
+                            enMenuCopyTotp.Enabled = true;
+                            enMenuCopyTotp.Tag = currentEntry;
                         }
 
                         enMenuSetupTotp.Enabled = true;
@@ -581,12 +578,9 @@ namespace KeeTrayTOTP
                     _liColumnsCount = KeePass.Program.Config.MainWindow.EntryListColumns.Count;
                     foreach (var column in KeePass.Program.Config.MainWindow.EntryListColumns)
                     {
-                        if (column.Type == AceColumnType.PluginExt)
+                        if (column.Type == AceColumnType.PluginExt && column.CustomName == Localization.Strings.TOTP)
                         {
-                            if (column.CustomName == Localization.Strings.TOTP)
-                            {
-                                _liColumnTotpVisible = true;
-                            }
+                            _liColumnTotpVisible = true;
                         }
                     }
                 }
@@ -627,40 +621,32 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void SprEngine_FilterCompile(object sender, SprEventArgs e)
         {
-            if ((e.Context.Flags & SprCompileFlags.ExtActive) == SprCompileFlags.ExtActive)
+            if ((e.Context.Flags & SprCompileFlags.ExtActive) == SprCompileFlags.ExtActive && e.Text.IndexOf(PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), StringComparison.InvariantCultureIgnoreCase) >= 0)
             {
-                if (e.Text.IndexOf(PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), StringComparison.InvariantCultureIgnoreCase) >= 0)
+                if (SettingsCheck(e.Context.Entry) && SeedCheck(e.Context.Entry))
                 {
-                    if (SettingsCheck(e.Context.Entry) && SeedCheck(e.Context.Entry))
+                    if (SettingsValidate(e.Context.Entry))
                     {
-                        if (SettingsValidate(e.Context.Entry))
+                        string[] settings = SettingsGet(e.Context.Entry);
+
+                        TOTPProvider totpGenerator = new TOTPProvider(settings, ref this.TimeCorrections);
+
+                        string invalidCharacters;
+
+                        if (SeedValidate(e.Context.Entry, out invalidCharacters))
                         {
-                            string[] settings = SettingsGet(e.Context.Entry);
-
-                            TOTPProvider totpGenerator = new TOTPProvider(settings, ref this.TimeCorrections);
-
-                            string invalidCharacters;
-
-                            if (SeedValidate(e.Context.Entry, out invalidCharacters))
-                            {
-                                e.Context.Entry.Touch(false);
-                                string totp = totpGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
-                                e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
-                            }
-                            else
-                            {
-                                e.Text = string.Empty;
-                                MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
-                            }
-                            if (totpGenerator.TimeCorrectionError)
-                            {
-                                MessageService.ShowWarning(Localization.Strings.WarningBadURL);
-                            }
+                            e.Context.Entry.Touch(false);
+                            string totp = totpGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
+                            e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
                         }
                         else
                         {
                             e.Text = string.Empty;
-                            MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
+                            MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
+                        }
+                        if (totpGenerator.TimeCorrectionError)
+                        {
+                            MessageService.ShowWarning(Localization.Strings.WarningBadURL);
                         }
                     }
                     else
@@ -668,6 +654,11 @@ namespace KeeTrayTOTP
                         e.Text = string.Empty;
                         MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
                     }
+                }
+                else
+                {
+                    e.Text = string.Empty;
+                    MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
                 }
             }
         }

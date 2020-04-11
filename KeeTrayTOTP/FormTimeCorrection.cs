@@ -51,24 +51,18 @@ namespace KeeTrayTOTP
         {
             GlobalWindowManager.AddWindow(this);
 
-            Text = Localization.Strings.TimeCorrection + @" - " + Localization.Strings.TrayTOTPPlugin; //Sets the form's display text.
+            Text = Localization.Strings.TimeCorrection + " - " + Localization.Strings.TrayTOTPPlugin;
             if (_plugin.PluginHost.MainWindow.ActiveDatabase.IsOpen)
             {
-                foreach (var pe in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true)) //Goes through all entries to find existing urls but excludes existing time corrections.
+                foreach (var pe in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true))
                 {
-                    if (_plugin.SettingsCheck(pe)) //Checks that settings exists for this entry.
+                    if (_plugin.SettingsCheck(pe))
                     {
-                        string[] settings = _plugin.SettingsGet(pe); //Gets the entry's totp settings.
+                        string[] settings = _plugin.SettingsGet(pe);
                         bool validUrl;
-                        if (_plugin.SettingsValidate(pe, out validUrl)) //Validates the settings.
+                        if (_plugin.SettingsValidate(pe, out validUrl) && validUrl && !ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null)
                         {
-                            if (validUrl) //Makes sure the URL is also valid.
-                            {
-                                if (!ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null) //Checks if not already in combobox or is an existing time correction.
-                                {
-                                    ComboBoxUrlTimeCorrection.Items.Add(settings[2]); //Adds the URL to the combobox for quick adding.
-                                }
-                            }
+                            ComboBoxUrlTimeCorrection.Items.Add(settings[2]);
                         }
                     }
                 }

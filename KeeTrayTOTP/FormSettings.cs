@@ -344,12 +344,9 @@ namespace KeeTrayTOTP
             else
             {
                 Working(false, true); // Set controls depending on the state of action.
-                if (e.Result != null)
+                if (e.Result != null && e.Result.ToString() == "Reset")
                 {
-                    if (e.Result.ToString() == "Reset")
-                    {
-                        MessageBox.Show(Localization.Strings.SettingsDefaultValuesRestored, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    MessageBox.Show(Localization.Strings.SettingsDefaultValuesRestored, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -426,12 +423,9 @@ namespace KeeTrayTOTP
             else
             {
                 Working(false, true); //Set controls depending on the state of action.
-                if (e.Result != null)
+                if (e.Result != null && e.Result.ToString() == "OK")
                 {
-                    if (e.Result.ToString() == "OK")
-                    {
-                        DialogResult = DialogResult.OK;
-                    }
+                    DialogResult = DialogResult.OK;
                 }
             }
         }
