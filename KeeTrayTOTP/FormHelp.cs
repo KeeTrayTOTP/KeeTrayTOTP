@@ -10,10 +10,6 @@ namespace KeeTrayTOTP
     internal partial class FormHelp : Form
     {
         /// <summary>
-        /// Plugin Host.
-        /// </summary>
-        private readonly KeeTrayTOTPExt _plugin;
-        /// <summary>
         /// Getting started flag.
         /// </summary>
         private readonly bool _gettingStarted;
@@ -23,9 +19,8 @@ namespace KeeTrayTOTP
         /// </summary>
         /// <param name="plugin">Plugin Host.</param>
         /// <param name="gettingStarted">Getting Started Display Flag.</param>
-        internal FormHelp(KeeTrayTOTPExt plugin, bool gettingStarted = false)
+        internal FormHelp(bool gettingStarted = false)
         {
-            _plugin = plugin;
             _gettingStarted = gettingStarted;
             InitializeComponent();
         }

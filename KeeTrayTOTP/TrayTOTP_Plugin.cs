@@ -244,7 +244,7 @@ namespace KeeTrayTOTP
             PluginHost = host;
 
             // Instantiate Help Form.
-            _helpForm = new FormHelp(this);
+            _helpForm = new FormHelp();
 
             // Register events.
             PluginHost.MainWindow.Shown += MainWindow_Shown;
@@ -302,7 +302,7 @@ namespace KeeTrayTOTP
                 PluginHost.CustomConfig.SetBool(setname_bool_FirstInstall_Shown, true);
                 if (!_helpForm.Visible)
                 {
-                    _helpForm = new FormHelp(this, true);
+                    _helpForm = new FormHelp(true);
                     _helpForm.Show();
                 }
                 else
@@ -319,8 +319,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnMenuSettingsClick(object sender, EventArgs e)
         {
-            var formSettings = new FormSettings(this);
-            UIUtil.ShowDialogAndDestroy(formSettings);
+            UIUtil.ShowDialogAndDestroy(new FormSettings(this));
         }
 
         /// <summary>
@@ -347,8 +346,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnMenuAboutClick(object sender, EventArgs e)
         {
-            var formAbout = new FormAbout(this);
-            UIUtil.ShowDialogAndDestroy(formAbout);
+            UIUtil.ShowDialogAndDestroy(new FormAbout());
         }
 
         /// <summary>
