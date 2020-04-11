@@ -54,7 +54,7 @@ namespace KeeTrayTOTP.Libraries
 
         static TimeCorrectionProvider()
         {
-            Interval = 60;
+            Interval = KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime;
         }
 
         /// <summary>

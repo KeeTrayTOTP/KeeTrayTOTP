@@ -31,11 +31,6 @@ namespace KeeTrayTOTP
         internal IPluginHost PluginHost;
 
         /// <summary>
-        /// Tray TOTP Support Url
-        /// </summary>
-        internal const string SupportUrl = "https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues";
-
-        /// <summary>
         /// Constants (keepass form object names).
         /// </summary>
         internal const string keeobj_string_EntryContextMenuCopyPassword_Name = "m_ctxEntryCopyPassword";
@@ -68,7 +63,7 @@ namespace KeeTrayTOTP
         /// Constants (default settings values).
         /// </summary>
         internal const string setdef_string_AutoType_FieldName = "TOTP";
-        internal const long setdef_ulong_TimeCorrection_RefreshTime = 60;
+        internal const int setdef_TimeCorrection_RefreshTime = 60;
 
         /// <summary>
         /// Constants (static settings value).
@@ -274,7 +269,7 @@ namespace KeeTrayTOTP
 
             //Time Correction.
             TimeCorrections = new TimeCorrectionCollection(PluginHost.CustomConfig.GetBool(setname_bool_TimeCorrection_Enable, false));
-            TimeCorrectionProvider.Interval = Convert.ToInt16(PluginHost.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime));
+            TimeCorrectionProvider.Interval = Convert.ToInt16(PluginHost.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime));
             TimeCorrections.AddRangeFromList(PluginHost.CustomConfig.GetString(setname_string_TimeCorrection_List, string.Empty).Split(';').ToList());
 
             return true;

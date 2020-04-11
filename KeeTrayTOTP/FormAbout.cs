@@ -11,6 +11,11 @@ namespace KeeTrayTOTP
     internal partial class FormAbout : Form
     {
         /// <summary>
+        /// Tray TOTP Support Url
+        /// </summary>
+        private static readonly Uri SupportUrl = new Uri("https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues", UriKind.Absolute);
+
+        /// <summary>
         /// Windows Form Constructor.
         /// </summary>
         /// <param name="plugin">Plugin Host.</param>
@@ -33,7 +38,7 @@ namespace KeeTrayTOTP
             ListViewAbout.Items[1].SubItems.Add(AssemblyCompany);
             ListViewAbout.Items[2].SubItems.Add(AssemblyVersion);
             ListViewAbout.Items[3].SubItems.Add(AssemblyTrademark);
-            ListViewAbout.Items[4].SubItems.Add(KeeTrayTOTPExt.SupportUrl);
+            ListViewAbout.Items[4].SubItems.Add(SupportUrl.AbsoluteUri);
             LabelCopyright.Text = AssemblyCopyright;
         }
 
