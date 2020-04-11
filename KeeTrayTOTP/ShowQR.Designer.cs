@@ -68,7 +68,7 @@
             // 
             this.IssuerText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.IssuerText.Location = new System.Drawing.Point(107, 65);
+            this.IssuerText.Location = new System.Drawing.Point(107, 69);
             this.IssuerText.Name = "IssuerText";
             this.IssuerText.Size = new System.Drawing.Size(265, 20);
             this.IssuerText.TabIndex = 14;
@@ -78,7 +78,7 @@
             // 
             this.UsernameText.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.UsernameText.Location = new System.Drawing.Point(107, 92);
+            this.UsernameText.Location = new System.Drawing.Point(107, 93);
             this.UsernameText.Name = "UsernameText";
             this.UsernameText.Size = new System.Drawing.Size(265, 20);
             this.UsernameText.TabIndex = 15;
@@ -87,7 +87,7 @@
             // IssuerLabel
             // 
             this.IssuerLabel.AutoSize = true;
-            this.IssuerLabel.Location = new System.Drawing.Point(13, 72);
+            this.IssuerLabel.Location = new System.Drawing.Point(15, 72);
             this.IssuerLabel.Name = "IssuerLabel";
             this.IssuerLabel.Size = new System.Drawing.Size(64, 13);
             this.IssuerLabel.TabIndex = 16;
@@ -96,7 +96,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(16, 99);
+            this.label2.Location = new System.Drawing.Point(15, 96);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(73, 13);
             this.label2.TabIndex = 17;
@@ -116,9 +116,10 @@
             this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(200, 330);
             this.Name = "ShowQR";
             this.ShowInTaskbar = false;
-            this.Text = "ShowQR";
+            this.Text = "QR Code";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ShowQR_FormClosed);
             this.Load += new System.EventHandler(this.ShowQR_Load);
             this.ResizeEnd += new System.EventHandler(this.OnResizeEnd);
