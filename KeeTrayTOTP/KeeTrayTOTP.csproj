@@ -103,7 +103,6 @@
     <Compile Include="ShowQR.Designer.cs">
       <DependentUpon>ShowQR.cs</DependentUpon>
     </Compile>
-    <Compile Include="Libraries\QRCoder\Stream4Methods.cs" />
     <Compile Include="TrayTOTP_CustomColumn.cs" />
     <Compile Include="TrayTOTP_Extensions.cs" />
     <Compile Include="FormHelp.cs">

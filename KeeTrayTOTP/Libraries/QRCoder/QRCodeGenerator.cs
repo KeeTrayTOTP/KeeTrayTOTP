@@ -31,7 +31,7 @@ using System.Collections;
 
 namespace QRCoder
 {
-    public class QRCodeGenerator : IDisposable
+    public sealed class QRCodeGenerator : IDisposable
     {
         private static readonly char[] numTable = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' };
         private static readonly char[] alphanumEncTable = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', ' ', '$', '%', '*', '+', '-', '.', '/', ':' };
@@ -63,7 +63,7 @@ namespace QRCoder
             this.CreateAlignmentPatternTable();
         }
 
-        public QRCodeData CreateQrCode(string plainText, ECCLevel eccLevel, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1)
+        public QRCodeData CreateQrCode(string plainText, ECCLevel eccLevel = QRCodeGenerator.ECCLevel.Q, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1)
         {
             EncodingMode encoding = GetEncodingFromPlaintext(plainText, forceUtf8);
             var codedText = this.PlainTextToBinary(plainText, encoding, eciMode, utf8BOM, forceUtf8);
@@ -110,7 +110,7 @@ namespace QRCoder
                 bitString = bitString.Substring(0, dataLength);
             }
 
-            //Calculate error correction words
+            // Calculate error correction words
             var codeWordWithECC = new List<CodewordBlock>();
             for (var i = 0; i < eccInfo.BlocksInGroup1; i++)
             {
@@ -471,6 +471,7 @@ namespace QRCoder
                 });
                 }
             }
+
             public static void PlaceDarkModule(ref QRCodeData qrCode, int version, ref List<Rectangle> blockedModules)
             {
                 qrCode.ModuleMatrix[4 * version + 9][8] = true;
@@ -612,8 +613,7 @@ namespace QRCoder
                 {
                     int score1 = 0,
                         score2 = 0,
-                        score3 = 0,
-                        score4 = 0;
+                        score3 = 0;
                     var size = qrCode.ModuleMatrix.Count;
 
                     //Penalty 1                   
@@ -756,7 +756,7 @@ namespace QRCoder
                     var percent = (blackModules / (qrCode.ModuleMatrix.Count * qrCode.ModuleMatrix.Count)) * 100;
                     var prevMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 50) / 5;
                     var nextMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 45) / 5;
-                    score4 = Math.Min(prevMultipleOf5, nextMultipleOf5) * 10;
+                    var score4 = Math.Min(prevMultipleOf5, nextMultipleOf5) * 10;
 
                     return score1 + score2 + score3 + score4;
                 }
@@ -934,55 +934,42 @@ namespace QRCoder
         {
             if (version < 10)
             {
-                if (encMode.Equals(EncodingMode.Numeric))
+                switch (encMode)
                 {
-                    return 10;
-                }
-                else if (encMode.Equals(EncodingMode.Alphanumeric))
-                {
-                    return 9;
-                }
-                else
-                {
-                    return 8;
+                    case EncodingMode.Numeric:
+                        return 10;
+                    case EncodingMode.Alphanumeric:
+                        return 9;
+                    default:
+                        return 8;
                 }
             }
             else if (version < 27)
             {
-                if (encMode.Equals(EncodingMode.Numeric))
+                switch (encMode)
                 {
-                    return 12;
-                }
-                else if (encMode.Equals(EncodingMode.Alphanumeric))
-                {
-                    return 11;
-                }
-                else if (encMode.Equals(EncodingMode.Byte))
-                {
-                    return 16;
-                }
-                else
-                {
-                    return 10;
+                    case EncodingMode.Numeric:
+                        return 12;
+                    case EncodingMode.Alphanumeric:
+                        return 11;
+                    case EncodingMode.Byte:
+                        return 16;
+                    default: 
+                        return 10;
                 }
             }
             else
             {
-                if (encMode.Equals(EncodingMode.Numeric))
+                switch (encMode)
                 {
-                    return 14;
-                }
-                else if (encMode.Equals(EncodingMode.Alphanumeric))
-                {
-                    return 13;
-                }
-                else if (encMode.Equals(EncodingMode.Byte))
-                {
-                    return 16;
-                }
-                else
-                {
-                    return 12;
+                    case EncodingMode.Numeric:
+                        return 14;
+                    case EncodingMode.Alphanumeric:
+                        return 13;
+                    case EncodingMode.Byte:
+                        return 16;
+                    default:
+                        return 12;
                 }
             }
         }
@@ -1062,27 +1049,14 @@ namespace QRCoder
             return codeText;
         }
 
-        private string PlainTextToBinaryECI(string plainText)
-        {
-            var codeText = string.Empty;
-            foreach (byte _byte in Encoding.GetEncoding("ascii").GetBytes(plainText))
-            {
-                codeText += DecToBin(_byte, 8);
-            }
-            return codeText;
-        }
-
         private string ConvertToIso8859(string value, string Iso = "ISO-8859-2")
         {
             Encoding iso = Encoding.GetEncoding(Iso);
             Encoding utf8 = Encoding.UTF8;
             byte[] utfBytes = utf8.GetBytes(value);
             byte[] isoBytes = Encoding.Convert(utf8, iso, utfBytes);
-#if !PCL
+
             return iso.GetString(isoBytes);
-#else
-            return iso.GetString(isoBytes, 0, isoBytes.Length);
-#endif
         }
 
         private string PlainTextToBinaryByte(string plainText, EciMode eciMode, bool utf8BOM, bool forceUtf8)
@@ -1104,8 +1078,6 @@ namespace QRCoder
                     case EciMode.Iso8859_2:
                         codeBytes = Encoding.GetEncoding("ISO-8859-2").GetBytes(ConvertToIso8859(plainText, "ISO-8859-2"));
                         break;
-                    case EciMode.Default:
-                    case EciMode.Utf8:
                     default:
                         codeBytes = utf8BOM ? Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(plainText)).ToArray() : Encoding.UTF8.GetBytes(plainText);
                         break;
@@ -1536,7 +1508,6 @@ namespace QRCoder
             public override string ToString()
             {
                 var sb = new StringBuilder();
-                //this.PolyItems.ForEach(x => sb.Append("a^" + x.Coefficient + "*x^" + x.Exponent + " + "));
                 foreach (var polyItem in this.PolyItems)
                 {
                     sb.Append("a^" + polyItem.Coefficient + "*x^" + polyItem.Exponent + " + ");

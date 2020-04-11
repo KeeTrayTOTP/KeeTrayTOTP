@@ -402,14 +402,9 @@ namespace KeeTrayTOTP
 
             var rawSeed = this.SeedGet(entry).ReadString();
             var cleanSeed = Regex.Replace(rawSeed, @"\s+", "");
-
-            var showQr = new ShowQR
-            {
-                Seed = cleanSeed,
-                IssuerText = { Text = entry.Strings.Get("Title").ReadString() },
-                UsernameText = { Text = entry.Strings.Get("UserName").ReadString() },
-            };
-            showQr.ShowDialog();
+            var issuer = entry.Strings.Get("Title").ReadString();
+            var username = entry.Strings.Get("UserName").ReadString();
+            UIUtil.ShowDialogAndDestroy(new ShowQR(cleanSeed, issuer, username));
 
             PluginHost.MainWindow.RefreshEntriesList();
         }
