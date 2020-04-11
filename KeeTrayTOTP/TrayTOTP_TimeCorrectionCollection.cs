@@ -72,7 +72,7 @@ namespace KeeTrayTOTP
             foreach (var url in urLs)
             {
                 //Validating that url is not null.
-                if (url != String.Empty)
+                if (url != string.Empty)
                 {
                     //Validating that this server is not already checked.
                     bool next = false;
@@ -102,7 +102,7 @@ namespace KeeTrayTOTP
             foreach (string url in urLs.Split(';'))
             {
                 //Validating that url is not null.
-                if (url != String.Empty)
+                if (url != string.Empty)
                 {
                     //Validating that this server is not already checked.
                     bool next = false;
@@ -132,7 +132,7 @@ namespace KeeTrayTOTP
             foreach (ListViewItem lvi in lvIs)
             {
                 //Validating that url is not null.
-                if (lvi.Text != String.Empty)
+                if (lvi.Text != string.Empty)
                 {
                     //Validating that this server is not already checked.
                     bool next = false;
@@ -166,7 +166,7 @@ namespace KeeTrayTOTP
                 var lvi = new ListViewItem(tc.Url) { ImageIndex = tc.LastUpdateSucceeded ? 0 : 2 };
                 lvi.SubItems.Add((tc.LastUpdateSucceeded ? tc.TimeCorrection.ToString() : Localization.Strings.ConnectionFailed));
                 lvi.Tag = tc;
-                lvi.ToolTipText = (tc.LastUpdateSucceeded ? String.Empty : tc.LastUpdateDateTime.ToString());
+                lvi.ToolTipText = (tc.LastUpdateSucceeded ? string.Empty : tc.LastUpdateDateTime.ToString());
                 lvIs.Add(lvi);
             }
             return lvIs.ToArray();
@@ -194,7 +194,7 @@ namespace KeeTrayTOTP
         internal string ToSetting()
         {
             //Temporary string to build the string from multiple strings.
-            var @return = String.Empty;
+            var @return = string.Empty;
             foreach (var timeCorrection in _timeCorrections)
             {
                 @return = @return + timeCorrection.Url + ";";

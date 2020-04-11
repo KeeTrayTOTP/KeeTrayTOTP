@@ -84,7 +84,7 @@ namespace KeeTrayTOTP.Libraries
                 this.Encoder = TOTPEncoder.Rfc6238;
             }
 
-            if (settings.Length > 2 && settings[2] != String.Empty)
+            if (settings.Length > 2 && settings[2] != string.Empty)
             {
                 var tc = tcc[settings[2]];
 

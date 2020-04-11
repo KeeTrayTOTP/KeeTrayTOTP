@@ -74,7 +74,7 @@ namespace QRCoder
                 version = this.GetVersion(dataInputLength, encoding, eccLevel);
             }
 
-            string modeIndicator = String.Empty;
+            string modeIndicator = string.Empty;
             if (eciMode != EciMode.Default)
             {
                 modeIndicator = DecToBin((int)EncodingMode.ECI, 4);
@@ -860,7 +860,7 @@ namespace QRCoder
         {
             return new List<char>(bitString.ToCharArray()).Select((x, i) => new { Index = i, Value = x })
                 .GroupBy(x => x.Index / 8)
-                .Select(x => String.Join("", x.Select(v => v.Value.ToString()).ToArray()))
+                .Select(x => string.Join("", x.Select(v => v.Value.ToString()).ToArray()))
                 .ToList();
         }
 
@@ -943,7 +943,7 @@ namespace QRCoder
         {
             var bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
             var result = Encoding.GetEncoding("ISO-8859-1").GetString(bytes, 0, bytes.Length);
-            return String.Equals(input, result);
+            return string.Equals(input, result);
         }
 
         private string PlainTextToBinary(string plainText, EncodingMode encMode, EciMode eciMode, bool utf8BOM, bool forceUtf8)
