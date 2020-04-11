@@ -116,6 +116,7 @@ namespace KeeTrayTOTP
                     MessageBox.Show(Localization.Strings.SettingsOpenDatabaseRequired, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+
                 if (!CheckBoxAutoTypeFieldName.Checked)
                 {
                     CheckBoxAutoTypeFieldRename.Checked = false;
