@@ -120,7 +120,6 @@ namespace KeeTrayTOTP
                 {
                     CheckBoxAutoTypeFieldRename.Checked = false;
                     MessageBox.Show(Localization.Strings.SettingsEnableFieldRename, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
                 }
             }
         }
