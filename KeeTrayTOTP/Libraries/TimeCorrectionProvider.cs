@@ -10,7 +10,7 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Timer providing the delay between each time correction check.
         /// </summary>
-        private System.Timers.Timer _timer;
+        private readonly System.Timers.Timer _timer;
 
         /// <summary>
         /// Thread which handles the time correction check.
@@ -18,24 +18,23 @@ namespace KeeTrayTOTP.Libraries
         private System.Threading.Thread _task;
 
         private bool _enable;
+
         /// <summary>
-        /// Defines weither or not the class will attempt to get time correction from the server.
+        /// Defines whether or not the class will attempt to get time correction from the server.
         /// </summary>
         public bool Enable { get { return _enable; } set { _enable = value; _timer.Enabled = value; } }
 
-        private static int _interval = 60;
         /// <summary>
         /// Gets or sets the interval in minutes between each online checks for time correction.
         /// </summary>
         /// <value>Time</value>
-        public static int Interval { get { return _interval; } set { _interval = value; } }
+        public static int Interval { get; set; }
         private long _intervalStretcher;
 
-        private volatile string _url;
         /// <summary>
         /// Returns the URL this instance is using to checks for time correction.
         /// </summary>
-        public string Url { get { return _url; } }
+        public string Url { get; private set; }
 
         private TimeSpan _timeCorrection;
         /// <summary>
@@ -43,17 +42,20 @@ namespace KeeTrayTOTP.Libraries
         /// </summary>
         public TimeSpan TimeCorrection { get { return _timeCorrection; } }
 
-        private DateTime _lastUpdateDateTime;
         /// <summary>
         /// Returns the date and time in universal format of the last online check for time correction.
         /// </summary>
-        public DateTime LastUpdateDateTime { get { return _lastUpdateDateTime; } }
+        public DateTime LastUpdateDateTime { get; private set; }
 
-        private bool _lastUpdateSucceded;
         /// <summary>
         /// Returns true if the last check for time correction was successful.
         /// </summary>
-        public bool LastUpdateSucceded { get { return _lastUpdateSucceded; } }
+        public bool LastUpdateSucceeded { get; private set; }
+
+        static TimeCorrectionProvider()
+        {
+            Interval = KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime;
+        }
 
         /// <summary>
         /// Instanciates a new TOTP_TimeCorrection using the specified URL to contact the server.
@@ -62,14 +64,14 @@ namespace KeeTrayTOTP.Libraries
         /// <param name="enable">Enable or disable the time correction check.</param>
         public TimeCorrectionProvider(string url, bool enable = true)
         {
-            if (url == string.Empty)
+            if (string.IsNullOrEmpty(url))
             {
                 throw new Exception("Invalid URL."); //Throws exception if the URL is invalid as the class cannot work without it.
             }
 
-            _url = url; //Defines variable from argument.
+            Url = url; //Defines variable from argument.
             _enable = enable; //Defines variable from argument.
-            _lastUpdateDateTime = DateTime.MinValue; //Defines variable from non-constant default value.
+            LastUpdateDateTime = DateTime.MinValue; //Defines variable from non-constant default value.
             _timeCorrection = TimeSpan.Zero; //Defines variable from non-constant default value.
             _timer = new System.Timers.Timer(); //Instanciates timer.
             _timer.Elapsed += Timer_Elapsed; //Handles the timer event
@@ -88,7 +90,7 @@ namespace KeeTrayTOTP.Libraries
         private void Timer_Elapsed(object sender, EventArgs e)
         {
             _intervalStretcher++; //Increments timer.
-            if (_intervalStretcher >= (60 * _interval)) //Checks if the specified delay has been reached.
+            if (_intervalStretcher >= (60 * Interval)) //Checks if the specified delay has been reached.
             {
                 _intervalStretcher = 0; //Resets the timer.
                 Task_Do(); //Attempts to run a new task
@@ -117,17 +119,19 @@ namespace KeeTrayTOTP.Libraries
         {
             try
             {
-                var webClient = new System.Net.WebClient(); //WebClient to connect to server.
-                webClient.DownloadData(_url); //Downloads the server's page using HTTP or HTTPS.
-                var dateHeader = webClient.ResponseHeaders.Get("Date"); //Gets the date from the HTTP header of the downloaded page.
-                _timeCorrection = DateTime.UtcNow - DateTime.Parse(dateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime(); //Compares the downloaded date to the systems date giving us a timespan.
-                _lastUpdateSucceded = true; //Informs that the date check has succeeded.
+                using (var webClient = new System.Net.WebClient())
+                {
+                    webClient.DownloadData(Url); //Downloads the server's page using HTTP or HTTPS.
+                    var dateHeader = webClient.ResponseHeaders.Get("Date"); //Gets the date from the HTTP header of the downloaded page.
+                    _timeCorrection = DateTime.UtcNow - DateTime.Parse(dateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime(); //Compares the downloaded date to the systems date giving us a timespan.
+                    LastUpdateSucceeded = true; //Informs that the date check has succeeded.
+                }
             }
             catch (Exception)
             {
-                _lastUpdateSucceded = false; //Informs that the date check has failed.
+                LastUpdateSucceeded = false; //Informs that the date check has failed.
             }
-            _lastUpdateDateTime = DateTime.Now; //Informs when the last update has been attempted (succeeded or not).
+            LastUpdateDateTime = DateTime.Now; //Informs when the last update has been attempted (succeeded or not).
         }
 
         /// <summary>

@@ -31,11 +31,6 @@ namespace KeeTrayTOTP
         internal IPluginHost PluginHost;
 
         /// <summary>
-        /// Tray TOTP Support Url
-        /// </summary>
-        internal const string SupportUrl = "https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues";
-
-        /// <summary>
         /// Constants (keepass form object names).
         /// </summary>
         internal const string keeobj_string_EntryContextMenuCopyPassword_Name = "m_ctxEntryCopyPassword";
@@ -68,7 +63,7 @@ namespace KeeTrayTOTP
         /// Constants (default settings values).
         /// </summary>
         internal const string setdef_string_AutoType_FieldName = "TOTP";
-        internal const long setdef_ulong_TimeCorrection_RefreshTime = 60;
+        internal const int setdef_TimeCorrection_RefreshTime = 60;
 
         /// <summary>
         /// Constants (static settings value).
@@ -90,7 +85,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Notify Icon Context Menu List.
         /// </summary>
-        private List<ToolStripMenuItem> _niMenuList = new List<ToolStripMenuItem>();
+        private readonly List<ToolStripMenuItem> _niMenuList = new List<ToolStripMenuItem>();
         /// <summary>
         /// Notify Icon Context Menu Separator.
         /// </summary>
@@ -121,7 +116,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Entries Refresh Timer.
         /// </summary>
-        private Timer _liRefreshTimer = new Timer();
+        private readonly Timer _liRefreshTimer = new Timer();
 
         /// <summary>
         /// Entries Refresh Timer Previous Counter to Prevent Useless Refresh.
@@ -192,7 +187,7 @@ namespace KeeTrayTOTP
                 enMenuTrayTotp.DropDownItems.Add(enMenuSetupTotp);
                 enMenuTrayTotp.DropDownItems.Add(enMenuShowQr);
 
-                enMenuTrayTotp.DropDownOpening += delegate (object sender, EventArgs e)
+                enMenuTrayTotp.DropDownOpening += (object sender, EventArgs e) =>
                 {
                     enMenuCopyTotp.Enabled = false;
                     enMenuSetupTotp.Enabled = false;
@@ -202,13 +197,10 @@ namespace KeeTrayTOTP
                     if (PluginHost.MainWindow.GetSelectedEntriesCount() == 1)
                     {
                         var currentEntry = PluginHost.MainWindow.GetSelectedEntry(true);
-                        if (SettingsCheck(currentEntry) && SeedCheck(currentEntry))
+                        if (SettingsCheck(currentEntry) && SeedCheck(currentEntry) && SettingsValidate(currentEntry))
                         {
-                            if (SettingsValidate(currentEntry))
-                            {
-                                enMenuCopyTotp.Enabled = true;
-                                enMenuCopyTotp.Tag = currentEntry;
-                            }
+                            enMenuCopyTotp.Enabled = true;
+                            enMenuCopyTotp.Tag = currentEntry;
                         }
 
                         enMenuSetupTotp.Enabled = true;
@@ -217,7 +209,7 @@ namespace KeeTrayTOTP
                     enMenuSetupTotp.Visible = PluginHost.CustomConfig.GetBool(setname_bool_EntryContextSetup_Visible, true);
                 };
 
-                enMenuTrayTotp.DropDownClosed += delegate (object sender, EventArgs e)
+                enMenuTrayTotp.DropDownClosed += (object sender, EventArgs e) =>
                 {
                     enMenuCopyTotp.Enabled = true;
                 };
@@ -244,7 +236,7 @@ namespace KeeTrayTOTP
             PluginHost = host;
 
             // Instantiate Help Form.
-            _helpForm = new FormHelp(this);
+            _helpForm = new FormHelp();
 
             // Register events.
             PluginHost.MainWindow.Shown += MainWindow_Shown;
@@ -277,7 +269,7 @@ namespace KeeTrayTOTP
 
             //Time Correction.
             TimeCorrections = new TimeCorrectionCollection(PluginHost.CustomConfig.GetBool(setname_bool_TimeCorrection_Enable, false));
-            TimeCorrectionProvider.Interval = Convert.ToInt16(PluginHost.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime));
+            TimeCorrectionProvider.Interval = Convert.ToInt16(PluginHost.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime));
             TimeCorrections.AddRangeFromList(PluginHost.CustomConfig.GetString(setname_string_TimeCorrection_List, string.Empty).Split(';').ToList());
 
             return true;
@@ -302,7 +294,7 @@ namespace KeeTrayTOTP
                 PluginHost.CustomConfig.SetBool(setname_bool_FirstInstall_Shown, true);
                 if (!_helpForm.Visible)
                 {
-                    _helpForm = new FormHelp(this, true);
+                    _helpForm = new FormHelp(true);
                     _helpForm.Show();
                 }
                 else
@@ -319,8 +311,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnMenuSettingsClick(object sender, EventArgs e)
         {
-            var formSettings = new FormSettings(this);
-            UIUtil.ShowDialogAndDestroy(formSettings);
+            UIUtil.ShowDialogAndDestroy(new FormSettings(this));
         }
 
         /// <summary>
@@ -347,8 +338,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnMenuAboutClick(object sender, EventArgs e)
         {
-            var formAbout = new FormAbout(this);
-            UIUtil.ShowDialogAndDestroy(formAbout);
+            UIUtil.ShowDialogAndDestroy(new FormAbout());
         }
 
         /// <summary>
@@ -402,14 +392,9 @@ namespace KeeTrayTOTP
 
             var rawSeed = this.SeedGet(entry).ReadString();
             var cleanSeed = Regex.Replace(rawSeed, @"\s+", "");
-
-            var showQr = new ShowQR
-            {
-                Seed = cleanSeed,
-                IssuerText = { Text = entry.Strings.Get("Title").ReadString() },
-                UsernameText = { Text = entry.Strings.Get("UserName").ReadString() },
-            };
-            showQr.ShowDialog();
+            var issuer = entry.Strings.Get("Title").ReadString();
+            var username = entry.Strings.Get("UserName").ReadString();
+            UIUtil.ShowDialogAndDestroy(new ShowQR(cleanSeed, issuer, username));
 
             PluginHost.MainWindow.RefreshEntriesList();
         }
@@ -440,7 +425,7 @@ namespace KeeTrayTOTP
                         var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
                         var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
                         string trayTitle;
-                        if ((trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || (string.IsNullOrEmpty(entryUsername)))
+                        if ((trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || string.IsNullOrEmpty(entryUsername))
                         {
                             trayTitle = entryTitle.ExtWithSpaceAfter();
                         }
@@ -580,7 +565,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnTimerTick(object sender, EventArgs e)
         {
-            if ((PluginHost.MainWindow.ActiveDatabase.IsOpen) && (PluginHost.MainWindow.Visible))
+            if (PluginHost.MainWindow.ActiveDatabase.IsOpen && PluginHost.MainWindow.Visible)
             {
                 if (KeePass.Program.Config.MainWindow.EntryListColumns.Count != _liColumnsCount)
                 {
@@ -588,12 +573,9 @@ namespace KeeTrayTOTP
                     _liColumnsCount = KeePass.Program.Config.MainWindow.EntryListColumns.Count;
                     foreach (var column in KeePass.Program.Config.MainWindow.EntryListColumns)
                     {
-                        if (column.Type == AceColumnType.PluginExt)
+                        if (column.Type == AceColumnType.PluginExt && column.CustomName == Localization.Strings.TOTP)
                         {
-                            if (column.CustomName == Localization.Strings.TOTP)
-                            {
-                                _liColumnTotpVisible = true;
-                            }
+                            _liColumnTotpVisible = true;
                         }
                     }
                 }
@@ -615,7 +597,7 @@ namespace KeeTrayTOTP
                     }
                 }
 
-                if ((_liColumnTotpVisible) && (_liColumnTotpContains)) //Tests if displayed entries have totps that require refreshing.
+                if (_liColumnTotpVisible && _liColumnTotpContains) //Tests if displayed entries have totps that require refreshing.
                 {
                     var currentSeconds = DateTime.Now.Second;
                     if (_liRefreshTimerPreviousCounter != currentSeconds)
@@ -634,40 +616,32 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void SprEngine_FilterCompile(object sender, SprEventArgs e)
         {
-            if ((e.Context.Flags & SprCompileFlags.ExtActive) == SprCompileFlags.ExtActive)
+            if ((e.Context.Flags & SprCompileFlags.ExtActive) == SprCompileFlags.ExtActive && e.Text.IndexOf(PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), StringComparison.InvariantCultureIgnoreCase) >= 0)
             {
-                if (e.Text.IndexOf(PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), StringComparison.InvariantCultureIgnoreCase) >= 0)
+                if (SettingsCheck(e.Context.Entry) && SeedCheck(e.Context.Entry))
                 {
-                    if (SettingsCheck(e.Context.Entry) && SeedCheck(e.Context.Entry))
+                    if (SettingsValidate(e.Context.Entry))
                     {
-                        if (SettingsValidate(e.Context.Entry))
+                        string[] settings = SettingsGet(e.Context.Entry);
+
+                        TOTPProvider totpGenerator = new TOTPProvider(settings, ref this.TimeCorrections);
+
+                        string invalidCharacters;
+
+                        if (SeedValidate(e.Context.Entry, out invalidCharacters))
                         {
-                            string[] settings = SettingsGet(e.Context.Entry);
-
-                            TOTPProvider totpGenerator = new TOTPProvider(settings, ref this.TimeCorrections);
-
-                            string invalidCharacters;
-
-                            if (SeedValidate(e.Context.Entry, out invalidCharacters))
-                            {
-                                e.Context.Entry.Touch(false);
-                                string totp = totpGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
-                                e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
-                            }
-                            else
-                            {
-                                e.Text = string.Empty;
-                                MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
-                            }
-                            if (totpGenerator.TimeCorrectionError)
-                            {
-                                MessageService.ShowWarning(Localization.Strings.WarningBadURL);
-                            }
+                            e.Context.Entry.Touch(false);
+                            string totp = totpGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
+                            e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
                         }
                         else
                         {
                             e.Text = string.Empty;
-                            MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
+                            MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
+                        }
+                        if (totpGenerator.TimeCorrectionError)
+                        {
+                            MessageService.ShowWarning(Localization.Strings.WarningBadURL);
                         }
                     }
                     else
@@ -675,6 +649,11 @@ namespace KeeTrayTOTP
                         e.Text = string.Empty;
                         MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
                     }
+                }
+                else
+                {
+                    e.Text = string.Empty;
+                    MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
                 }
             }
         }

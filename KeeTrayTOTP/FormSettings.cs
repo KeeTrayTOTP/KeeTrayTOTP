@@ -116,11 +116,11 @@ namespace KeeTrayTOTP
                     MessageBox.Show(Localization.Strings.SettingsOpenDatabaseRequired, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
+
                 if (!CheckBoxAutoTypeFieldName.Checked)
                 {
                     CheckBoxAutoTypeFieldRename.Checked = false;
                     MessageBox.Show(Localization.Strings.SettingsEnableFieldRename, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    return;
                 }
             }
         }
@@ -307,7 +307,7 @@ namespace KeeTrayTOTP
 
             // Time Correction
             CheckBoxTimeCorrection.Checked = _plugin.PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TimeCorrection_Enable, false);
-            NumericTimeCorrectionInterval.Value = Convert.ToDecimal(_plugin.PluginHost.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime));
+            NumericTimeCorrectionInterval.Value = Convert.ToDecimal(_plugin.PluginHost.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime));
             ListViewTimeCorrectionList.Items.AddRange(_plugin.TimeCorrections.ToLvi());
             if (WorkerLoad.CancellationPending) { e.Cancel = true; return; }
 
@@ -344,12 +344,9 @@ namespace KeeTrayTOTP
             else
             {
                 Working(false, true); // Set controls depending on the state of action.
-                if (e.Result != null)
+                if (e.Result != null && e.Result.ToString() == "Reset")
                 {
-                    if (e.Result.ToString() == "Reset")
-                    {
-                        MessageBox.Show(Localization.Strings.SettingsDefaultValuesRestored, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
-                    }
+                    MessageBox.Show(Localization.Strings.SettingsDefaultValuesRestored, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.OK, MessageBoxIcon.Information);
                 }
             }
         }
@@ -426,12 +423,9 @@ namespace KeeTrayTOTP
             else
             {
                 Working(false, true); //Set controls depending on the state of action.
-                if (e.Result != null)
+                if (e.Result != null && e.Result.ToString() == "OK")
                 {
-                    if (e.Result.ToString() == "OK")
-                    {
-                        DialogResult = DialogResult.OK;
-                    }
+                    DialogResult = DialogResult.OK;
                 }
             }
         }
@@ -470,7 +464,7 @@ namespace KeeTrayTOTP
             // Time Correction
             _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_TimeCorrection_Enable, null);
             _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, null);
-            Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(KeeTrayTOTPExt.setdef_ulong_TimeCorrection_RefreshTime);
+            Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime);
             _plugin.TimeCorrections.ResetThenAddRangeFromString(string.Empty);
 
             // Storage
