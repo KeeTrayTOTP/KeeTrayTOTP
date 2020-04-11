@@ -1115,8 +1115,8 @@ namespace QRCoder
             }
             resultPolynom.PolyItems.RemoveAll(x => toGlue.Contains(x.Exponent));
             resultPolynom.PolyItems.AddRange(gluedPolynoms);
-            resultPolynom.PolyItems = resultPolynom.PolyItems.OrderByDescending(x => x.Exponent).ToList();
-            return resultPolynom;
+
+            return new Polynom(resultPolynom.PolyItems.OrderByDescending(x => x.Exponent));
         }
 
         private int GetIntValFromAlphaExp(int exp)
@@ -1453,18 +1453,12 @@ namespace QRCoder
                 this.PolyItems = new List<PolynomItem>();
             }
 
-            public List<PolynomItem> PolyItems { get; set; }
-
-            public override string ToString()
+            public Polynom(IEnumerable<PolynomItem> items)
             {
-                var sb = new StringBuilder();
-                foreach (var polyItem in this.PolyItems)
-                {
-                    sb.Append("a^" + polyItem.Coefficient + "*x^" + polyItem.Exponent + " + ");
-                }
-
-                return sb.ToString().TrimEnd(new[] { ' ', '+' });
+                this.PolyItems = new List<PolynomItem>(items);
             }
+
+            public List<PolynomItem> PolyItems { get; private set; }
         }
 
         private class Point
