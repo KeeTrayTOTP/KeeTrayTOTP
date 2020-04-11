@@ -713,7 +713,7 @@ namespace QRCoder
                         }
                     }
 
-                    var percent = (blackModules / (qrCode.ModuleMatrix.Count * qrCode.ModuleMatrix.Count)) * 100;
+                    var percent = blackModules / (qrCode.ModuleMatrix.Count * qrCode.ModuleMatrix.Count) * 100;
                     var prevMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 50) / 5;
                     var nextMultipleOf5 = Math.Abs((int)Math.Floor(percent / 5) * 5 - 45) / 5;
                     var score4 = Math.Min(prevMultipleOf5, nextMultipleOf5) * 10;
@@ -742,7 +742,7 @@ namespace QRCoder
             }
 
             var leadTermSource = messagePolynom;
-            for (var i = 0; (leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0); i++)
+            for (var i = 0; leadTermSource.PolyItems.Count > 0 && leadTermSource.PolyItems[leadTermSource.PolyItems.Count - 1].Exponent > 0; i++)
             {
                 if (leadTermSource.PolyItems[0].Coefficient == 0)
                 {
@@ -767,9 +767,9 @@ namespace QRCoder
             {
                 newPoly.PolyItems.Add(
                     new PolynomItem(
-                        (poly.PolyItems[i].Coefficient != 0
+                        poly.PolyItems[i].Coefficient != 0
                             ? this.GetAlphaExpFromIntVal(poly.PolyItems[i].Coefficient)
-                            : 0), poly.PolyItems[i].Exponent));
+                            : 0, poly.PolyItems[i].Exponent));
             }
 
             return newPoly;
@@ -936,7 +936,7 @@ namespace QRCoder
 
         private bool IsUtf8(EncodingMode encoding, string plainText)
         {
-            return (encoding == EncodingMode.Byte && !this.IsValidISO(plainText));
+            return encoding == EncodingMode.Byte && !this.IsValidISO(plainText);
         }
 
         private bool IsValidISO(string input)
@@ -1098,7 +1098,7 @@ namespace QRCoder
                     var polItemRes = new PolynomItem
                     (
                         ShrinkAlphaExp(polItemBase.Coefficient + polItemMulti.Coefficient),
-                        (polItemBase.Exponent + polItemMulti.Exponent)
+                        polItemBase.Exponent + polItemMulti.Exponent
                     );
                     resultPolynom.PolyItems.Add(polItemRes);
                 }

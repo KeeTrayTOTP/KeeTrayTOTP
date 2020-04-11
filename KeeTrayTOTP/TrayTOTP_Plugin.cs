@@ -425,7 +425,7 @@ namespace KeeTrayTOTP
                         var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
                         var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
                         string trayTitle;
-                        if ((trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || (string.IsNullOrEmpty(entryUsername)))
+                        if ((trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || string.IsNullOrEmpty(entryUsername))
                         {
                             trayTitle = entryTitle.ExtWithSpaceAfter();
                         }
@@ -565,7 +565,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnTimerTick(object sender, EventArgs e)
         {
-            if ((PluginHost.MainWindow.ActiveDatabase.IsOpen) && (PluginHost.MainWindow.Visible))
+            if (PluginHost.MainWindow.ActiveDatabase.IsOpen && PluginHost.MainWindow.Visible)
             {
                 if (KeePass.Program.Config.MainWindow.EntryListColumns.Count != _liColumnsCount)
                 {
@@ -597,7 +597,7 @@ namespace KeeTrayTOTP
                     }
                 }
 
-                if ((_liColumnTotpVisible) && (_liColumnTotpContains)) //Tests if displayed entries have totps that require refreshing.
+                if (_liColumnTotpVisible && _liColumnTotpContains) //Tests if displayed entries have totps that require refreshing.
                 {
                     var currentSeconds = DateTime.Now.Second;
                     if (_liRefreshTimerPreviousCounter != currentSeconds)
