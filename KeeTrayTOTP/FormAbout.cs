@@ -11,17 +11,11 @@ namespace KeeTrayTOTP
     internal partial class FormAbout : Form
     {
         /// <summary>
-        /// Plugin Host.
-        /// </summary>
-        private readonly KeeTrayTOTPExt _plugin;
-
-        /// <summary>
         /// Windows Form Constructor.
         /// </summary>
         /// <param name="plugin">Plugin Host.</param>
-        internal FormAbout(KeeTrayTOTPExt plugin)
+        internal FormAbout()
         {
-            _plugin = plugin;
             InitializeComponent();
         }
 
