@@ -347,7 +347,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void OnMenuAboutClick(object sender, EventArgs e)
         {
-            var formAbout = new FormAbout();
+            var formAbout = new FormAbout(this);
             UIUtil.ShowDialogAndDestroy(formAbout);
         }
 
