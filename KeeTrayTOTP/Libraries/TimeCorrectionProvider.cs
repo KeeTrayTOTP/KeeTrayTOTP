@@ -10,7 +10,7 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Timer providing the delay between each time correction check.
         /// </summary>
-        private System.Timers.Timer _timer;
+        private readonly System.Timers.Timer _timer;
 
         /// <summary>
         /// Thread which handles the time correction check.
@@ -31,7 +31,7 @@ namespace KeeTrayTOTP.Libraries
         public static int Interval { get { return _interval; } set { _interval = value; } }
         private long _intervalStretcher;
 
-        private volatile string _url;
+        private volatile readonly string _url;
         /// <summary>
         /// Returns the URL this instance is using to checks for time correction.
         /// </summary>

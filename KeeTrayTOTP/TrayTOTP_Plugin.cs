@@ -90,7 +90,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Notify Icon Context Menu List.
         /// </summary>
-        private List<ToolStripMenuItem> _niMenuList = new List<ToolStripMenuItem>();
+        private readonly List<ToolStripMenuItem> _niMenuList = new List<ToolStripMenuItem>();
         /// <summary>
         /// Notify Icon Context Menu Separator.
         /// </summary>
@@ -121,7 +121,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Entries Refresh Timer.
         /// </summary>
-        private Timer _liRefreshTimer = new Timer();
+        private readonly Timer _liRefreshTimer = new Timer();
 
         /// <summary>
         /// Entries Refresh Timer Previous Counter to Prevent Useless Refresh.
