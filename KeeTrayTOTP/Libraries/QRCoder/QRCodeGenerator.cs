@@ -987,7 +987,6 @@ namespace QRCoder
         private bool IsValidISO(string input)
         {
             var bytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(input);
-            //var result = Encoding.GetEncoding("ISO-8859-1").GetString(bytes);
             var result = Encoding.GetEncoding("ISO-8859-1").GetString(bytes, 0, bytes.Length);
             return String.Equals(input, result);
         }
@@ -1002,9 +1001,6 @@ namespace QRCoder
                     return PlainTextToBinaryNumeric(plainText);
                 case EncodingMode.Byte:
                     return PlainTextToBinaryByte(plainText, eciMode, utf8BOM, forceUtf8);
-                case EncodingMode.Kanji:
-                    return string.Empty;
-                case EncodingMode.ECI:
                 default:
                     return string.Empty;
             }
@@ -1187,8 +1183,7 @@ namespace QRCoder
         private void CreateAlphanumEncDict()
         {
             this.alphanumEncDict = new Dictionary<char, int>();
-            //alphanumEncTable.ToList().Select((x, i) => new { Chr = x, Index = i }).ToList().ForEach(x => this.alphanumEncDict.Add(x.Chr, x.Index));
-            foreach (var res in alphanumEncTable.ToList().Select((x, i) => new { Chr = x, Index = i }).ToList())
+            foreach (var res in alphanumEncTable.Select((x, i) => new { Chr = x, Index = i }))
             {
                 this.alphanumEncDict.Add(res.Chr, res.Index);
             }
