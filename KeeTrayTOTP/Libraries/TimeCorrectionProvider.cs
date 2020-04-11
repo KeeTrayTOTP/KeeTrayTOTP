@@ -49,11 +49,11 @@ namespace KeeTrayTOTP.Libraries
         /// </summary>
         public DateTime LastUpdateDateTime { get { return _lastUpdateDateTime; } }
 
-        private bool _lastUpdateSucceded;
+        private bool _lastUpdateSucceeded;
         /// <summary>
         /// Returns true if the last check for time correction was successful.
         /// </summary>
-        public bool LastUpdateSucceded { get { return _lastUpdateSucceded; } }
+        public bool LastUpdateSucceeded { get { return _lastUpdateSucceeded; } }
 
         /// <summary>
         /// Instanciates a new TOTP_TimeCorrection using the specified URL to contact the server.
@@ -121,11 +121,11 @@ namespace KeeTrayTOTP.Libraries
                 webClient.DownloadData(_url); //Downloads the server's page using HTTP or HTTPS.
                 var dateHeader = webClient.ResponseHeaders.Get("Date"); //Gets the date from the HTTP header of the downloaded page.
                 _timeCorrection = DateTime.UtcNow - DateTime.Parse(dateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime(); //Compares the downloaded date to the systems date giving us a timespan.
-                _lastUpdateSucceded = true; //Informs that the date check has succeeded.
+                _lastUpdateSucceeded = true; //Informs that the date check has succeeded.
             }
             catch (Exception)
             {
-                _lastUpdateSucceded = false; //Informs that the date check has failed.
+                _lastUpdateSucceeded = false; //Informs that the date check has failed.
             }
             _lastUpdateDateTime = DateTime.Now; //Informs when the last update has been attempted (succeeded or not).
         }
