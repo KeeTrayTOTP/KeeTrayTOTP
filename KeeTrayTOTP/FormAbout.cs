@@ -64,7 +64,6 @@ namespace KeeTrayTOTP
             {
                 var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>();
                 return attribute != null ? attribute.InformationalVersion: null;
-
             }
         }
 
@@ -77,7 +76,6 @@ namespace KeeTrayTOTP
             {
                 var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyDescriptionAttribute>();
                 return attribute != null ? attribute.Description : null;
-
             }
         }
 
@@ -100,12 +98,8 @@ namespace KeeTrayTOTP
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCopyrightAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-                return ((AssemblyCopyrightAttribute)attributes[0]).Copyright;
+                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyCopyrightAttribute>();
+                return attribute != null ? attribute.Copyright : null;
             }
         }
 
@@ -116,12 +110,8 @@ namespace KeeTrayTOTP
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyTrademarkAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-                return ((AssemblyTrademarkAttribute)attributes[0]).Trademark;
+                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyTrademarkAttribute>();
+                return attribute != null ? attribute.Trademark : null;
             }
         }
 
@@ -132,12 +122,8 @@ namespace KeeTrayTOTP
         {
             get
             {
-                object[] attributes = Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(AssemblyCompanyAttribute), false);
-                if (attributes.Length == 0)
-                {
-                    return string.Empty;
-                }
-                return ((AssemblyCompanyAttribute)attributes[0]).Company;
+                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyCompanyAttribute>();
+                return attribute != null ? attribute.Company : null;
             }
         }
 
