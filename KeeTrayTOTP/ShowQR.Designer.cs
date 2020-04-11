@@ -34,7 +34,6 @@
             this.UsernameText = new System.Windows.Forms.TextBox();
             this.IssuerLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.RegenerateButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.QROutputPicture)).BeginInit();
             this.SuspendLayout();
             // 
@@ -58,6 +57,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.QROutputPicture.Location = new System.Drawing.Point(12, 118);
+            this.QROutputPicture.MinimumSize = new System.Drawing.Size(60, 60);
             this.QROutputPicture.Name = "QROutputPicture";
             this.QROutputPicture.Size = new System.Drawing.Size(360, 360);
             this.QROutputPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -70,8 +70,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.IssuerText.Location = new System.Drawing.Point(107, 65);
             this.IssuerText.Name = "IssuerText";
-            this.IssuerText.Size = new System.Drawing.Size(100, 20);
+            this.IssuerText.Size = new System.Drawing.Size(265, 20);
             this.IssuerText.TabIndex = 14;
+            this.IssuerText.TextChanged += new System.EventHandler(this.OnTextChanged);
             // 
             // UsernameText
             // 
@@ -79,8 +80,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.UsernameText.Location = new System.Drawing.Point(107, 92);
             this.UsernameText.Name = "UsernameText";
-            this.UsernameText.Size = new System.Drawing.Size(100, 20);
+            this.UsernameText.Size = new System.Drawing.Size(265, 20);
             this.UsernameText.TabIndex = 15;
+            this.UsernameText.TextChanged += new System.EventHandler(this.OnTextChanged);
             // 
             // IssuerLabel
             // 
@@ -100,23 +102,11 @@
             this.label2.TabIndex = 17;
             this.label2.Text = "User (Subtitle)";
             // 
-            // RegenerateButton
-            // 
-            this.RegenerateButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.RegenerateButton.Location = new System.Drawing.Point(224, 72);
-            this.RegenerateButton.Name = "RegenerateButton";
-            this.RegenerateButton.Size = new System.Drawing.Size(148, 40);
-            this.RegenerateButton.TabIndex = 18;
-            this.RegenerateButton.Text = "&Regenerate";
-            this.RegenerateButton.UseVisualStyleBackColor = true;
-            this.RegenerateButton.Click += new System.EventHandler(this.RegenerateButton_Click);
-            // 
             // ShowQR
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(384, 490);
-            this.Controls.Add(this.RegenerateButton);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.IssuerLabel);
             this.Controls.Add(this.UsernameText);
@@ -131,6 +121,7 @@
             this.Text = "ShowQR";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.ShowQR_FormClosed);
             this.Load += new System.EventHandler(this.ShowQR_Load);
+            this.ResizeEnd += new System.EventHandler(this.OnResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.QROutputPicture)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -143,7 +134,6 @@
         private System.Windows.Forms.PictureBox QROutputPicture;
         private System.Windows.Forms.Label IssuerLabel;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button RegenerateButton;
         public System.Windows.Forms.TextBox IssuerText;
         public System.Windows.Forms.TextBox UsernameText;
     }
