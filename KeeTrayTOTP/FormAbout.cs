@@ -18,7 +18,6 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Windows Form Constructor.
         /// </summary>
-        /// <param name="plugin">Plugin Host.</param>
         internal FormAbout()
         {
             InitializeComponent();

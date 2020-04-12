@@ -46,7 +46,7 @@ namespace KeeTrayTOTP
         {
             GlobalWindowManager.AddWindow(this);
 
-            Text = Localization.Strings.Settings + @" - " + Localization.Strings.TrayTOTPPlugin; // Set form's name using constants.
+            Text = Localization.Strings.Settings + " - " + Localization.Strings.TrayTOTPPlugin; // Set form's name using constants.
             Working(true, true); // Set controls depending on the state of action.
             WorkerLoad.RunWorkerAsync(); // Load Settings in form controls.
         }

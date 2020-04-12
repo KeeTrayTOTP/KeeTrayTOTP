@@ -33,7 +33,7 @@ namespace KeeTrayTOTP
         {
             GlobalWindowManager.AddWindow(this);
 
-            Text = Localization.Strings.Setup + @" - " + Localization.Strings.TrayTOTPPlugin; //Set form's name using constants.
+            Text = Localization.Strings.Setup + " - " + Localization.Strings.TrayTOTPPlugin; //Set form's name using constants.
 
             if (_plugin.SettingsCheck(_entry) || _plugin.SeedCheck(_entry)) //Checks the the totp settings exists.
             {
