@@ -17,7 +17,6 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Windows Form Constructor.
         /// </summary>
-        /// <param name="plugin">Plugin Host.</param>
         /// <param name="gettingStarted">Getting Started Display Flag.</param>
         internal FormHelp(bool gettingStarted = false)
         {
@@ -33,7 +32,7 @@ namespace KeeTrayTOTP
         private void FormHelp_Load(object sender, EventArgs e)
         {
             Size = new Size(550, 350);
-            Text = Localization.Strings.Help + @" - " + Localization.Strings.TrayTOTPPlugin;
+            Text = Localization.Strings.Help + " - " + Localization.Strings.TrayTOTPPlugin;
             foreach (Control ctl in SplitContainerHelp.Panel2.Controls)
             {
                 ctl.Location = new Point(3, 3);
