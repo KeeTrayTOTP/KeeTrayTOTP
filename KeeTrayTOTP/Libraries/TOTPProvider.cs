@@ -68,7 +68,6 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Instantiate a new TOTP_Generator.
         /// </summary>
-        /// <param name="initSettings">Saved Settings.</param>
         public TOTPProvider(string[] settings, ref TimeCorrectionCollection tcc)
         {
             this._duration = Convert.ToInt16(settings[0]);
