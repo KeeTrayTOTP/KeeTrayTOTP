@@ -42,10 +42,10 @@ namespace KeeTrayTOTP.Tests
             updateParts.Should().HaveCount(2);
 
             var assembly = typeof(KeeTrayTOTPExt).Assembly;
-            var assemblyName = assembly.GetName();
             var assemblyFileVersionAttribute = assembly.GetCustomAttribute<AssemblyFileVersionAttribute>();
+            var assemblyTitleAttribute = assembly.GetCustomAttribute<AssemblyTitleAttribute>();
            
-            updateParts.First().Should().Be(assemblyName.Name, "First part should equal the plugin name");
+            updateParts.First().Should().Be(assemblyTitleAttribute.Title, "First part should equal the plugin name");
             updateParts.Last().Should().Be(assemblyFileVersionAttribute.Version, "Last part should equal the current plugin version.");
         }
     }
