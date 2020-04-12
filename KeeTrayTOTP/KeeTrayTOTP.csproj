@@ -38,22 +38,22 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <OutputPath>bin\$(Configuration)\</OutputPath>
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'ReleasePlgx|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\ReleasePlgx\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="KeePass">
@@ -91,6 +91,7 @@
     <Compile Include="Libraries\Base32.cs" />
     <Compile Include="Libraries\TimeCorrectionProvider.cs" />
     <Compile Include="Libraries\TOTPEncoder.cs" />
+    <Compile Include="TotpPasswordEntryExtensions.cs" />
     <Compile Include="SetupTOTP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -167,22 +168,21 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\textfield_key.png" />
+    <None Include="BigDatabase.kdbx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <ExcludeFromPlgx />
+    </None>
     <None Include="Test.kdbx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <ExcludeFromPlgx />
     </None>
   </ItemGroup>
+  <!-- Resources -->
   <ItemGroup>
+    <None Include="Resources\textfield_key.png" />
     <None Include="Resources\bullet_key.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\bullet_delete.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\bullet_error.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Equipment.png" />
     <None Include="Resources\Help symbol.png" />
     <None Include="Resources\Info.png" />
@@ -211,6 +211,11 @@
     <StartProgram>$(MSBuildProjectDirectory)\$(OutputPath)KeePass.exe</StartProgram>
     <StartArguments>Test.kdbx --pw:test</StartArguments>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'BigDatabase'">
+    <StartAction>Program</StartAction>
+    <StartProgram>$(MSBuildProjectDirectory)\$(OutputPath)KeePass.exe</StartProgram>
+    <StartArguments>BigDatabase.kdbx --pw:123</StartArguments>
+  </PropertyGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="AfterBuild" Condition="'$(Configuration)' == 'ReleasePlgx'">
     <CallTarget Targets="BuildPlgx" />
@@ -219,5 +224,6 @@
     <Delete Files="$(OutDir)Keepass.config.xml" />
     <Delete Files="$(OutDir)KeeTrayTOTP.dll" />
     <Delete Files="$(OutDir)Test.kdbx" />
+    <Delete Files="$(OutDir)BigDatabase.kdbx" />
   </Target>
 </Project>
