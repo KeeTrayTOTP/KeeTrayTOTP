@@ -66,7 +66,7 @@ namespace KeeTrayTOTP.Libraries
         {
             if (string.IsNullOrEmpty(url))
             {
-                throw new Exception("Invalid URL."); //Throws exception if the URL is invalid as the class cannot work without it.
+                throw new ArgumentNullException("url", "Invalid URL.");
             }
 
             Url = url; //Defines variable from argument.
@@ -77,7 +77,7 @@ namespace KeeTrayTOTP.Libraries
             _timer.Elapsed += Timer_Elapsed; //Handles the timer event
             _timer.Interval = 1000; //Defines the timer interval to 1 seconds.
             _timer.Enabled = _enable; //Defines the timer to run if the class is initially enabled.
-            _task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
+            _task = new System.Threading.Thread(UpdateTimeCorrection); //Instanciate a new task.
             if (_enable)
             {
                 _task.Start(); //Starts the new thread if the class is initially enabled.
@@ -105,17 +105,19 @@ namespace KeeTrayTOTP.Libraries
         {
             if (!_task.IsAlive) //Checks if the task is still running.
             {
-                _task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
-                _task.Start(); //Starts the new thread.
-                return true; //Informs if successful
+                _task = new System.Threading.Thread(UpdateTimeCorrection);
+                _task.Name = typeof(TimeCorrectionProvider).Name;
+                _task.Start();
+                return true;
             }
-            return false; //Informs if failed
+
+            return false;
         }
 
         /// <summary>
         /// Event that occurs when the timer has reached the required value. Attempts to get time correction from the server.
         /// </summary>
-        private void Task_Thread()
+        private void UpdateTimeCorrection()
         {
             try
             {
