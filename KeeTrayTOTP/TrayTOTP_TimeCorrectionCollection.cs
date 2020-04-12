@@ -55,7 +55,6 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Handles Time Correction for TOTP Generators insuring generation accuracy.
         /// </summary>
-        /// <param name="Plugin">Handle to the plugin's class.</param>
         /// <param name="enable">Enabled by Default.</param>
         internal TimeCorrectionCollection(bool enable = true)
         {
