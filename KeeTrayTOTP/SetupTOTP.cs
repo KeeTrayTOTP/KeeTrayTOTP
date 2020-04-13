@@ -35,13 +35,13 @@ namespace KeeTrayTOTP
 
             Text = Localization.Strings.Setup + " - " + Localization.Strings.TrayTOTPPlugin; //Set form's name using constants.
 
-            if (_plugin.SettingsCheck(_entry) || _plugin.SeedCheck(_entry)) //Checks the the totp settings exists.
+            if (_entry.HasTotpSettings() || _entry.HasTotpSeed()) //Checks the the totp settings exists.
             {
-                string[] settings = _plugin.SettingsGet(_entry); //Gets the the existing totp settings.
                 bool validInterval;
                 bool validLength;
                 bool validUrl;
-                _plugin.SettingsValidate(_entry, out validInterval, out validLength, out validUrl); //Validates the settings value.
+                _entry.HasValidTotpSettings(out validInterval, out validLength, out validUrl); //Validates the settings value.
+                string[] settings = _entry.GetTotpSettings(); //Gets the the existing totp settings.
                 if (validInterval)
                 {
                     NumericIntervalSetup.Value = Convert.ToDecimal(settings[0]); //Checks if interval is valid and sets interval numeric to the setting value.
@@ -68,9 +68,9 @@ namespace KeeTrayTOTP
                 DeleteSetupButton.Visible = false; //Hides the back button.
             }
 
-            if (_plugin.SeedCheck(_entry))
+            if (_entry.HasTotpSeed())
             {
-                TextBoxSeedSetup.Text = _plugin.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
+                TextBoxSeedSetup.Text = _entry.SeedGet().ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
             }
 
             ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); //Gets existings time corrections and adds them in the combobox.
@@ -212,7 +212,6 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void ButtonDelete_Click(object sender, EventArgs e)
         {
-            //if (_plugin.SettingsCheck(entry) || _plugin.SeedCheck(entry))
             if (MessageBox.Show(Localization.Strings.SetupMessageAskDeleteCurrentEntry, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
                 try
@@ -223,8 +222,9 @@ namespace KeeTrayTOTP
                     _entry.Touch(true);
                     _plugin.PluginHost.MainWindow.ActiveDatabase.Modified = true;
                 }
-                catch (Exception)
+                catch 
                 {
+                    // TODO: handle this more gracefully in the future
                 }
                 DialogResult = DialogResult.OK;
                 Close();

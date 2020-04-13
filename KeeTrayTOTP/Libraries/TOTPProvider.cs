@@ -27,7 +27,7 @@ namespace KeeTrayTOTP.Libraries
             {
                 if (value <= 0)
                 {
-                    throw new Exception("Invalid Duration."); //Throws an exception if the duration is invalid as the class cannot work without it.
+                    throw new InvalidOperationException("Invalid Duration."); //Throws an exception if the duration is invalid as the class cannot work without it.
                 }
 
                 this._duration = value;
@@ -49,7 +49,7 @@ namespace KeeTrayTOTP.Libraries
                 //Throws an exception if the length is invalid as the class cannot work without it.
                 if (value < 4 || value > 8)
                 {
-                    throw new Exception("Invalid Length.");
+                    throw new InvalidOperationException("Invalid Length.");
                 }
 
                 this._length = value; //Defines variable from argument.
@@ -68,7 +68,7 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Instantiate a new TOTP_Generator.
         /// </summary>
-        public TOTPProvider(string[] settings, ref TimeCorrectionCollection tcc)
+        public TOTPProvider(string[] settings, TimeCorrectionCollection tcc)
         {
             this._duration = Convert.ToInt16(settings[0]);
 
@@ -139,26 +139,6 @@ namespace KeeTrayTOTP.Libraries
         }
 
         /// <summary>
-        /// Converts an unsigned integer to binary data.
-        /// </summary>
-        /// <param name="n">Unsigned Integer.</param>
-        /// <returns>Binary data.</returns>
-        private byte[] GetBytes(ulong n)
-        {
-            byte[] b = new byte[8];
-            b[0] = (byte)(n >> 56);
-            b[1] = (byte)(n >> 48);
-            b[2] = (byte)(n >> 40);
-            b[3] = (byte)(n >> 32);
-            b[4] = (byte)(n >> 24);
-            b[5] = (byte)(n >> 16);
-            b[6] = (byte)(n >> 8);
-            b[7] = (byte)n;
-
-            return b;
-        }
-
-        /// <summary>
         /// Generate a TOTP using provided binary data.
         /// </summary>
         /// <param name="key">Key in String Format.</param>
@@ -196,8 +176,12 @@ namespace KeeTrayTOTP.Libraries
                     Array.Reverse(totp);
                 }
 
-                return this.Encoder(totp, _length);
+                LastCode = this.Encoder(totp, _length);
+
+                return LastCode;
             }
         }
+
+        public string LastCode { get; private set; }
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 using KeeTrayTOTP.Libraries;
@@ -36,7 +36,6 @@ namespace KeeTrayTOTP
         /// Provides access to a specific collection item using the URL as a key.
         /// </summary>
         /// <param name="url">URL.</param>
-        /// <returns></returns>
         internal TimeCorrectionProvider this[string url]
         {
             get
@@ -177,13 +176,7 @@ namespace KeeTrayTOTP
         /// <returns>String Array.</returns>
         internal object[] ToComboBox()
         {
-            //Temporary string List to facilitate building the array.
-            var @return = new List<object>();
-            foreach (var timeCorrection in _timeCorrections)
-            {
-                @return.Add(timeCorrection.Url);
-            }
-            return @return.ToArray();
+            return _timeCorrections.Select(c => c.Url).ToArray();
         }
 
         /// <summary>
@@ -192,13 +185,7 @@ namespace KeeTrayTOTP
         /// <returns>String seperated by a colon.</returns>
         internal string ToSetting()
         {
-            //Temporary string to build the string from multiple strings.
-            var @return = string.Empty;
-            foreach (var timeCorrection in _timeCorrections)
-            {
-                @return = @return + timeCorrection.Url + ";";
-            }
-            return @return.TrimEnd(';');
+            return string.Join(";", _timeCorrections.Select(c => c.Url));
         }
     }
 }

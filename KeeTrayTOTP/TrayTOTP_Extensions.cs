@@ -12,7 +12,6 @@ namespace KeeTrayTOTP
         /// Concatenates a space in front of the current string.
         /// </summary>
         /// <param name="extension">Current string.</param>
-        /// <returns></returns>
         internal static string ExtWithSpaceBefore(this string extension)
         {
             return " " + extension;
@@ -22,7 +21,6 @@ namespace KeeTrayTOTP
         /// Concatenates the current string with space to the end.
         /// </summary>
         /// <param name="extension">Current string.</param>
-        /// <returns></returns>
         internal static string ExtWithSpaceAfter(this string extension)
         {
             return extension + " ";
@@ -32,7 +30,6 @@ namespace KeeTrayTOTP
         /// Concatenates the current string with a bracket in front and to the end.
         /// </summary>
         /// <param name="extension">Current string.</param>
-        /// <returns></returns>
         internal static string ExtWithBrackets(this string extension)
         {
             return ExtWith(extension, '{', '}');
@@ -42,7 +39,6 @@ namespace KeeTrayTOTP
         /// Concatenates the current string with a parenthesis in front and to the end.
         /// </summary>
         /// <param name="extension">Current string.</param>
-        /// <returns></returns>
         internal static string ExtWithParenthesis(this string extension)
         {
             return ExtWith(extension, '(', ')');
@@ -54,7 +50,6 @@ namespace KeeTrayTOTP
         /// <param name="extension">Current string.</param>
         /// <param name="left">Front character.</param>
         /// <param name="right">End character.</param>
-        /// <returns></returns>
         internal static string ExtWith(this string extension, char left, char right)
         {
             return left + extension + right;
@@ -64,7 +59,6 @@ namespace KeeTrayTOTP
         /// Remove all spaces from the current string.
         /// </summary>
         /// <param name="extension">Current string.</param>
-        /// <returns></returns>
         internal static string ExtWithoutSpaces(this string extension)
         {
             return extension.ExtWithout(" ");
@@ -75,7 +69,6 @@ namespace KeeTrayTOTP
         /// </summary>
         /// <param name="extension">Current string.</param>
         /// <param name="chars">Characters to remove.</param>
-        /// <returns></returns>
         internal static string ExtWithout(this string extension, string chars)
         {
             foreach (var @char in chars)
@@ -91,7 +84,6 @@ namespace KeeTrayTOTP
         /// <param name="extension">Current string.</param>
         /// <param name="index">Split index.</param>
         /// <param name="seperator">Split seperators.</param>
-        /// <returns></returns>
         internal static string ExtSplit(this string extension, int index, char seperator = ';')
         {
             if (extension != string.Empty)

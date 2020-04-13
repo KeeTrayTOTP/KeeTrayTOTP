@@ -41,7 +41,6 @@ namespace KeeTrayTOTP.Libraries
         ///     The screen rectangle which is used for the calculation. This should be the screen on which the
         ///     control will be opened
         /// </param>
-        /// <returns></returns>
         internal Point CalculateLocationForDropDown(Point mousePosition, Rectangle screenRect)
         {
             var screenHeight = screenRect.Height;

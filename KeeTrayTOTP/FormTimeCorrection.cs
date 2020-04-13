@@ -56,11 +56,11 @@ namespace KeeTrayTOTP
             {
                 foreach (var pe in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true))
                 {
-                    if (_plugin.SettingsCheck(pe))
+                    if (pe.HasTotpSettings())
                     {
-                        string[] settings = _plugin.SettingsGet(pe);
+                        string[] settings = pe.GetTotpSettings();
                         bool validUrl;
-                        if (_plugin.SettingsValidate(pe, out validUrl) && validUrl && !ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null)
+                        if (pe.HasValidTotpSettings(out validUrl) && validUrl && !ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null)
                         {
                             ComboBoxUrlTimeCorrection.Items.Add(settings[2]);
                         }
