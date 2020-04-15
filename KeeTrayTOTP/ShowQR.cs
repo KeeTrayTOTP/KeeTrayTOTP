@@ -27,8 +27,6 @@ namespace KeeTrayTOTP
 
         private void GenerateQRCode()
         {
-      
-
             var code = string.Format("otpauth://totp/{0}:{1}?secret={2}&issuer={0}", Uri.EscapeDataString(IssuerText.Text), Uri.EscapeDataString(UsernameText.Text), this.seed);
 
             using (var qrGenerator = new QRCodeGenerator())
