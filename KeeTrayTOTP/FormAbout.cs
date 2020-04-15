@@ -41,7 +41,7 @@ namespace KeeTrayTOTP
             ListViewAbout.Items[4].SubItems.Add(SupportUrl.AbsoluteUri);
             LabelCopyright.Text = AssemblyCopyright;
 
-            ChangeToUnderlined(ref ListViewAbout, 4, Color.Blue);
+            SetHyperlinkStyle(4, Color.Blue);
         }
 
         /// <summary>
@@ -169,22 +169,20 @@ namespace KeeTrayTOTP
         {
             var hit = ListViewAbout.HitTest(e.Location);
             if (hit.Item != null && hit.Item == ListViewAbout.Items[4] && hit.SubItem == ListViewAbout.Items[4].SubItems[1])
-            {
-                var url = new Uri(hit.SubItem.Text); 
-                System.Diagnostics.Process.Start(url.ToString());
+            { 
+                System.Diagnostics.Process.Start(SupportUrl.ToString());
             }
         }
         /// <summary>
-        /// Windows Form Row Subitem To Underlined Font.
+        /// Windows Form Row Subitem To Underlined Blue Color Font.
         /// </summary>
-        /// <param name="listView"></param>
         /// <param name="RowIndex"></param>
         /// /// <param name="color"></param>
-        private void ChangeToUnderlined(ref ListView listView, int RowIndex, Color color)
+        private void SetHyperlinkStyle(int RowIndex, Color color)
         {
-            listView.Items[RowIndex].UseItemStyleForSubItems = false;
-            listView.Items[RowIndex].SubItems[1].Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline);
-            listView.Items[RowIndex].SubItems[1].ForeColor = color;
+            ListViewAbout.Items[RowIndex].UseItemStyleForSubItems = false;
+            ListViewAbout.Items[RowIndex].SubItems[1].Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline);
+            ListViewAbout.Items[RowIndex].SubItems[1].ForeColor = color;
 
         }
 
@@ -196,9 +194,11 @@ namespace KeeTrayTOTP
         private void ListViewAbout_MouseMove(object sender, MouseEventArgs e)
         {
             var hit = ListViewAbout.HitTest(e.Location);
-            if (hit.Item != ListViewAbout.Items[4]) ListViewAbout.Cursor = Cursors.Default;
-            else if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) ListViewAbout.Cursor = Cursors.Hand;
-            else ListViewAbout.Cursor = Cursors.Default;
+            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1] && hit.Item == ListViewAbout.Items[4]) {
+                ListViewAbout.Cursor = Cursors.Hand;
+            } else {
+                ListViewAbout.Cursor = Cursors.Default; 
+            }
         }
     }
 }
