@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCompany("Time Crash")]
 [assembly: AssemblyProduct("KeePass Plugin")]
 [assembly: AssemblyCopyright("Copyright © Time Crash 2020")]
-[assembly: AssemblyTrademark("2020-04-06")]
+[assembly: AssemblyTrademark("2020-04-15")]
 [assembly: AssemblyCulture("")]
 [assembly: AssemblyVersion("0.104.*")]
 [assembly: AssemblyFileVersion("0.104.0.0")]
