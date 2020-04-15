@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
 using KeePass.UI;
@@ -39,6 +40,8 @@ namespace KeeTrayTOTP
             ListViewAbout.Items[3].SubItems.Add(AssemblyTrademark);
             ListViewAbout.Items[4].SubItems.Add(SupportUrl.AbsoluteUri);
             LabelCopyright.Text = AssemblyCopyright;
+
+            ChangeToUnderlined(ref ListViewAbout, 4, Color.Blue);
         }
 
         /// <summary>
@@ -155,6 +158,47 @@ namespace KeeTrayTOTP
         private void FormAbout_FormClosed(object sender, FormClosedEventArgs e)
         {
             GlobalWindowManager.RemoveWindow(this);
+        }
+
+        /// <summary>
+        /// Windows Form Mouse Click Handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListViewAbout_MouseClick(object sender, MouseEventArgs e)
+        {
+            var hit = ListViewAbout.HitTest(e.Location);
+            if (hit.Item != null && hit.Item == ListViewAbout.Items[4] && hit.SubItem == ListViewAbout.Items[4].SubItems[1])
+            {
+                var url = new Uri(hit.SubItem.Text); 
+                System.Diagnostics.Process.Start(url.ToString());
+            }
+        }
+        /// <summary>
+        /// Windows Form Row Subitem To Underlined Font.
+        /// </summary>
+        /// <param name="listView"></param>
+        /// <param name="RowIndex"></param>
+        /// /// <param name="color"></param>
+        private void ChangeToUnderlined(ref ListView listView, int RowIndex, Color color)
+        {
+            listView.Items[RowIndex].UseItemStyleForSubItems = false;
+            listView.Items[RowIndex].SubItems[1].Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline);
+            listView.Items[RowIndex].SubItems[1].ForeColor = color;
+
+        }
+
+        /// <summary>
+        /// Windows Form Mouse Move Handler.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ListViewAbout_MouseMove(object sender, MouseEventArgs e)
+        {
+            var hit = ListViewAbout.HitTest(e.Location);
+            if (hit.Item != ListViewAbout.Items[4]) ListViewAbout.Cursor = Cursors.Default;
+            else if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1]) ListViewAbout.Cursor = Cursors.Hand;
+            else ListViewAbout.Cursor = Cursors.Default;
         }
     }
 }
