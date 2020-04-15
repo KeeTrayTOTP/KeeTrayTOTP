@@ -830,12 +830,12 @@ namespace QRCoder
         private int GetVersion(int length, EncodingMode encMode, ErrorCorrectionLevel errorCorrectionLevel)
         {
             return this.capacityTable
-               .Where(x => x.Details.Any(y => y.ErrorCorrectionLevel == errorCorrectionLevel && y.CapacityDict[encMode] >= Convert.ToInt32(length)))
-               .Select(x => new
-               {
-                   version = x.Version,
-                   capacity = x.Details.Single(y => y.ErrorCorrectionLevel == errorCorrectionLevel).CapacityDict[encMode]
-               }).Min(x => x.version);
+                .Where(x => x.Details.Any(y => y.ErrorCorrectionLevel == errorCorrectionLevel && y.CapacityDict[encMode] >= Convert.ToInt32(length)))
+                .Select(x => new
+                {
+                    version = x.Version,
+                    capacity = x.Details.Single(y => y.ErrorCorrectionLevel == errorCorrectionLevel).CapacityDict[encMode]
+                }).Min(x => x.version);
         }
 
         private EncodingMode GetEncodingFromPlaintext(string plainText, bool forceUtf8)
