@@ -9,6 +9,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyCopyright("Copyright © Time Crash 2020")]
 [assembly: AssemblyTrademark("2020-04-15")]
 [assembly: AssemblyCulture("")]
-[assembly: AssemblyVersion("0.104.*")]
-[assembly: AssemblyFileVersion("0.104.0.0")]
+[assembly: AssemblyVersion("0.105.*")]
+[assembly: AssemblyFileVersion("0.105.0.0")]
 [assembly: InternalsVisibleTo("KeeTrayTOTP.Tests")]
