@@ -9,7 +9,10 @@ using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
 {
-    internal class TrayTOTP_CustomColumn : ColumnProvider
+    /// <summary>
+    /// Provides a column to Keepass showing the TOTP Code for an entry.
+    /// </summary>
+    internal class TrayTOTP_TOTPCodeColumn : ColumnProvider
     {
         /// <summary>
         /// Reference to the plugin host for access to KeePass functions.
@@ -21,11 +24,7 @@ namespace KeeTrayTOTP
         /// </summary>
         private readonly KeeTrayTOTPExt _plugin;
 
-        /// <summary>
-        /// Provides support to add a custom column to KeePass, in this case the TOTP Provider Column.
-        /// </summary>
-        /// <param name="plugin">Handle to the plugin class.</param>
-        internal TrayTOTP_CustomColumn(KeeTrayTOTPExt plugin)
+        internal TrayTOTP_TOTPCodeColumn(KeeTrayTOTPExt plugin)
         {
             _plugin = plugin;
             _pluginHost = _plugin.PluginHost;
@@ -34,7 +33,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Column Names, in the case this provider handles more than one column.
         /// </summary>
-        private readonly string[] _columnName = new[] { Localization.Strings.TOTP };
+        private static readonly string[] _columnName = new[] { Localization.Strings.ColumnTOTPCode };
 
         /// <summary>
         /// Informs Keepass of the Column Names, in the case this provider handles more than one column.
@@ -99,11 +98,6 @@ namespace KeeTrayTOTP
         /// <returns></returns>
         public override bool SupportsCellAction(string columnName)
         {
-            if (columnName == null)
-            {
-                throw new ArgumentNullException("columnName");
-            }
-
             return true;
         }
 
@@ -114,11 +108,6 @@ namespace KeeTrayTOTP
         /// <param name="pe">Entry associated with the clicked cell.</param>
         public override void PerformCellAction(string columnName, PwEntry pe)
         {
-            if (columnName == null)
-            {
-                throw new ArgumentNullException("columnName");
-            }
-
             if (_pluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnCopy_Enable, true))
             {
                 _plugin.TOTPCopyToClipboard(pe);

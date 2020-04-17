@@ -92,9 +92,14 @@ namespace KeeTrayTOTP
         private ToolStripSeparator _niMenuSeperator;
 
         /// <summary>
-        /// Entries Column TOTP.
+        /// Column Provider that shows the TOTP Code
         /// </summary>
-        private TrayTOTP_CustomColumn _liColumnTotp;
+        private ColumnProvider totpCodeColumnProvider;
+
+        /// <summary>
+        /// Column Provider that shows the TOTP Status
+        /// </summary>
+        private ColumnProvider totpStatusColumnProvider;
 
         /// <summary>
         /// Entry List Column Count.
@@ -259,8 +264,10 @@ namespace KeeTrayTOTP
             }
 
             // List Column TOTP.
-            _liColumnTotp = new TrayTOTP_CustomColumn(this);
-            PluginHost.ColumnProviderPool.Add(_liColumnTotp);
+            totpCodeColumnProvider = new TrayTOTP_TOTPCodeColumn(this);
+            totpStatusColumnProvider = new TrayTOTP_TOTPStatusColumn(this);
+            PluginHost.ColumnProviderPool.Add(totpCodeColumnProvider);
+            PluginHost.ColumnProviderPool.Add(totpStatusColumnProvider);
 
             // Refresh Timer.
             _liRefreshTimer.Interval = setstat_int_EntryList_RefreshRate;
@@ -365,8 +372,7 @@ namespace KeeTrayTOTP
         {
             if (PluginHost.MainWindow.GetSelectedEntriesCount() == 1)
             {
-                var formWizard = new SetupTOTP(this, PluginHost.MainWindow.GetSelectedEntry(true));
-                formWizard.ShowDialog();
+                UIUtil.ShowDialogAndDestroy(new SetupTOTP(this, PluginHost.MainWindow.GetSelectedEntry(true)));
                 PluginHost.MainWindow.RefreshEntriesList();
             }
         }
@@ -908,8 +914,10 @@ namespace KeeTrayTOTP
             }
 
             // Remove Column provider.
-            PluginHost.ColumnProviderPool.Remove(_liColumnTotp);
-            _liColumnTotp = null;
+            PluginHost.ColumnProviderPool.Remove(totpCodeColumnProvider);
+            PluginHost.ColumnProviderPool.Remove(totpStatusColumnProvider);
+            totpCodeColumnProvider = null;
+            totpStatusColumnProvider = null;
 
             // Remove Timer.
             _liRefreshTimer.Tick -= OnTimerTick;

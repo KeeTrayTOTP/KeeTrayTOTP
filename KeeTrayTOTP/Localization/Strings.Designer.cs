@@ -70,6 +70,24 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TOTP.
+        /// </summary>
+        internal static string ColumnTOTPCode {
+            get {
+                return ResourceManager.GetString("ColumnTOTPCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TOTP Status.
+        /// </summary>
+        internal static string ColumnTOTPStatus {
+            get {
+                return ResourceManager.GetString("ColumnTOTPStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection failed!.
         /// </summary>
         internal static string ConnectionFailed {
@@ -489,6 +507,15 @@ namespace KeeTrayTOTP.Localization {
         internal static string TOTP {
             get {
                 return ResourceManager.GetString("TOTP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TOTP Enabled.
+        /// </summary>
+        internal static string TOTPEnabled {
+            get {
+                return ResourceManager.GetString("TOTPEnabled", resourceCulture);
             }
         }
         
