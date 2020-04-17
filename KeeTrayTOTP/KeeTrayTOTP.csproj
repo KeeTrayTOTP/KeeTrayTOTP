@@ -73,6 +73,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Helpers\DocumentHelper.cs" />
+    <Compile Include="Helpers\MenuItemHelper.cs" />
+    <Compile Include="Helpers\ImageHelper.cs" />
     <Compile Include="Menu\EntryMenuItemProvider.cs" />
     <Compile Include="Menu\MainMenuItemProvider.cs" />
     <Compile Include="Menu\MenuItemProvider.cs" />
@@ -96,6 +99,7 @@
     <Compile Include="Libraries\TimeCorrectionProvider.cs" />
     <Compile Include="Libraries\TOTPEncoder.cs" />
     <Compile Include="Menu\MenuItemProviderBase.cs" />
+    <Compile Include="Menu\TrayMenuItemProvider.cs" />
     <Compile Include="SetupTOTP.cs">
       <SubType>Form</SubType>
     </Compile>

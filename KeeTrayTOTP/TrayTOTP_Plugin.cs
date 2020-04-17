@@ -55,6 +55,7 @@ namespace KeeTrayTOTP
         internal const string setname_string_TOTPSeed_StringName = "totpseed_stringname";
         internal const string setname_string_TOTPSettings_StringName = "totpsettings_stringname";
         internal const string setname_bool_TrimTrayText = "traytotp_trim_tray_text";
+        internal const string setname_bool_LegacyTrayMenuProvider_Enable = "traymenulegacymenuprovider_enable";
 
         /// <summary>
         /// Constants (default settings values).

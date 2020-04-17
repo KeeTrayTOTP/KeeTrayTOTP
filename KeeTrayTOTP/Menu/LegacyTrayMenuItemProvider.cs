@@ -22,19 +22,14 @@ namespace KeeTrayTOTP.Menu
     ///     The provider has to keep track of the items itself, as they are not handled by keepass,
     ///     cause we "inject" them and bypass the intended way.
     /// </remarks>
-    public class LegacyTrayMenuItemProvider : MenuItemProviderBase
+    public class LegacyTrayMenuItemProvider : TrayMenuItemProvider
     {
         private ToolStripMenuItem _niMenuTitle;
         private ToolStripSeparator _niMenuSeparator;
 
         private readonly List<ToolStripMenuItem> _niMenuList = new List<ToolStripMenuItem>();
-        protected KeeTrayTOTPExt Plugin;
-        protected IPluginHost PluginHost;
-
-        public LegacyTrayMenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
+        public LegacyTrayMenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost) : base(plugin, pluginHost)
         {
-            PluginHost = pluginHost;
-            Plugin = plugin;
             SetUpLegacyContextMenuEntries();
         }
 
@@ -76,31 +71,9 @@ namespace KeeTrayTOTP.Menu
                 _niMenuSeparator.Visible = true;
                 if (PluginHost.MainWindow.ActiveDatabase.IsOpen)
                 {
-                    var trimTrayText = PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
                     foreach (PwEntry entry in Plugin.GetVisibleAndValidPasswordEntries())
                     {
-                        var entryTitle = entry.Strings.ReadSafe(PwDefs.TitleField);
-
-                        var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
-                        var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
-                        string trayTitle;
-                        if ((trimTrayText && entryTitle.Length + entryUsername.Length > KeeTrayTOTPExt.setstat_trim_text_length) || string.IsNullOrEmpty(entryUsername))
-                        {
-                            trayTitle = entryTitle.ExtWithSpaceAfter();
-                        }
-                        else
-                        {
-                            trayTitle = entryTitle.ExtWithSpaceAfter() + entryUsername.ExtWithParenthesis();
-                        }
-                        PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
-
-                        var newMenu = new ToolStripMenuItem(trayTitle, Properties.Resources.TOTP_Key, OnNotifyMenuTOTPClick);
-                        newMenu.Tag = entry;
-                        if (!Plugin.SettingsValidate(entry))
-                        {
-                            newMenu.Enabled = false;
-                            newMenu.Image = Properties.Resources.TOTP_Error;
-                        }
+                        var newMenu = CreateMenuItemFromPwEntry(entry);
                         _niMenuList.Add(newMenu);
                     }
 
@@ -194,21 +167,6 @@ namespace KeeTrayTOTP.Menu
 
             PluginHost.MainWindow.TrayContextMenu.Items.Remove(_niMenuSeparator);
             _niMenuSeparator.Dispose();
-        }
-
-        protected void OnNotifyMenuTOTPClick(object sender, EventArgs e)
-        {
-            ToolStripMenuItem tsi = sender as ToolStripMenuItem;
-            if (tsi == null)
-            {
-                return;
-            }
-
-            PwEntry pe = tsi.Tag as PwEntry;
-            if (pe != null)
-            {
-                Plugin.TOTPCopyToClipboard(pe);
-            }
         }
     }
 }

@@ -178,6 +178,24 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Locked.
+        /// </summary>
+        internal static string Locked {
+            get {
+                return ResourceManager.GetString("Locked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No database is opened!.
+        /// </summary>
+        internal static string NoDatabaseIsOpened {
+            get {
+                return ResourceManager.GetString("NoDatabaseIsOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No TOTP Seed found!.
         /// </summary>
         internal static string NoTOTPSeedFound {

@@ -33,6 +33,7 @@
             this.TabControlSettings = new System.Windows.Forms.TabControl();
             this.TabPageContextMenus = new System.Windows.Forms.TabPage();
             this.GroupBoxTrayMenu = new System.Windows.Forms.GroupBox();
+            this.CheckBoxEnableLegacyTrayMenuProvider = new System.Windows.Forms.CheckBox();
             this.CheckBoxTrimTrayText = new System.Windows.Forms.CheckBox();
             this.CheckBoxShowTOTPEntriesTrayMenu = new System.Windows.Forms.CheckBox();
             this.LabelDescriptionTrayMenu = new System.Windows.Forms.Label();
@@ -138,15 +139,28 @@
             // 
             // GroupBoxTrayMenu
             // 
+            this.GroupBoxTrayMenu.Controls.Add(this.CheckBoxEnableLegacyTrayMenuProvider);
             this.GroupBoxTrayMenu.Controls.Add(this.CheckBoxTrimTrayText);
             this.GroupBoxTrayMenu.Controls.Add(this.CheckBoxShowTOTPEntriesTrayMenu);
             this.GroupBoxTrayMenu.Controls.Add(this.LabelDescriptionTrayMenu);
             this.GroupBoxTrayMenu.Location = new System.Drawing.Point(10, 143);
             this.GroupBoxTrayMenu.Name = "GroupBoxTrayMenu";
-            this.GroupBoxTrayMenu.Size = new System.Drawing.Size(335, 131);
+            this.GroupBoxTrayMenu.Size = new System.Drawing.Size(335, 160);
             this.GroupBoxTrayMenu.TabIndex = 1;
             this.GroupBoxTrayMenu.TabStop = false;
             this.GroupBoxTrayMenu.Text = "Tray Menu";
+            // 
+            // CheckBoxEnableLegacyTrayMenuProvider
+            // 
+            this.HelpProviderSettings.SetHelpString(this.CheckBoxEnableLegacyTrayMenuProvider, "Enable the old behavior for providing tray menu items. (All keepass entries will " +
+        "be available in the root tray menu. This is not recommended!)");
+            this.CheckBoxEnableLegacyTrayMenuProvider.Location = new System.Drawing.Point(19, 125);
+            this.CheckBoxEnableLegacyTrayMenuProvider.Name = "CheckBoxEnableLegacyTrayMenuProvider";
+            this.HelpProviderSettings.SetShowHelp(this.CheckBoxEnableLegacyTrayMenuProvider, true);
+            this.CheckBoxEnableLegacyTrayMenuProvider.Size = new System.Drawing.Size(300, 31);
+            this.CheckBoxEnableLegacyTrayMenuProvider.TabIndex = 3;
+            this.CheckBoxEnableLegacyTrayMenuProvider.Text = "Enable legacy tray menu \r\n(Requires program restart, not recommended)";
+            this.CheckBoxEnableLegacyTrayMenuProvider.UseVisualStyleBackColor = true;
             // 
             // CheckBoxTrimTrayText
             // 
@@ -873,5 +887,6 @@
         private System.Windows.Forms.Button ButtonReset;
         private System.ComponentModel.BackgroundWorker WorkerReset;
         private System.Windows.Forms.CheckBox CheckBoxTrimTrayText;
+        private System.Windows.Forms.CheckBox CheckBoxEnableLegacyTrayMenuProvider;
     }
 }

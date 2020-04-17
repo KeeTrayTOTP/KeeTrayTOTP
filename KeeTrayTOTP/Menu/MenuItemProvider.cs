@@ -12,7 +12,15 @@ namespace KeeTrayTOTP.Menu
 
         public MenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
         {
-            _trayMenuItemProvider = new LegacyTrayMenuItemProvider(plugin, pluginHost);
+            if (pluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, false))
+            {
+                _trayMenuItemProvider = new LegacyTrayMenuItemProvider(plugin, pluginHost);
+            }
+            else
+            {
+                _trayMenuItemProvider = new TrayMenuItemProvider(plugin, pluginHost);
+            }
+
             _entryMenuItemProvider = new EntryMenuItemProvider(plugin, pluginHost);
             _mainMenuItemProvider = new MainMenuItemProvider(plugin);
         }
