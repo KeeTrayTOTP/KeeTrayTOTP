@@ -9,7 +9,7 @@
     <PlgxConfiguration>
       <Prerequisites>
         <KeePassVersion>2.31</KeePassVersion>
-        <DotNetVersion>3.5</DotNetVersion>
+        <DotNetVersion>4.0</DotNetVersion>
       </Prerequisites>
     </PlgxConfiguration>
   </PropertyGroup>
