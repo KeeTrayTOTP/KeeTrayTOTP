@@ -86,15 +86,16 @@ namespace KeeTrayTOTP
         /// Notify Icon Context Menu List.
         /// </summary>
         private readonly List<ToolStripMenuItem> _niMenuList = new List<ToolStripMenuItem>();
+
         /// <summary>
         /// Notify Icon Context Menu Separator.
         /// </summary>
         private ToolStripSeparator _niMenuSeperator;
 
         /// <summary>
-        /// Entries Column TOTP.
+        /// Provides columns to KeePass
         /// </summary>
-        private TrayTOTP_CustomColumn _liColumnTotp;
+        private ColumnProvider columnProvider;
 
         /// <summary>
         /// Entry List Column Count.
@@ -259,8 +260,8 @@ namespace KeeTrayTOTP
             }
 
             // List Column TOTP.
-            _liColumnTotp = new TrayTOTP_CustomColumn(this);
-            PluginHost.ColumnProviderPool.Add(_liColumnTotp);
+            columnProvider = new TrayTOTP_ColumnProvider(this);
+            PluginHost.ColumnProviderPool.Add(columnProvider);
 
             // Refresh Timer.
             _liRefreshTimer.Interval = setstat_int_EntryList_RefreshRate;
@@ -365,8 +366,7 @@ namespace KeeTrayTOTP
         {
             if (PluginHost.MainWindow.GetSelectedEntriesCount() == 1)
             {
-                var formWizard = new SetupTOTP(this, PluginHost.MainWindow.GetSelectedEntry(true));
-                formWizard.ShowDialog();
+                UIUtil.ShowDialogAndDestroy(new SetupTOTP(this, PluginHost.MainWindow.GetSelectedEntry(true)));
                 PluginHost.MainWindow.RefreshEntriesList();
             }
         }
@@ -825,6 +825,11 @@ namespace KeeTrayTOTP
             return pe.Strings.Get(PluginHost.CustomConfig.GetString(setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
         }
 
+        internal bool CanGenerateTOTP(PwEntry pe)
+        {
+            return SettingsCheck(pe) && SeedCheck(pe) && SettingsValidate(pe) && SeedValidate(pe);
+        }
+
         /// <summary>
         /// Copies the specified entry's generated TOTP to the clipboard using the KeePass's clipboard function.
         /// </summary>
@@ -908,8 +913,8 @@ namespace KeeTrayTOTP
             }
 
             // Remove Column provider.
-            PluginHost.ColumnProviderPool.Remove(_liColumnTotp);
-            _liColumnTotp = null;
+            PluginHost.ColumnProviderPool.Remove(columnProvider);
+            columnProvider = null;
 
             // Remove Timer.
             _liRefreshTimer.Tick -= OnTimerTick;
