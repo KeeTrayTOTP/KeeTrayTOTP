@@ -103,7 +103,6 @@
     <Compile Include="ShowQR.Designer.cs">
       <DependentUpon>ShowQR.cs</DependentUpon>
     </Compile>
-    <Compile Include="TrayTOTP_TOTPCodeColumn.cs" />
     <Compile Include="TrayTOTP_Extensions.cs" />
     <Compile Include="FormHelp.cs">
       <SubType>Form</SubType>
@@ -132,7 +131,7 @@
     <Compile Include="Libraries\TOTPProvider.cs" />
     <Compile Include="TrayTOTP_Plugin.cs" />
     <Compile Include="TrayTOTP_TimeCorrectionCollection.cs" />
-    <Compile Include="TrayTOTP_TOTPStatusColumn.cs" />
+    <Compile Include="TrayTOTP_ColumnProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormAbout.resx">

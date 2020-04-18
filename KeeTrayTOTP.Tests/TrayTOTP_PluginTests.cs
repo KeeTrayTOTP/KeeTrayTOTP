@@ -23,14 +23,14 @@ namespace KeeTrayTOTP.Tests
         }
 
         [TestMethod]
-        public void InitializePlugin_ShouldAddTwoColumns()
+        public void InitializePlugin_ShouldAddOneColumnProvider()
         {
             var plugin = CreatePluginHostMock(out var host);
             var numberOfColumnsBeforeInitialize = host.Object.ColumnProviderPool.Count;
 
             plugin.Initialize(host.Object);
 
-            host.Object.ColumnProviderPool.Should().HaveCount(numberOfColumnsBeforeInitialize + 2);
+            host.Object.ColumnProviderPool.Should().HaveCount(numberOfColumnsBeforeInitialize + 1);
         }
 
         [TestMethod]

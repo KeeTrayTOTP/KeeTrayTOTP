@@ -3,22 +3,23 @@ using System.Windows.Forms;
 
 using KeePass.UI;
 using KeePassLib;
+using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
 {
     /// <summary>
-    /// Provides a column to Keepass showing the TOTP Status for an entry.
+    /// Provides columns to Keepass showing the TOTP Code / TOTP Status for an entry.
     /// </summary>
-    internal class TrayTOTP_TOTPStatusColumn : ColumnProvider
+    internal class TrayTOTP_ColumnProvider : ColumnProvider
     {
         private readonly KeeTrayTOTPExt _plugin;
 
-        internal TrayTOTP_TOTPStatusColumn(KeeTrayTOTPExt plugin)
+        internal TrayTOTP_ColumnProvider(KeeTrayTOTPExt plugin)
         {
             _plugin = plugin;
         }
 
-        private static readonly string[] _columnName = new[] { Localization.Strings.ColumnTOTPStatus };
+        private static readonly string[] _columnName = new[] { Localization.Strings.ColumnTOTPCode, Localization.Strings.ColumnTOTPStatus };
 
         public override string[] ColumnNames
         {
@@ -38,27 +39,48 @@ namespace KeeTrayTOTP
         /// <returns>String displayed in the columns.</returns>
         public override string GetCellData(string columnName, PwEntry pe)
         {
-            if (pe == null)
+            if (columnName == Localization.Strings.ColumnTOTPCode)
             {
-                return string.Empty;
+                return GetCellDataInternal(pe, GetInnerValueCode);
+            }
+            else if (columnName == Localization.Strings.ColumnTOTPStatus)
+            {
+                return GetCellDataInternal(pe, GetInnerValueStatus);
             }
 
+            return string.Empty;
+        }
+
+        private string GetCellDataInternal(PwEntry pe, Func<PwEntry, string> innerValueFunc)
+        {
             var settingsCheck = _plugin.SettingsCheck(pe);
             var seedCheck = _plugin.SeedCheck(pe);
 
-            if (settingsCheck  && seedCheck)
+            if (settingsCheck && seedCheck)
             {
                 if (_plugin.SettingsValidate(pe))
                 {
                     if (_plugin.SeedValidate(pe))
                     {
-                        return Localization.Strings.TOTPEnabled;
+                        return innerValueFunc(pe);
                     }
                     return Localization.Strings.ErrorBadSeed;
                 }
                 return Localization.Strings.ErrorBadSettings;
             }
             return (settingsCheck || seedCheck) ? Localization.Strings.ErrorStorage : string.Empty;
+        }
+
+        private static string GetInnerValueStatus(PwEntry entry)
+        {
+            return Localization.Strings.TOTPEnabled;
+        }
+
+        private string GetInnerValueCode(PwEntry entry)
+        {
+            string[] settings = _plugin.SettingsGet(entry);
+            var totpGenerator = new TOTPProvider(settings, ref _plugin.TimeCorrections);
+            return totpGenerator.GenerateByByte(Base32.Decode(_plugin.SeedGet(entry).ReadString().ExtWithoutSpaces())) + (_plugin.PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnTimer_Visible, true) ? totpGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
         }
 
         /// <summary>
@@ -77,12 +99,10 @@ namespace KeeTrayTOTP
         /// <param name="pe">Entry associated with the clicked cell.</param>
         public override void PerformCellAction(string columnName, PwEntry pe)
         {
-            if (columnName == null)
+            if (_plugin.PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnCopy_Enable, true))
             {
-                throw new ArgumentNullException("columnName");
+                _plugin.TOTPCopyToClipboard(pe);
             }
-
-            UIUtil.ShowDialogAndDestroy(new SetupTOTP(_plugin, pe));
         }
     }
 }

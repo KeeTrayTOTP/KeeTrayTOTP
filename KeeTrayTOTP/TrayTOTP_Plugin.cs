@@ -92,14 +92,9 @@ namespace KeeTrayTOTP
         private ToolStripSeparator _niMenuSeperator;
 
         /// <summary>
-        /// Column Provider that shows the TOTP Code
+        /// Provides columns to KeePass
         /// </summary>
-        private ColumnProvider totpCodeColumnProvider;
-
-        /// <summary>
-        /// Column Provider that shows the TOTP Status
-        /// </summary>
-        private ColumnProvider totpStatusColumnProvider;
+        private ColumnProvider columnProvider;
 
         /// <summary>
         /// Entry List Column Count.
@@ -264,10 +259,8 @@ namespace KeeTrayTOTP
             }
 
             // List Column TOTP.
-            totpCodeColumnProvider = new TrayTOTP_TOTPCodeColumn(this);
-            totpStatusColumnProvider = new TrayTOTP_TOTPStatusColumn(this);
-            PluginHost.ColumnProviderPool.Add(totpCodeColumnProvider);
-            PluginHost.ColumnProviderPool.Add(totpStatusColumnProvider);
+            columnProvider = new TrayTOTP_ColumnProvider(this);
+            PluginHost.ColumnProviderPool.Add(columnProvider);
 
             // Refresh Timer.
             _liRefreshTimer.Interval = setstat_int_EntryList_RefreshRate;
@@ -914,10 +907,8 @@ namespace KeeTrayTOTP
             }
 
             // Remove Column provider.
-            PluginHost.ColumnProviderPool.Remove(totpCodeColumnProvider);
-            PluginHost.ColumnProviderPool.Remove(totpStatusColumnProvider);
-            totpCodeColumnProvider = null;
-            totpStatusColumnProvider = null;
+            PluginHost.ColumnProviderPool.Remove(columnProvider);
+            columnProvider = null;
 
             // Remove Timer.
             _liRefreshTimer.Tick -= OnTimerTick;
