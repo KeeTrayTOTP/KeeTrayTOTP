@@ -99,7 +99,11 @@ namespace KeeTrayTOTP
         /// <param name="pe">Entry associated with the clicked cell.</param>
         public override void PerformCellAction(string columnName, PwEntry pe)
         {
-            if (_plugin.PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnCopy_Enable, true))
+            if (!_plugin.CanGenerateTOTP(pe))
+            {
+                UIUtil.ShowDialogAndDestroy(new SetupTOTP(_plugin, pe));
+            }
+            else if (_plugin.PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnCopy_Enable, true))
             {
                 _plugin.TOTPCopyToClipboard(pe);
             }

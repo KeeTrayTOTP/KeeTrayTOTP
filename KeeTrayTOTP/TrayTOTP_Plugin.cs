@@ -86,6 +86,7 @@ namespace KeeTrayTOTP
         /// Notify Icon Context Menu List.
         /// </summary>
         private readonly List<ToolStripMenuItem> _niMenuList = new List<ToolStripMenuItem>();
+
         /// <summary>
         /// Notify Icon Context Menu Separator.
         /// </summary>
@@ -822,6 +823,11 @@ namespace KeeTrayTOTP
         internal ProtectedString SeedGet(PwEntry pe)
         {
             return pe.Strings.Get(PluginHost.CustomConfig.GetString(setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
+        }
+
+        internal bool CanGenerateTOTP(PwEntry pe)
+        {
+            return SettingsCheck(pe) && SeedCheck(pe) && SettingsValidate(pe) && SeedValidate(pe);
         }
 
         /// <summary>
