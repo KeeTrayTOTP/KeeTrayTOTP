@@ -9,6 +9,9 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Menu\LegacyTrayMenuTests.cs~RF23986679.TMP" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="..\version_manifest.txt" Link="version_manifest.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
