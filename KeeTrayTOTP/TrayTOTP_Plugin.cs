@@ -2,21 +2,17 @@ using System;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
 using KeePass.App.Configuration;
 using KeePass.Plugins;
 using KeePass.UI;
 using KeePass.Util;
 using KeePass.Util.Spr;
-
 using KeePassLib;
 using KeePassLib.Utility;
 using KeePassLib.Security;
 using KeeTrayTOTP.Libraries;
-using KeeTrayTOTP.Localization;
 using KeeTrayTOTP.Menu;
 
 namespace KeeTrayTOTP
