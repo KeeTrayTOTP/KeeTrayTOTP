@@ -35,8 +35,8 @@ namespace KeeTrayTOTP.Menu
             _rootTrayMenuItem = new ToolStripMenuItem(Strings.TrayTOTPPlugin, Resources.TOTP);
 
             _rootTrayMenuItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
-
             _rootTrayMenuItem.DropDownOpening += OnRootDropDownOpening;
+            _rootTrayMenuItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
             _rootTrayMenuItem.DropDownClosed += OnDropDownClosed;
 
             return _rootTrayMenuItem;
