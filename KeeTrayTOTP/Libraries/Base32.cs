@@ -1,9 +1,31 @@
-﻿using System;
+﻿// Taken from https://raw.githubusercontent.com/telehash/telehash.net/master/Telehash.Net/Base32.cs
+//
+// Copyright(c) 2015 Thomas Muldowney
+// 
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+// THE SOFTWARE.
+
+using System;
 
 namespace KeeTrayTOTP.Libraries
 {
     /// <summary>
-    /// Utility to deal with Base32 encoding and decoding.
+    /// Utility to deal with Base32 encoding and decoding
     /// </summary>
     /// <remarks>
     /// http://tools.ietf.org/html/rfc4648
@@ -11,11 +33,11 @@ namespace KeeTrayTOTP.Libraries
     public static class Base32
     {
         /// <summary>
-        /// The number of bits in a base32 encoded character.
+        /// The number of bits in a base32 encoded character
         /// </summary>
         private const int EncodedBitCount = 5;
         /// <summary>
-        /// The number of bits in a byte.
+        /// The number of bits in a byte
         /// </summary>
         private const int ByteBitCount = 8;
         /// <summary>
@@ -25,26 +47,30 @@ namespace KeeTrayTOTP.Libraries
         /// </summary>
         private const string EncodingChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
         /// <summary>
-        /// Takes a block of data and converts it to a base 32 encoded string.
+        /// The rfc defines '=' as the padding character
         /// </summary>
-        /// <param name="data">Input data.</param>
-        /// <returns>base 32 string.</returns>
+        private const char PaddingCharacter = '=';
+        /// <summary>
+        /// Takes a block of data and converts it to a base 32 encoded string
+        /// </summary>
+        /// <param name="data">Input data</param>
+        /// <returns>base 32 string</returns>
         public static string Encode(byte[] data)
         {
             if (data == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException("data");
             }
 
             if (data.Length == 0)
             {
-                throw new ArgumentNullException();
+                return string.Empty;
             }
 
             // The output character count is calculated in 40 bit blocks.  That is because the least
             // common blocks size for both binary (8 bit) and base 32 (5 bit) is 40.  Padding must be used
             // to fill in the difference.
-            int outputCharacterCount = (int)Math.Ceiling(data.Length / (decimal)EncodedBitCount) * ByteBitCount;
+            var outputCharacterCount = (int)decimal.Ceiling(data.Length / (decimal)EncodedBitCount) * ByteBitCount;
             char[] outputBuffer = new char[outputCharacterCount];
 
             byte workingValue = 0;
@@ -67,7 +93,7 @@ namespace KeeTrayTOTP.Libraries
                 workingValue = (byte)((workingByte << remainingBits) & 31);
             }
 
-            // If we didn't finish, write the last current working char.
+            // If we didn't finish, write the last current working char
             if (currentPosition != outputCharacterCount)
             {
                 outputBuffer[currentPosition++] = EncodingChars[workingValue];
@@ -77,8 +103,7 @@ namespace KeeTrayTOTP.Libraries
             // Since the outputCharacterCount does account for the paddingCharacters, fill it out.
             while (currentPosition < outputCharacterCount)
             {
-                // The RFC defined paddinc char is '='.
-                outputBuffer[currentPosition++] = '=';
+                outputBuffer[currentPosition++] = PaddingCharacter;
             }
 
             return new string(outputBuffer);
@@ -93,10 +118,11 @@ namespace KeeTrayTOTP.Libraries
         {
             if (string.IsNullOrEmpty(base32))
             {
-                throw new ArgumentNullException();
+                return new byte[0];
             }
 
-            var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd('=');
+            var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd(PaddingCharacter);
+
             foreach (var c in unpaddedBase32)
             {
                 if (EncodingChars.IndexOf(c) < 0)

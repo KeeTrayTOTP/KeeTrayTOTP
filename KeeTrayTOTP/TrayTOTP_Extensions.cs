@@ -1,4 +1,5 @@
 ﻿using KeePassLib;
+using KeeTrayTOTP.Libraries;
 using System;
 
 namespace KeeTrayTOTP
@@ -124,7 +125,7 @@ namespace KeeTrayTOTP
             invalidChars = null;
             try
             {
-                foreach (var currentChar in extension)
+                foreach (var currentChar in extension.TrimEnd('='))
                 {
                     var currentCharValue = char.GetNumericValue(currentChar);
                     if (char.IsLetter(currentChar))
