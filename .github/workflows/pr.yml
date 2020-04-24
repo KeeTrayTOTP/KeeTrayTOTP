@@ -26,10 +26,10 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
       
     - name: SonarScanner Begin
-      run: dotnet sonarscanner begin /k:"KeeTrayTOTP_KeeTrayTOTP" /o:"keetraytotp"
+      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.verbose=true
 
     - name: MSBuild
-      run: msbuild KeeTrayTOTP.sln /m /t:Rebuild
+      run: msbuild KeeTrayTOTP.sln /m
 
     - name: Run tests
       # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
