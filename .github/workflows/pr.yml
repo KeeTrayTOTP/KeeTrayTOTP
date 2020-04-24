@@ -33,7 +33,7 @@ jobs:
 
     - name: Run tests
       # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
-      run: dotnet test --no-build
+      run: dotnet test --no-build --collect:"XPlat Code Coverage"
       
     - name: SonarScanner End
       run: dotnet sonarscanner end
