@@ -391,7 +391,7 @@ namespace KeeTrayTOTP
             }
 
             var rawSeed = this.SeedGet(entry).ReadString();
-            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "");
+            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "").TrimEnd('=');
             var issuer = entry.Strings.Get("Title").ReadString();
             var username = entry.Strings.Get("UserName").ReadString();
             UIUtil.ShowDialogAndDestroy(new ShowQR(cleanSeed, issuer, username));
