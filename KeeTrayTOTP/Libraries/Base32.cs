@@ -21,6 +21,8 @@
 // THE SOFTWARE.
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KeeTrayTOTP.Libraries
 {
@@ -121,7 +123,7 @@ namespace KeeTrayTOTP.Libraries
                 return new byte[0];
             }
 
-            var unpaddedBase32 = base32.ToUpperInvariant().TrimEnd(PaddingCharacter);
+            var unpaddedBase32 = GetUnpaddedBase32(base32);
 
             foreach (var c in unpaddedBase32)
             {
@@ -161,6 +163,29 @@ namespace KeeTrayTOTP.Libraries
             }
 
             return outputBuffer;
+        }
+
+        public static bool IsBase32(this string input)
+        {
+            return GetUnpaddedBase32(input).All(EncodingChars.Contains);
+        }
+
+        public static bool IsBase32(this string input, out string invalidCharacters)
+        {
+            invalidCharacters = null;
+            foreach (var c in GetUnpaddedBase32(input))
+            {
+                if (!EncodingChars.Contains(c))
+                {
+                    invalidCharacters += c.ToString();
+                }
+            }
+
+            return invalidCharacters == null;
+        }
+        private static string GetUnpaddedBase32(string input)
+        {
+            return input.ToUpperInvariant().TrimEnd(PaddingCharacter);
         }
     }
 }

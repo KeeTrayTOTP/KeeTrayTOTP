@@ -800,8 +800,7 @@ namespace KeeTrayTOTP
         /// <returns>Validity of the Seed's characters for Base32 format.</returns>
         internal bool SeedValidate(PwEntry passwordEntry)
         {
-            string invalidCharacters;
-            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().ExtIsBase32(out invalidCharacters);
+            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().IsBase32();
         }
 
         /// <summary>
@@ -812,7 +811,7 @@ namespace KeeTrayTOTP
         /// <returns>Validity of the Seed's characters.</returns>
         internal bool SeedValidate(PwEntry passwordEntry, out string invalidCharacters)
         {
-            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().ExtIsBase32(out invalidCharacters);
+            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().IsBase32(out invalidCharacters);
         }
 
         /// <summary>

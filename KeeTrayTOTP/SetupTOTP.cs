@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using KeePass.UI;
 using KeePassLib;
 using KeePassLib.Security;
+using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
 {
@@ -102,7 +103,7 @@ namespace KeeTrayTOTP
             {
                 ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupSeedCantBeEmpty);
             }
-            else if (!TextBoxSeedSetup.Text.ExtWithoutSpaces().ExtIsBase32(out invalidBase32Chars)) // TODO: Add support to other known formats
+            else if (!TextBoxSeedSetup.Text.ExtWithoutSpaces().IsBase32(out invalidBase32Chars)) // TODO: Add support to other known formats
             {
                 ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupInvalidCharacter + "(" + invalidBase32Chars + ")!");
             }

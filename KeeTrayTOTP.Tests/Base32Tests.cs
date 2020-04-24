@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using KeeTrayTOTP.Libraries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -9,6 +10,8 @@ namespace KeeTrayTOTP.Tests
     [TestClass]
     public class Base32Tests
     {
+        private const string InvalidSeed = "MZXW6!YTBOI======!";
+
         [DataTestMethod]
         [DynamicData(nameof(GetBase32Data), DynamicDataSourceType.Method)]
         public void Encode_ShouldWorkOnRfc4648TestCases(Base32TestCase testCase)
@@ -31,15 +34,41 @@ namespace KeeTrayTOTP.Tests
 
         [DataTestMethod]
         [DynamicData(nameof(GetBase32Data), DynamicDataSourceType.Method)]
-        public void ExtIsBase32_ShouldReturnTrueFor(Base32TestCase testCase)
+        public void IsBase32Out_ShouldReturnTrueFor(Base32TestCase testCase)
         {
-            var actual = testCase.Encoded.ExtIsBase32(out string invalidChars);
+            var actual = testCase.Encoded.IsBase32(out string invalidChars);
 
             actual.Should().BeTrue();
             invalidChars.Should().BeNullOrEmpty();
         }
 
-        /// <summary>
+        [DataTestMethod]
+        [DynamicData(nameof(GetBase32Data), DynamicDataSourceType.Method)]
+        public void IsBase32_ShouldReturnTrueFor(Base32TestCase testCase)
+        {
+            var actual = testCase.Encoded.IsBase32();
+
+            actual.Should().BeTrue();
+        }
+
+        [TestMethod]
+        public void Decode_ShouldThrowWithInvalidSeed()
+        {
+            Action act = () => Base32.Decode(InvalidSeed);
+
+            act.Should().Throw<ArgumentException>().WithMessage("Base32 contains illegal characters.");
+        }
+
+        [TestMethod]
+        public void ExtIsBase32_ShouldReturnFalseWithInvalidChars()
+        {
+            var actual = InvalidSeed.IsBase32(out string invalidChars);
+
+            actual.Should().BeFalse();
+            invalidChars.Should().Be("!======!");
+        }
+
+                /// <summary>
         /// Testcases were taken from <see cref="https://tools.ietf.org/html/rfc4648"/>
         /// </summary>
         public static IEnumerable<object[]> GetBase32Data()
