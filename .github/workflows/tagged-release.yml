@@ -27,7 +27,7 @@ jobs:
       run: nuget restore KeeTrayTOTP.sln
 
     - name: MSBuild (With Plgx)
-      run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx /d:sonar.host.url="https://sonarcloud.io"
+      run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
 
     - name: Upload plgx
       uses: actions/upload-artifact@v1
