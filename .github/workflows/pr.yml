@@ -22,12 +22,23 @@ jobs:
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
 
+    - name: Install dotnet-sonarscanner
+      run: dotnet tool install --global dotnet-sonarscanner
+      
+    - name: SonarScanner Begin
+      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.host.url="https://sonarcloud.io"
+
     - name: MSBuild
       run: msbuild KeeTrayTOTP.sln /m
 
     - name: Run tests
       # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
       run: dotnet test --no-build
+      
+    - name: SonarScanner End
+      run: dotnet sonarscanner end
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     - name: MSBuild (With Plgx)
       run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
