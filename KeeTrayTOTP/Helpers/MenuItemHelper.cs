@@ -13,7 +13,7 @@ namespace KeeTrayTOTP.Helpers
         internal static void OnDatabaseDropDownOpening(object sender, EventArgs e)
         {
             ToolStripMenuItem menuItem = sender as ToolStripMenuItem;
-            if (menuItem == null || menuItem.HasDropDownItems == false)
+            if (menuItem == null || !menuItem.HasDropDownItems)
             {
                 return; // not a drop down item
             }
