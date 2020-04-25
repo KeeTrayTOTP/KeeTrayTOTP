@@ -28,8 +28,10 @@ namespace KeeTrayTOTP.Tests.Menu
         public void LegacyTrayMenuItemProvider_ShouldAddItemsDirectlyToMainWindowsTrayContextMenu()
         {
             var plugin = CreatePluginHostMock(out var host);
+            host.Object.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, true);
             var oldItemCount = host.Object.MainWindow.TrayContextMenu.Items.Count;
-            var legacyTrayMenuItemProvider = new LegacyTrayMenuItemProvider(plugin, host.Object);
+            
+            plugin.Initialize(host.Object);
 
             var sut = host.Object.MainWindow.TrayContextMenu.Items.Count;
 
@@ -43,6 +45,12 @@ namespace KeeTrayTOTP.Tests.Menu
 
             var mainForm = new MainForm();
             host.SetupGet(c => c.MainWindow).Returns(mainForm);
+
+            var customConfig = new AceCustomConfig();
+            host.SetupGet(c => c.CustomConfig).Returns(customConfig);
+
+            var columnProviderPool = new ColumnProviderPool();
+            host.SetupGet(c => c.ColumnProviderPool).Returns(columnProviderPool);
 
             return plugin;
         }
