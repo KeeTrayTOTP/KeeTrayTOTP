@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using KeePass.Forms;
 using KeePass.Plugins;
 using KeePass.UI;
 using KeePass.Util.Spr;
@@ -56,7 +55,7 @@ namespace KeeTrayTOTP.Menu
 
             var documents = PluginHost.MainWindow.DocumentManager.Documents;
 
-            IEnumerable<ToolStripMenuItem> menuItems = BuildMenuItemsForRootDropDown(documents);
+            var menuItems = BuildMenuItemsForRootDropDown(documents);
             rootTrayMenuItem.DropDownItems.AddRange(menuItems.Cast<ToolStripItem>().ToArray());
         }
 
@@ -215,13 +214,13 @@ namespace KeeTrayTOTP.Menu
 
         protected void OnNotifyMenuTOTPClick(object sender, EventArgs e)
         {
-            ToolStripMenuItem tsi = sender as ToolStripMenuItem;
-            if (tsi == null)
+            var menuItem = sender as ToolStripMenuItem;
+            if (menuItem == null)
             {
                 return;
             }
 
-            PwEntry pe = tsi.Tag as PwEntry;
+            var pe = menuItem.Tag as PwEntry;
             if (pe != null)
             {
                 Plugin.TOTPCopyToClipboard(pe);
