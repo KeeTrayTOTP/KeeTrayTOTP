@@ -1,4 +1,5 @@
 ﻿using KeePassLib;
+using KeeTrayTOTP.Libraries;
 using System;
 
 namespace KeeTrayTOTP
@@ -103,38 +104,6 @@ namespace KeeTrayTOTP
                 }
             }
             return string.Empty;
-        }
-
-        /// <summary>
-        /// Makes sure the string provided as a Seed is Base32. Invalid characters are available as out string.
-        /// </summary>
-        /// <param name="extension">Current string.</param>
-        /// <param name="invalidChars">Invalid characters.</param>
-        /// <returns>Validity of the string's characters for Base32 format.</returns>
-        internal static bool ExtIsBase32(this string extension, out string invalidChars)
-        {
-            invalidChars = null;
-            try
-            {
-                foreach (var currentChar in extension)
-                {
-                    var currentCharValue = char.GetNumericValue(currentChar);
-                    if (char.IsLetter(currentChar))
-                    {
-                        continue;
-                    }
-                    if (char.IsDigit(currentChar) && (currentCharValue > 1) && (currentCharValue < 8))
-                    {
-                        continue;
-                    }
-                    invalidChars = (invalidChars + currentCharValue.ToString().ExtWithSpaceBefore()).Trim();
-                }
-            }
-            catch (Exception)
-            {
-                invalidChars = Localization.Strings.Error;
-            }
-            return invalidChars == null;
         }
 
         internal static bool IsExpired(this PwEntry passwordEntry)

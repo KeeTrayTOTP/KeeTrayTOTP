@@ -63,7 +63,7 @@ namespace QRCoder
             this.CreateAlignmentPatternTable();
         }
 
-        public QRCodeData CreateQrCode(string plainText, ErrorCorrectionLevel eccLevel = QRCodeGenerator.ErrorCorrectionLevel.Q, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1)
+        public QRCodeData CreateQrCode(string plainText, ErrorCorrectionLevel eccLevel = ErrorCorrectionLevel.Q, bool forceUtf8 = false, bool utf8BOM = false, EciMode eciMode = EciMode.Default, int requestedVersion = -1)
         {
             EncodingMode encoding = GetEncodingFromPlaintext(plainText, forceUtf8);
             var codedText = this.PlainTextToBinary(plainText, encoding, eciMode, utf8BOM, forceUtf8);
@@ -569,6 +569,47 @@ namespace QRCoder
 
             private static class MaskPattern
             {
+                // NOTE: Methods are invoked via reflection (typeof(MaskPattern).GetMethods()))
+                public static bool Pattern1(int x, int y)
+                {
+                    return (x + y) % 2 == 0;
+                }
+
+                public static bool Pattern2(int x, int y)
+                {
+                    return y % 2 == 0;
+                }
+
+                public static bool Pattern3(int x, int y)
+                {
+                    return x % 3 == 0;
+                }
+
+                public static bool Pattern4(int x, int y)
+                {
+                    return (x + y) % 3 == 0;
+                }
+
+                public static bool Pattern5(int x, int y)
+                {
+                    return ((int)(Math.Floor(y / 2d) + Math.Floor(x / 3d)) % 2) == 0;
+                }
+
+                public static bool Pattern6(int x, int y)
+                {
+                    return ((x * y) % 2) + ((x * y) % 3) == 0;
+                }
+
+                public static bool Pattern7(int x, int y)
+                {
+                    return (((x * y) % 2) + ((x * y) % 3)) % 2 == 0;
+                }
+
+                public static bool Pattern8(int x, int y)
+                {
+                    return (((x + y) % 2) + ((x * y) % 3)) % 2 == 0;
+                }
+
                 public static int Score(ref QRCodeData qrCode)
                 {
                     int score1 = 0,

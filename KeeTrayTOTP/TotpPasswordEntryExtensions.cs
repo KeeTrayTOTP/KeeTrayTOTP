@@ -1,6 +1,7 @@
 ﻿using KeePass.Plugins;
 using KeePassLib;
 using KeePassLib.Security;
+using KeeTrayTOTP.Libraries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -165,7 +166,7 @@ namespace KeeTrayTOTP
         internal static bool SeedValidate(this PwEntry passwordEntry)
         {
             string invalidCharacters;
-            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().ExtIsBase32(out invalidCharacters);
+            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().IsBase32(out invalidCharacters);
         }
 
         /// <summary>
@@ -176,7 +177,7 @@ namespace KeeTrayTOTP
         /// <returns>Validity of the Seed's characters.</returns>
         internal static bool SeedValidate(this PwEntry passwordEntry, out string invalidChars)
         {
-            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().ExtIsBase32(out invalidChars);
+            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().IsBase32(out invalidChars);
         }
 
         /// <summary>
