@@ -36,7 +36,7 @@ jobs:
       run: dotnet test --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
 
     - name: Copy coverage file to root for SonarQube
-      run:  cp -Path (gci -Path KeeTrayTOTP.Tests -Recurse -Force -Name coverage.opencover.xml) -Destination coverage.opencover.xml
+      run: cp -Path ("KeeTrayTOTP.Tests\TestResults\" + (gci -Path KeeTrayTOTP.Tests\TestResults -Recurse -Force -Name coverage.opencover.xml)) -Destination coverage.opencover.xml
 
     - name: SonarScanner End
       run: dotnet sonarscanner end
