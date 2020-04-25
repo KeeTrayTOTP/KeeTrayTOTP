@@ -165,6 +165,11 @@ namespace KeeTrayTOTP.Libraries
             return outputBuffer;
         }
 
+        public static bool HasInvalidPadding(string input)
+        {
+            return GetUnpaddedBase32(input).Contains(PaddingCharacter);
+        }
+
         public static bool IsBase32(this string input)
         {
             return GetUnpaddedBase32(input).All(EncodingChars.Contains);
@@ -172,17 +177,20 @@ namespace KeeTrayTOTP.Libraries
 
         public static bool IsBase32(this string input, out string invalidCharacters)
         {
-            invalidCharacters = null;
+            var hashSet = new HashSet<char>();
             foreach (var c in GetUnpaddedBase32(input))
             {
                 if (!EncodingChars.Contains(c))
                 {
-                    invalidCharacters += c.ToString();
+                    hashSet.Add(c);
                 }
             }
 
-            return invalidCharacters == null;
+            invalidCharacters = new string(hashSet.ToArray());
+
+            return hashSet.Count == 0;
         }
+
         private static string GetUnpaddedBase32(string input)
         {
             return input.ToUpperInvariant().TrimEnd(PaddingCharacter);

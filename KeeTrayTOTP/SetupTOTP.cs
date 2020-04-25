@@ -103,9 +103,13 @@ namespace KeeTrayTOTP
             {
                 ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupSeedCantBeEmpty);
             }
-            else if (!TextBoxSeedSetup.Text.ExtWithoutSpaces().IsBase32(out invalidBase32Chars)) // TODO: Add support to other known formats
+            else if (Base32.HasInvalidPadding(TextBoxSeedSetup.Text.ExtWithoutSpaces()))
             {
-                ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupInvalidCharacter + "(" + invalidBase32Chars + ")!");
+                ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupInvalidPadding);
+            }
+            else if (!TextBoxSeedSetup.Text.ExtWithoutSpaces().IsBase32(out invalidBase32Chars))
+            {
+                ErrorProviderSetup.SetError(TextBoxSeedSetup, Localization.Strings.SetupInvalidCharacter + "(" + invalidBase32Chars + ")");
             }
             else
             {

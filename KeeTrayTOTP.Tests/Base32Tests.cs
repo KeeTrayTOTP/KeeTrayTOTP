@@ -10,7 +10,7 @@ namespace KeeTrayTOTP.Tests
     [TestClass]
     public class Base32Tests
     {
-        private const string InvalidSeed = "MZXW6!YTBOI======!";
+        private const string InvalidSeed = "MZXW6=YTBOI!===!";
 
         [DataTestMethod]
         [DynamicData(nameof(GetBase32Data), DynamicDataSourceType.Method)]
@@ -51,6 +51,13 @@ namespace KeeTrayTOTP.Tests
             actual.Should().BeTrue();
         }
 
+        [DataTestMethod]
+        [DynamicData(nameof(GetBase32Data), DynamicDataSourceType.Method)]
+        public void HasInvalidPadding_ShouldReturnFalseFor(Base32TestCase testCase)
+        {
+            Base32.HasInvalidPadding(testCase.Encoded).Should().BeFalse();
+        }
+
         [TestMethod]
         public void Decode_ShouldThrowWithInvalidSeed()
         {
@@ -63,12 +70,17 @@ namespace KeeTrayTOTP.Tests
         public void ExtIsBase32_ShouldReturnFalseWithInvalidChars()
         {
             var actual = InvalidSeed.IsBase32(out string invalidChars);
-
             actual.Should().BeFalse();
-            invalidChars.Should().Be("!======!");
+            invalidChars.Should().Be("=!");
         }
 
-                /// <summary>
+        [TestMethod]
+        public void HasInvalidPadding_ShouldReturnTrueWhenNotPadding()
+        {
+            Base32.HasInvalidPadding(InvalidSeed).Should().BeTrue();
+        }
+
+        /// <summary>
         /// Testcases were taken from <see cref="https://tools.ietf.org/html/rfc4648"/>
         /// </summary>
         public static IEnumerable<object[]> GetBase32Data()
