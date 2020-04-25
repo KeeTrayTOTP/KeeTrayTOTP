@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using KeePass.Forms;
 using KeePass.Plugins;
 using KeePass.UI;
 using KeePass.Util.Spr;
@@ -42,15 +43,6 @@ namespace KeeTrayTOTP.Menu
             return _rootTrayMenuItem;
         }
 
-        /// <summary>
-        ///     This menu item is required to show the dropdown arrow in the tray context menu,
-        ///     even if the menu is still empty. (because we don't fill it until the opening event)
-        /// </summary>
-        private static ToolStripMenuItem CreatePseudoToolStripMenuItem()
-        {
-            return new ToolStripMenuItem();
-        }
-
         private void OnRootDropDownOpening(object sender, EventArgs e)
         {
             var rootTrayMenuItem = sender as ToolStripMenuItem;
@@ -60,54 +52,70 @@ namespace KeeTrayTOTP.Menu
             }
 
             rootTrayMenuItem.DropDownItems.Clear();
-
-            var documents = PluginHost.MainWindow.DocumentManager.Documents;
-            if (DocumentManager.IsNotAtLeastOneDocumentOpen())
-            {
-                var noDatabaseOpenedMenuItem = new ToolStripMenuItem(Strings.NoDatabaseIsOpened, Resources.TOTP_Error);
-                rootTrayMenuItem.DropDownItems.Add(noDatabaseOpenedMenuItem);
-                return;
-            }
-
             _trimTrayMenuTextEnabled = PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
 
-            IEnumerable<ToolStripMenuItem> menuItems = null;
-            if (DocumentManager.IsSingleDatabaseOpenAndUnlocked()) 
-            {
-                // show entries directly as dropdown of the root menu
-                menuItems = CreateMenuItemsFromPwGroup(documents[0].Database.RootGroup);
-            }
-            else 
-            {
-                // show entries for each opened (but potential locked) database
-                menuItems = documents.Select(CreateMenuItemForDocument);
-            }
+            var documents = PluginHost.MainWindow.DocumentManager.Documents;
+
+            IEnumerable<ToolStripMenuItem> menuItems = BuildMenuItemsForRootDropDown(documents);
             rootTrayMenuItem.DropDownItems.AddRange(menuItems.Cast<ToolStripItem>().ToArray());
-            
         }
 
-        private ToolStripMenuItem CreateMenuItemForDocument(PwDocument document)
+        internal IEnumerable<ToolStripMenuItem> BuildMenuItemsForRootDropDown(List<PwDocument> documents)
+        {
+            if (documents.IsNotAtLeastOneDocumentOpen())
+            {
+                return new []
+                {
+                    new ToolStripMenuItem(Strings.NoDatabaseIsOpened, Resources.TOTP_Error)
+                };
+            }
+
+            if (documents.IsSingleDatabaseOpenAndUnlocked())
+            {
+                // create entries directly as dropdown of the root menu
+                return CreateDatabaseSubMenuItemsFromPwDocument(documents[0]);
+            }
+
+            // create entries for each opened (but potential locked) database
+            return documents.Select(CreateDatabaseMenuItemForDocument);
+        }
+
+        private ToolStripMenuItem CreateDatabaseMenuItemForDocument(PwDocument document)
         {
             ToolStripMenuItem mainDropDownItem;
             if (!document.Database.IsOpen)
             {
                 var documentName = UrlUtil.GetFileName(document.LockedIoc.Path);
-                EventHandler t = (o, e) => PluginHost.MainWindow.OpenDatabase(document.LockedIoc, null, true);
                 documentName += " [" + Strings.Locked + "]";
-                mainDropDownItem = new ToolStripMenuItem(documentName, Resources.TOTP_Error, t);
+                mainDropDownItem = new ToolStripMenuItem(documentName, Resources.TOTP_Error, OnClickOpenDatabase);
             }
             else
             {
                 var documentName = UrlUtil.GetFileName(document.Database.IOConnectionInfo.Path);
                 mainDropDownItem = new ToolStripMenuItem(documentName, ImageHelper.CreateImageFromColor(document.Database.Color));
-                mainDropDownItem.Tag = document;
                 mainDropDownItem.DropDownOpening += OnDatabaseDropDownOpening;
                 mainDropDownItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
                 mainDropDownItem.DropDownClosed += OnDropDownClosed;
                 mainDropDownItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
             }
-
+            
+            mainDropDownItem.Tag = document;
             return mainDropDownItem;
+        }
+
+        private void OnClickOpenDatabase(object sender, EventArgs eventArgs)
+        {
+            var menuItem = sender as ToolStripMenuItem;
+            if (menuItem == null)
+            {
+                return;
+            }
+
+            var document = menuItem.Tag as PwDocument;
+            if (document != null)
+            {
+                PluginHost.MainWindow.OpenDatabase(document.LockedIoc, null, true);
+            }
         }
 
         private void OnDatabaseDropDownOpening(object sender, EventArgs e)
@@ -126,13 +134,39 @@ namespace KeeTrayTOTP.Menu
 
             databaseMenuItem.DropDownItems.Clear();
 
-            var menuItems = CreateMenuItemsFromPwGroup(pwDocument.Database.RootGroup);
+            var menuItems = CreateDatabaseSubMenuItemsFromPwDocument(pwDocument);
             databaseMenuItem.DropDownItems.AddRange(menuItems.Cast<ToolStripItem>().ToArray());
         }
 
-        private IEnumerable<ToolStripMenuItem> CreateMenuItemsFromPwGroup(PwGroup pwGroup)
+        protected IEnumerable<ToolStripMenuItem> CreateDatabaseSubMenuItemsFromPwDocument(PwDocument pwDocument)
         {
-            return Plugin.GetVisibleAndValidPasswordEntries(pwGroup).Select(CreateMenuItemFromPwEntry);
+            var validPwEntries = Plugin.GetVisibleAndValidPasswordEntries(pwDocument.Database.RootGroup).ToArray();
+            if (validPwEntries.Length > 0)
+            {
+                return validPwEntries.Select(entry => CreateMenuItemFromPwEntry(entry, pwDocument.Database));
+            }
+
+            return NoTOTPEntriesFoundMenuItem(pwDocument);
+        }
+
+        private IEnumerable<ToolStripMenuItem> NoTOTPEntriesFoundMenuItem(PwDocument pwDocument)
+        {
+            return new[]
+            {
+                new ToolStripMenuItem("[" + Localization.Strings.NoTOTPEntriesFound + "]", Resources.TOTP_Error, OnClickOpenDatabase)
+                {
+                    Tag = pwDocument
+                }
+            };
+        }
+
+        /// <summary>
+        ///     This menu item is required to show the dropdown arrow in the tray context menu,
+        ///     even if the menu is still empty. (because we don't fill it until the opening event)
+        /// </summary>
+        private static ToolStripMenuItem CreatePseudoToolStripMenuItem()
+        {
+            return new ToolStripMenuItem();
         }
 
         private void OnDropDownClosed(object sender, EventArgs e)
@@ -147,11 +181,10 @@ namespace KeeTrayTOTP.Menu
             rootMenuItem.DropDownItems.Add(new ToolStripMenuItem());
         }
 
-        protected ToolStripMenuItem CreateMenuItemFromPwEntry(PwEntry entry)
+        protected ToolStripMenuItem CreateMenuItemFromPwEntry(PwEntry entry, PwDatabase pwDatabase)
         {
-            var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false,
+            var context = new SprContext(entry, pwDatabase, SprCompileFlags.All, false, 
                 false);
-
             var entryTitle = entry.Strings.ReadSafe(PwDefs.TitleField);
             var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
 

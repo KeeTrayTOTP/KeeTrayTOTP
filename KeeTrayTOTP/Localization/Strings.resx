@@ -163,6 +163,9 @@
   <data name="NoDatabaseIsOpened" xml:space="preserve">
     <value>No database is opened!</value>
   </data>
+  <data name="NoTOTPEntriesFound" xml:space="preserve">
+    <value>No TOTP Entries found</value>
+  </data>
   <data name="NoTOTPSeedFound" xml:space="preserve">
     <value>No TOTP Seed found!</value>
   </data>

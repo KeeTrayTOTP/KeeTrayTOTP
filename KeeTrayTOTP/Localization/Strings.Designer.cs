@@ -196,6 +196,15 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No TOTP Entries found.
+        /// </summary>
+        internal static string NoTOTPEntriesFound {
+            get {
+                return ResourceManager.GetString("NoTOTPEntriesFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No TOTP Seed found!.
         /// </summary>
         internal static string NoTOTPSeedFound {

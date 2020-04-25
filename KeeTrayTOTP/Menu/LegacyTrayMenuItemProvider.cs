@@ -73,7 +73,7 @@ namespace KeeTrayTOTP.Menu
                 {
                     foreach (PwEntry entry in Plugin.GetVisibleAndValidPasswordEntries())
                     {
-                        var newMenu = CreateMenuItemFromPwEntry(entry);
+                        var newMenu = CreateMenuItemFromPwEntry(entry, PluginHost.MainWindow.ActiveDatabase);
                         _niMenuList.Add(newMenu);
                     }
 
