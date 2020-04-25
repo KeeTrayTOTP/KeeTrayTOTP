@@ -6,23 +6,23 @@ namespace KeeTrayTOTP.Menu
 {
     public class MenuItemProvider : IDisposable
     {
-        private readonly MenuItemProviderBase _trayMenuItemProvider;
-        private readonly MenuItemProviderBase _entryMenuItemProvider;
-        private readonly MenuItemProviderBase _mainMenuItemProvider;
+        internal MenuItemProviderBase TrayMenuItemProvider { get; private set; }
+        internal MenuItemProviderBase EntryMenuItemProvider { get; private set; }
+        internal MenuItemProviderBase MainMenuItemProvider { get; private set; }
 
         public MenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
         {
             if (pluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, false))
             {
-                _trayMenuItemProvider = new LegacyTrayMenuItemProvider(plugin, pluginHost);
+                TrayMenuItemProvider = new LegacyTrayMenuItemProvider(plugin, pluginHost);
             }
             else
             {
-                _trayMenuItemProvider = new TrayMenuItemProvider(plugin, pluginHost);
+                TrayMenuItemProvider = new TrayMenuItemProvider(plugin, pluginHost);
             }
 
-            _entryMenuItemProvider = new EntryMenuItemProvider(plugin, pluginHost);
-            _mainMenuItemProvider = new MainMenuItemProvider(plugin);
+            EntryMenuItemProvider = new EntryMenuItemProvider(plugin, pluginHost);
+            MainMenuItemProvider = new MainMenuItemProvider(plugin);
         }
 
         internal ToolStripMenuItem GetMenuItem(PluginMenuType type)
@@ -48,17 +48,17 @@ namespace KeeTrayTOTP.Menu
 
         protected ToolStripMenuItem ProvideTrayMenuItem()
         {
-            return _trayMenuItemProvider != null ? _trayMenuItemProvider.ProvideMenuItem() : null;
+            return TrayMenuItemProvider != null ? TrayMenuItemProvider.ProvideMenuItem() : null;
         }
 
         protected ToolStripMenuItem ProvideEntryMenuItem()
         {
-            return _entryMenuItemProvider != null ? _entryMenuItemProvider.ProvideMenuItem() : null;
+            return EntryMenuItemProvider != null ? EntryMenuItemProvider.ProvideMenuItem() : null;
         }
 
         protected ToolStripMenuItem ProvideMainMenuItem()
         {
-            return _mainMenuItemProvider != null ? _mainMenuItemProvider.ProvideMenuItem() : null;
+            return MainMenuItemProvider != null ? MainMenuItemProvider.ProvideMenuItem() : null;
         }
 
         protected ToolStripMenuItem ProvideGroupMenuItem()
@@ -68,9 +68,9 @@ namespace KeeTrayTOTP.Menu
 
         public void Dispose()
         {
-            _trayMenuItemProvider.Dispose();
-            _entryMenuItemProvider.Dispose();
-            _mainMenuItemProvider.Dispose();
+            TrayMenuItemProvider.Dispose();
+            EntryMenuItemProvider.Dispose();
+            MainMenuItemProvider.Dispose();
         }
     }
 }
