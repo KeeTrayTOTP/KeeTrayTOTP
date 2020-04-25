@@ -140,6 +140,8 @@ namespace KeeTrayTOTP
             }
         }
 
+        public Settings Settings { get; private set; }
+
         public override ToolStripMenuItem GetMenuItem(PluginMenuType type)
         {
             // Provide a menu item for the main location(s)
@@ -193,7 +195,7 @@ namespace KeeTrayTOTP
                     enMenuCopyTotp.Enabled = false;
                     enMenuSetupTotp.Enabled = false;
 
-                    enMenuCopyTotp.Visible = PluginHost.CustomConfig.GetBool(setname_bool_EntryContextCopy_Visible, true);
+                    enMenuCopyTotp.Visible = Settings.EntryContextCopyVisible;
 
                     if (PluginHost.MainWindow.GetSelectedEntriesCount() == 1)
                     {
@@ -207,7 +209,7 @@ namespace KeeTrayTOTP
                         enMenuSetupTotp.Enabled = true;
                     }
 
-                    enMenuSetupTotp.Visible = PluginHost.CustomConfig.GetBool(setname_bool_EntryContextSetup_Visible, true);
+                    enMenuSetupTotp.Visible = Settings.EntryContextSetupVisible;
                 };
 
                 enMenuTrayTotp.DropDownClosed += (object sender, EventArgs e) =>
@@ -236,6 +238,8 @@ namespace KeeTrayTOTP
 
             PluginHost = host;
 
+            Settings = new Settings(host);
+
             // Instantiate Help Form.
             _helpForm = new FormHelp();
 
@@ -253,10 +257,10 @@ namespace KeeTrayTOTP
             PluginHost.MainWindow.TrayContextMenu.Opened += OnTrayContextMenuOpened;
 
             // Register auto-type function.
-            if (PluginHost.CustomConfig.GetBool(setname_bool_AutoType_Enable, true))
+            if (Settings.AutoTypeEnable)
             {
                 SprEngine.FilterCompile += SprEngine_FilterCompile;
-                SprEngine.FilterPlaceholderHints.Add(PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets());
+                SprEngine.FilterPlaceholderHints.Add(Settings.AutoTypeFieldName.ExtWithBrackets());
             }
 
             // List Column TOTP.
@@ -269,9 +273,9 @@ namespace KeeTrayTOTP
             _liRefreshTimer.Tick += OnTimerTick;
 
             //Time Correction.
-            TimeCorrections = new TimeCorrectionCollection(PluginHost.CustomConfig.GetBool(setname_bool_TimeCorrection_Enable, false));
-            TimeCorrectionProvider.Interval = Convert.ToInt16(PluginHost.CustomConfig.GetULong(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime));
-            TimeCorrections.AddRangeFromList(PluginHost.CustomConfig.GetString(setname_string_TimeCorrection_List, string.Empty).Split(';').ToList());
+            TimeCorrections = new TimeCorrectionCollection(Settings.TimeCorrectionEnable);
+            TimeCorrectionProvider.Interval = Convert.ToInt16(Settings.TimeCorrectionRefreshTime);
+            TimeCorrections.AddRangeFromList(Settings.TimeCorrectionList);
 
             return true;
         }
@@ -290,9 +294,9 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void MainWindow_Shown(object sender, EventArgs e)
         {
-            if (!PluginHost.CustomConfig.GetBool(setname_bool_FirstInstall_Shown, false))
+            if (!Settings.FirstInstallShown)
             {
-                PluginHost.CustomConfig.SetBool(setname_bool_FirstInstall_Shown, true);
+                Settings.FirstInstallShown = true;
                 if (!_helpForm.Visible)
                 {
                     _helpForm = new FormHelp(true);
@@ -411,13 +415,12 @@ namespace KeeTrayTOTP
                 PluginHost.MainWindow.TrayContextMenu.Items.Remove(menu);
             }
             _niMenuList.Clear();
-            if (PluginHost.CustomConfig.GetBool(setname_bool_NotifyContext_Visible, true))
+            if (Settings.NotifyContextVisible)
             {
                 _niMenuTitle.Visible = true;
                 _niMenuSeperator.Visible = true;
                 if (PluginHost.MainWindow.ActiveDatabase.IsOpen)
                 {
-                    var trimTrayText = PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
                     foreach (PwEntry entry in GetVisibleAndValidPasswordEntries())
                     {
                         var entryTitle = entry.Strings.ReadSafe(PwDefs.TitleField);
@@ -425,7 +428,7 @@ namespace KeeTrayTOTP
                         var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
                         var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
                         string trayTitle;
-                        if ((trimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || string.IsNullOrEmpty(entryUsername))
+                        if ((Settings.TrimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || string.IsNullOrEmpty(entryUsername))
                         {
                             trayTitle = entryTitle.ExtWithSpaceAfter();
                         }
@@ -433,7 +436,6 @@ namespace KeeTrayTOTP
                         {
                             trayTitle = entryTitle.ExtWithSpaceAfter() + entryUsername.ExtWithParenthesis();
                         }
-                        PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
 
                         var newMenu = new ToolStripMenuItem(trayTitle, Properties.Resources.TOTP_Key, OnNotifyMenuTOTPClick);
                         newMenu.Tag = entry;
@@ -616,7 +618,7 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void SprEngine_FilterCompile(object sender, SprEventArgs e)
         {
-            if ((e.Context.Flags & SprCompileFlags.ExtActive) == SprCompileFlags.ExtActive && e.Text.IndexOf(PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), StringComparison.InvariantCultureIgnoreCase) >= 0)
+            if ((e.Context.Flags & SprCompileFlags.ExtActive) == SprCompileFlags.ExtActive && e.Text.IndexOf(Settings.AutoTypeFieldName.ExtWithBrackets(), StringComparison.InvariantCultureIgnoreCase) >= 0)
             {
                 if (SettingsCheck(e.Context.Entry) && SeedCheck(e.Context.Entry))
                 {
@@ -632,7 +634,7 @@ namespace KeeTrayTOTP
                         {
                             e.Context.Entry.Touch(false);
                             string totp = totpGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
-                            e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets(), totp);
+                            e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, Settings.AutoTypeFieldName.ExtWithBrackets(), totp);
                         }
                         else
                         {
@@ -665,7 +667,7 @@ namespace KeeTrayTOTP
         /// <returns>Presence of Settings.</returns>
         internal bool SettingsCheck(PwEntry pe)
         {
-            return pe.Strings.Exists(PluginHost.CustomConfig.GetString(setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings));
+            return pe.Strings.Exists(Settings.TOTPSettingsStringName);
         }
 
         /// <summary>
@@ -780,7 +782,7 @@ namespace KeeTrayTOTP
         /// <returns>String Array (Interval, Length, Url).</returns>
         internal string[] SettingsGet(PwEntry pe)
         {
-            return pe.Strings.Get(PluginHost.CustomConfig.GetString(setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings)).ReadString().Split(';');
+            return pe.Strings.Get(Settings.TOTPSettingsStringName).ReadString().Split(';');
         }
 
         /// <summary>
@@ -790,7 +792,7 @@ namespace KeeTrayTOTP
         /// <returns>Presence of the Seed.</returns>
         internal bool SeedCheck(PwEntry pe)
         {
-            return pe.Strings.Exists(PluginHost.CustomConfig.GetString(setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
+            return pe.Strings.Exists(Settings.TOTPSeedStringName);
         }
 
         /// <summary>
@@ -821,7 +823,7 @@ namespace KeeTrayTOTP
         /// <returns>Protected Seed.</returns>
         internal ProtectedString SeedGet(PwEntry pe)
         {
-            return pe.Strings.Get(PluginHost.CustomConfig.GetString(setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
+            return pe.Strings.Get(Settings.TOTPSeedStringName);
         }
 
         internal bool CanGenerateTOTP(PwEntry pe)
@@ -905,10 +907,10 @@ namespace KeeTrayTOTP
             _niMenuSeperator.Dispose();
 
             // Unregister auto-type function.
-            if (SprEngine.FilterPlaceholderHints.Contains(PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets()))
+            if (SprEngine.FilterPlaceholderHints.Contains(Settings.AutoTypeFieldName.ExtWithBrackets()))
             {
                 SprEngine.FilterCompile -= SprEngine_FilterCompile;
-                SprEngine.FilterPlaceholderHints.Remove(PluginHost.CustomConfig.GetString(setname_string_AutoType_FieldName, setdef_string_AutoType_FieldName).ExtWithBrackets());
+                SprEngine.FilterPlaceholderHints.Remove(Settings.AutoTypeFieldName.ExtWithBrackets());
             }
 
             // Remove Column provider.

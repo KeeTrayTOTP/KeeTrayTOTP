@@ -91,6 +91,7 @@
     <Compile Include="Libraries\Base32.cs" />
     <Compile Include="Libraries\TimeCorrectionProvider.cs" />
     <Compile Include="Libraries\TOTPEncoder.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="SetupTOTP.cs">
       <SubType>Form</SubType>
     </Compile>

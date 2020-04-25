@@ -39,13 +39,11 @@ namespace KeeTrayTOTP.Tests
             var pwEntry = new KeePassLib.PwEntry(true, true);
             if (seed != null)
             {
-                var seedKey = _pluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed);
-                pwEntry.Strings.Set(seedKey, new ProtectedString(false, seed));
+                pwEntry.Strings.Set(_plugin.Settings.TOTPSeedStringName, new ProtectedString(false, seed));
             }
             if (settings != null)
             {
-                var settingsKey = _pluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings);
-                pwEntry.Strings.Set(settingsKey, new ProtectedString(false, settings));
+                pwEntry.Strings.Set(_plugin.Settings.TOTPSettingsStringName, new ProtectedString(false, settings));
             }
 
             var actual = column.GetCellData("TOTP Status", pwEntry);
@@ -66,13 +64,12 @@ namespace KeeTrayTOTP.Tests
             var pwEntry = new KeePassLib.PwEntry(true, true);
             if (seed != null)
             {
-                var seedKey = _pluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed);
-                pwEntry.Strings.Set(seedKey, new ProtectedString(false, seed));
+                pwEntry.Strings.Set(_plugin.Settings.TOTPSeedStringName, new ProtectedString(false, seed));
             }
             if (settings != null)
             {
-                var settingsKey = _pluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings);
-                pwEntry.Strings.Set(settingsKey, new ProtectedString(false, settings));
+                pwEntry.Strings.Set(_plugin.Settings.TOTPSettingsStringName, new ProtectedString(false, settings));
+
             }
 
             var actual = column.GetCellData("TOTP", pwEntry);
@@ -85,14 +82,12 @@ namespace KeeTrayTOTP.Tests
         [DataTestMethod]
         public void GetCellDataCode_WithValidSeedAndSettings_ShouldReturnA6DigitCodeWithDuration(bool showTimer, string regex)
         {
-            _plugin.PluginHost.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnTimer_Visible, showTimer);
+            _plugin.Settings.TOTPColumnTimerVisible = showTimer;
 
             var column = new TrayTOTP_ColumnProvider(_plugin);
             var pwEntry = new KeePassLib.PwEntry(true, true);
-            var seedKey = _pluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed);
-            pwEntry.Strings.Set(seedKey, new ProtectedString(false, ValidSeed));
-            var settingsKey = _pluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings);
-            pwEntry.Strings.Set(settingsKey, new ProtectedString(false, ValidSettings));
+            pwEntry.Strings.Set(_plugin.Settings.TOTPSeedStringName, new ProtectedString(false, ValidSeed));
+            pwEntry.Strings.Set(_plugin.Settings.TOTPSettingsStringName, new ProtectedString(false, ValidSettings));
 
             var actual = column.GetCellData("TOTP", pwEntry);
 
@@ -104,10 +99,9 @@ namespace KeeTrayTOTP.Tests
         {
             var column = new TrayTOTP_ColumnProvider(_plugin);
             var pwEntry = new KeePassLib.PwEntry(true, true);
-            var seedKey = _pluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed);
-            pwEntry.Strings.Set(seedKey, new ProtectedString(false, ValidSeed));
-            var settingsKey = _pluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings);
-            pwEntry.Strings.Set(settingsKey, new ProtectedString(false, ValidSettings));
+            
+            pwEntry.Strings.Set(_plugin.Settings.TOTPSeedStringName, new ProtectedString(false, ValidSeed));
+            pwEntry.Strings.Set(_plugin.Settings.TOTPSettingsStringName, new ProtectedString(false, ValidSettings));
 
             var actual = column.GetCellData("InvalidColumnName", pwEntry);
 
