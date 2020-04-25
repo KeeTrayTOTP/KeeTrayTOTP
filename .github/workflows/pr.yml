@@ -26,15 +26,18 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
       
     - name: SonarScanner Begin
-      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.host.url="https://sonarcloud.io"
+      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml"
 
     - name: MSBuild
       run: msbuild KeeTrayTOTP.sln /m
 
     - name: Run tests
       # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
-      run: dotnet test --no-build
-      
+      run: dotnet test --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+
+    - name: Copy coverage file to root for SonarQube. SonarQube currently does not support wildcards, and the coverage file ends up in a new folder with a random name.
+      run: cp -Path ("KeeTrayTOTP.Tests\TestResults\" + (gci -Path KeeTrayTOTP.Tests\TestResults -Recurse -Force -Name coverage.opencover.xml)) -Destination coverage.opencover.xml
+
     - name: SonarScanner End
       run: dotnet sonarscanner end
       env:
