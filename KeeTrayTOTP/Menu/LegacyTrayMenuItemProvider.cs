@@ -4,7 +4,6 @@ using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
 using KeePass.Plugins;
-using KeePass.Util.Spr;
 using KeePassLib;
 using KeeTrayTOTP.Libraries;
 using KeeTrayTOTP.Localization;
