@@ -358,6 +358,15 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Padding (=) can only appear at the end!.
+        /// </summary>
+        internal static string SetupInvalidPadding {
+            get {
+                return ResourceManager.GetString("SetupInvalidPadding", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid URL!.
         /// </summary>
         internal static string SetupInvalidUrl {

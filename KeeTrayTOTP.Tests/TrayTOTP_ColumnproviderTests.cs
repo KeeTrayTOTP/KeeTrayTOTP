@@ -16,7 +16,7 @@ namespace KeeTrayTOTP.Tests
         private readonly KeeTrayTOTPExt _plugin;
         private readonly IPluginHost _pluginHost;
 
-        const string InvalidSeed = "C5CYMIHWQUUZMKUGZHGEOSJSQDE4L===";
+        const string InvalidSeed = "C5CYMIHWQUUZMKUGZHGEOSJSQDE4L===!";
         const string ValidSeed = "JBSWY3DPEHPK3PXP";
         const string ValidSettings = "30;6";
 
