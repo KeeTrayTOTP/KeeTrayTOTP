@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using KeePass.Plugins;
+﻿using System.Collections.Generic;
 using KeePass.UI;
 
 namespace KeeTrayTOTP.Helpers
 {
-    public static class DocumentHelper
+    internal static class DocumentHelper
     {
         public static bool IsSingleDatabaseOpenAndUnlocked(this List<PwDocument> documents)
         {

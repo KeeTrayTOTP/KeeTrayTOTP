@@ -37,7 +37,7 @@ namespace KeeTrayTOTP.Menu
 
             _rootTrayMenuItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
             _rootTrayMenuItem.DropDownOpening += OnRootDropDownOpening;
-            _rootTrayMenuItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
+            _rootTrayMenuItem.DropDownOpening += MenuItemExtensions.OnDatabaseDropDownOpening;
             _rootTrayMenuItem.DropDownClosed += OnDropDownClosed;
 
             return _rootTrayMenuItem;
@@ -92,9 +92,9 @@ namespace KeeTrayTOTP.Menu
             else
             {
                 var documentName = UrlUtil.GetFileName(document.Database.IOConnectionInfo.Path);
-                mainDropDownItem = new ToolStripMenuItem(documentName, ImageHelper.CreateImageFromColor(document.Database.Color));
+                mainDropDownItem = new ToolStripMenuItem(documentName, ImageExtensions.CreateImageFromColor(document.Database.Color));
                 mainDropDownItem.DropDownOpening += OnDatabaseDropDownOpening;
-                mainDropDownItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
+                mainDropDownItem.DropDownOpening += MenuItemExtensions.OnDatabaseDropDownOpening;
                 mainDropDownItem.DropDownClosed += OnDropDownClosed;
                 mainDropDownItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
             }

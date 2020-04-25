@@ -73,9 +73,9 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\DocumentHelper.cs" />
-    <Compile Include="Helpers\MenuItemHelper.cs" />
-    <Compile Include="Helpers\ImageHelper.cs" />
+    <Compile Include="Helpers\DocumentExtensions.cs" />
+    <Compile Include="Helpers\MenuItemExtensions.cs" />
+    <Compile Include="Helpers\ImageExtensions.cs" />
     <Compile Include="Menu\EntryMenuItemProvider.cs" />
     <Compile Include="Menu\MainMenuItemProvider.cs" />
     <Compile Include="Menu\MenuItemProvider.cs" />

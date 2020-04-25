@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace KeeTrayTOTP.Helpers
 {
-    public static class MenuItemHelper
+    internal static class MenuItemExtensions
     {
         /// <summary>
         /// Prevent ToolStripMenuItems from jumping to second screen
