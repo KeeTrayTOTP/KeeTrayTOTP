@@ -26,15 +26,18 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
       
     - name: SonarScanner Begin
-      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.host.url="https://sonarcloud.io"
+      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml"
 
     - name: MSBuild
       run: msbuild KeeTrayTOTP.sln /m
 
     - name: Run tests
       # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
-      run: dotnet test --no-build --collect:"XPlat Code Coverage"
-      
+      run: dotnet test --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+
+    - name: Copy coverage file to root
+      run: for /f %a in ('dir /b /s coverage.opencover.xml ^| findstr "TestResults"') do xcopy "%a" . /i
+
     - name: SonarScanner End
       run: dotnet sonarscanner end
       env:
