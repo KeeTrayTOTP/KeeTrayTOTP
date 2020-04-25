@@ -22,7 +22,6 @@ namespace KeeTrayTOTP.Helpers
             var pos = new Point(menuItem.GetCurrentParent().Left, menuItem.GetCurrentParent().Top);
 
             // Current bounds of the current monitor
-            Rectangle bounds = Screen.GetWorkingArea(pos);
             Screen currentScreen = Screen.FromPoint(pos);
 
             // Find the width of sub-menu
