@@ -624,7 +624,7 @@ namespace KeeTrayTOTP
                     {
                         string[] settings = SettingsGet(e.Context.Entry);
 
-                        TOTPProvider totpGenerator = new TOTPProvider(settings, ref this.TimeCorrections);
+                        TOTPProvider totpGenerator = new TOTPProvider(settings, this.TimeCorrections);
 
                         string invalidCharacters;
 
@@ -841,7 +841,7 @@ namespace KeeTrayTOTP
                 {
                     string[] settings = SettingsGet(pe);
 
-                    TOTPProvider totpGenerator = new TOTPProvider(settings, ref this.TimeCorrections);
+                    TOTPProvider totpGenerator = new TOTPProvider(settings, this.TimeCorrections);
 
                     string invalidCharacters;
                     if (SeedValidate(pe, out invalidCharacters))
