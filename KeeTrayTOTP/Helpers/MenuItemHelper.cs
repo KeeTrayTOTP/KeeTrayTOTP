@@ -4,7 +4,7 @@ using System.Windows.Forms;
 
 namespace KeeTrayTOTP.Helpers
 {
-    internal static class MenuItemExtensions
+    internal static class MenuItemHelper
     {
         /// <summary>
         /// Prevent ToolStripMenuItems from jumping to second screen
