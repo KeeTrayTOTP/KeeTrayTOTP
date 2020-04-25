@@ -391,7 +391,7 @@ namespace KeeTrayTOTP
             }
 
             var rawSeed = this.SeedGet(entry).ReadString();
-            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "");
+            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "").TrimEnd('=');
             var issuer = entry.Strings.Get("Title").ReadString();
             var username = entry.Strings.Get("UserName").ReadString();
             UIUtil.ShowDialogAndDestroy(new ShowQR(cleanSeed, issuer, username));
@@ -800,19 +800,18 @@ namespace KeeTrayTOTP
         /// <returns>Validity of the Seed's characters for Base32 format.</returns>
         internal bool SeedValidate(PwEntry passwordEntry)
         {
-            string invalidCharacters;
-            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().ExtIsBase32(out invalidCharacters);
+            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().IsBase32();
         }
 
         /// <summary>
         /// Validates the entry's Seed making sure it's a valid Base32 string. Invalid characters are available as out string.
         /// </summary>
         /// <param name="passwordEntry">Password Entry.</param>
-        /// <param name="invalidChars">Password Entry.</param>
+        /// <param name="invalidCharacters">Password Entry.</param>
         /// <returns>Validity of the Seed's characters.</returns>
-        internal bool SeedValidate(PwEntry passwordEntry, out string invalidChars)
+        internal bool SeedValidate(PwEntry passwordEntry, out string invalidCharacters)
         {
-            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().ExtIsBase32(out invalidChars);
+            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().IsBase32(out invalidCharacters);
         }
 
         /// <summary>
