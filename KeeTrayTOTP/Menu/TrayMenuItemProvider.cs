@@ -228,13 +228,5 @@ namespace KeeTrayTOTP.Menu
             }
         }
 
-        public override void Dispose()
-        {
-            if (_rootTrayMenuItem != null)
-            {
-                _rootTrayMenuItem.DropDownOpening -= OnRootDropDownOpening;
-                _rootTrayMenuItem.DropDownClosed -= OnDropDownClosed;
-            }
-        }
     }
 }
