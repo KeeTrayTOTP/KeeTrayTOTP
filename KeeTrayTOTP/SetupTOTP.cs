@@ -212,14 +212,20 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void ButtonDelete_Click(object sender, EventArgs e)
         {
+            //if (_plugin.SettingsCheck(entry) || _plugin.SeedCheck(entry))
             if (MessageBox.Show(Localization.Strings.SetupMessageAskDeleteCurrentEntry, Localization.Strings.TrayTOTPPlugin, MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
             {
-                _entry.CreateBackup(_plugin.PluginHost.MainWindow.ActiveDatabase);
-                _entry.Strings.Remove(_plugin.PluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
-                _entry.Strings.Remove(_plugin.PluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings));
-                _entry.Touch(true);
-                _plugin.PluginHost.MainWindow.ActiveDatabase.Modified = true;
-
+                try
+                {
+                    _entry.CreateBackup(_plugin.PluginHost.MainWindow.ActiveDatabase);
+                    _entry.Strings.Remove(_plugin.PluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, Localization.Strings.TOTPSeed));
+                    _entry.Strings.Remove(_plugin.PluginHost.CustomConfig.GetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, Localization.Strings.TOTPSettings));
+                    _entry.Touch(true);
+                    _plugin.PluginHost.MainWindow.ActiveDatabase.Modified = true;
+                }
+                catch (Exception)
+                {
+                }
                 DialogResult = DialogResult.OK;
                 Close();
             }
