@@ -1,17 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Windows.Forms;
-using FluentAssertions;
+﻿using FluentAssertions;
 using KeePass.App.Configuration;
 using KeePass.Forms;
 using KeePass.Plugins;
 using KeePass.UI;
-using KeePassLib;
-using KeePassLib.Keys;
-using KeePassLib.Security;
-using KeePassLib.Serialization;
 using KeeTrayTOTP.Menu;
-using KeeTrayTOTP.Tests.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -20,13 +12,22 @@ namespace KeeTrayTOTP.Tests.Menu
     [TestClass]
     public class MenuItemProviderTests
     {
+        private KeeTrayTOTPExt _plugin;
+        private Mock<IPluginHost> _host;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _plugin = CreatePluginHostMock(out var host);
+            _host = host;
+        }
+
         [TestMethod]
         public void MenuItemProvider_ShouldDefaultReturnTheTrayMenuItemProvider()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            plugin.Initialize(host.Object);
+            _plugin.Initialize(_host.Object);
 
-            var sut = new MenuItemProvider(plugin, host.Object);
+            var sut = new MenuItemProvider(_plugin, _host.Object);
 
             sut.TrayMenuItemProvider.Should().BeOfType<TrayMenuItemProvider>();
         }
@@ -34,23 +35,23 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void MenuItemProvider_ShouldReturnTheLegacyTrayMenuItemProvider_IfSetInConfig()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            host.Object.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, true);
-            plugin.Initialize(host.Object);
+            _host.Object.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, true);
+            _plugin.Initialize(_host.Object);
 
-            var sut = new MenuItemProvider(plugin, host.Object);
+            var sut = new MenuItemProvider(_plugin, _host.Object);
+
             sut.TrayMenuItemProvider.Should().BeOfType<LegacyTrayMenuItemProvider>();
         }
 
         [TestMethod]
         public void MenuItemProvider_ShouldReturnTheCorrectTrayMenuEntries()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            plugin.Initialize(host.Object);
+            _plugin.Initialize(_host.Object);
 
-            var sut = new MenuItemProvider(plugin, host.Object);
+            var sut = new MenuItemProvider(_plugin, _host.Object);
 
             var trayMenuItem = sut.GetMenuItem(PluginMenuType.Tray);
+
             trayMenuItem.Should().NotBeNull();
             trayMenuItem.HasDropDownItems.Should().BeTrue();
             trayMenuItem.DropDownItems.Should().HaveCount(1, "because, there should be a pseudo entry.");
@@ -59,10 +60,9 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void MenuItemProvider_ShouldReturnTheCorrectMainMenuEntries()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            plugin.Initialize(host.Object);
+            _plugin.Initialize(_host.Object);
 
-            var sut = new MenuItemProvider(plugin, host.Object);
+            var sut = new MenuItemProvider(_plugin, _host.Object);
 
             var mainMenuItem = sut.GetMenuItem(PluginMenuType.Main);
             mainMenuItem.Should().NotBeNull();
@@ -73,10 +73,9 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void MenuItemProvider_ShouldReturnTheCorrectEntryMenuEntries()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            plugin.Initialize(host.Object);
+            _plugin.Initialize(_host.Object);
 
-            var sut = new MenuItemProvider(plugin, host.Object);
+            var sut = new MenuItemProvider(_plugin, _host.Object);
 
             var mainMenuItem = sut.GetMenuItem(PluginMenuType.Entry);
             mainMenuItem.Should().NotBeNull();
@@ -87,10 +86,9 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void MenuItemProvider_ShouldReturnNullForGroupMenuEntries()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            plugin.Initialize(host.Object);
+            _plugin.Initialize(_host.Object);
 
-            var sut = new MenuItemProvider(plugin, host.Object);
+            var sut = new MenuItemProvider(_plugin, _host.Object);
 
             var mainMenuItem = sut.GetMenuItem(PluginMenuType.Group);
             mainMenuItem.Should().BeNull();
@@ -99,10 +97,9 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void MenuItemProvider_ShouldReturnNullForUnknownEnumValue()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            plugin.Initialize(host.Object);
+            _plugin.Initialize(_host.Object);
 
-            var sut = new MenuItemProvider(plugin, host.Object);
+            var sut = new MenuItemProvider(_plugin, _host.Object);
 
             var mainMenuItem = sut.GetMenuItem((PluginMenuType)4);
             mainMenuItem.Should().BeNull();

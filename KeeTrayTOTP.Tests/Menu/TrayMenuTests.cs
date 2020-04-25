@@ -20,13 +20,20 @@ namespace KeeTrayTOTP.Tests.Menu
     [TestClass]
     public class TrayMenuTests
     {
+        private KeeTrayTOTPExt _plugin;
+        private TrayMenuItemProvider _trayMenuItemProvider;
+
+        [TestInitialize]
+        public void Initialize()
+        {
+            _plugin = CreatePluginHostMock(out var host);
+            _trayMenuItemProvider = new TrayMenuItemProvider(_plugin, host.Object);
+        }
+
         [TestMethod]
         public void TrayMenuItemProvider_ShouldReturnANewDropDownMenuItem()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            var trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
-
-            var sut = trayMenuItemProvider.ProvideMenuItem();
+            var sut = _trayMenuItemProvider.ProvideMenuItem();
 
             sut.Should().NotBeNull();
             sut.HasDropDownItems.Should().BeTrue();
@@ -35,14 +42,12 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldReturnCorrectMenuItem_IfNoDatabaseIsOpened()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            var trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
             var documents = new List<PwDocument>(new[]
             {
                 new PwDocument()
             });
 
-            var sut = trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
 
             sut.Count.Should().Be(1);
             sut.First().Text.Should().Be(Localization.Strings.NoDatabaseIsOpened,
@@ -53,14 +58,12 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldReturnEntryMenuItems_IfThereIsOnlyASingleDatabase()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            var trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
             var documents = new List<PwDocument>(new[]
             {
                 new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4),
             });
 
-            var sut = trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
 
             sut.Count.Should().Be(4,
                 "because, the items are added directly to the root tray menuitem if there is only a single database opened.");
@@ -69,14 +72,12 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldReturnCorrectInfo_IfThereAreNoTotpEntries()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            var trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
             var documents = new List<PwDocument>(new[]
             {
                 new PwDocument().New().WithNonTotpEntries(4)
             });
 
-            var sut = trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
 
             sut.Count.Should().Be(1);
             sut.First().Text.Should().Contain(Localization.Strings.NoTOTPEntriesFound,
@@ -86,15 +87,13 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldReturnEntryMenuItems_IfThereIsAtLeast2Databases()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            var trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
             var documents = new List<PwDocument>(new[]
             {
                 new PwDocument().New().WithNonTotpEntries(4).WithTotpEnabledEntries(4),
                 new PwDocument().New().WithNonTotpEntries(4).WithTotpEnabledEntries(4),
             });
 
-            var sut = trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
 
             sut.Count.Should().Be(2,
                 "because, the open databases are added as sub menu if there are at least 2 databases.");
@@ -103,15 +102,12 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldCreateASingleMenuItemWithLocked_IfASingleLockedDatabasesIsPresent()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            var trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
-
             var documents = new List<PwDocument>(new[]
             {
                 new PwDocument().New().Locked()
             });
 
-            var sut = trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
 
             sut.Count.Should().Be(1);
             sut.First().Text.Should().Contain("[" + Localization.Strings.Locked + "]", "because, there is only a locked database.");
@@ -120,15 +116,13 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldCreateMenuItemsContainingLocked_IfMultipleDatabasesAreLocked()
         {
-            var plugin = CreatePluginHostMock(out var host);
-            var trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
             var documents = new List<PwDocument>(new[]
             {
                 new PwDocument().New().Locked(),
                 new PwDocument().New().Locked()
             });
 
-            var sut = trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
 
             sut.Count.Should().Be(2);
             sut.Should().OnlyContain(s => s.Text.Contains("[" + Localization.Strings.Locked + "]"),
