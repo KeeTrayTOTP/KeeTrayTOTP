@@ -3,7 +3,7 @@ using System.Drawing;
 using KeeTrayTOTP.Libraries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace KeeTrayTOTP.Tests
+namespace KeeTrayTOTP.Tests.Menu
 {
     [TestClass]
     public class TrayContextMenuPositionTests
