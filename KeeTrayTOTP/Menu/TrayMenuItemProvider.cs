@@ -111,10 +111,33 @@ namespace KeeTrayTOTP.Menu
             }
 
             var document = menuItem.Tag as PwDocument;
-            if (document != null)
+            if (document == null)
             {
-                PluginHost.MainWindow.OpenDatabase(document.LockedIoc, null, true);
+                return;
             }
+
+            PluginHost.MainWindow.OpenDatabase(document.LockedIoc, null, true);
+        }
+
+        private void OnClickShowDatabase(object sender, EventArgs eventArgs)
+        {
+            var menuItem = sender as ToolStripMenuItem;
+            if (menuItem == null)
+            {
+                return;
+            }
+
+            var document = menuItem.Tag as PwDocument;
+            if (document == null)
+            {
+                return;
+            }
+
+            if (PluginHost.MainWindow.ActiveDatabase != document.Database)
+            {
+                PluginHost.MainWindow.MakeDocumentActive(document);
+            }
+            PluginHost.MainWindow.EnsureVisibleForegroundWindow(true, true);
         }
 
         private void OnDatabaseDropDownOpening(object sender, EventArgs e)
@@ -152,7 +175,7 @@ namespace KeeTrayTOTP.Menu
         {
             return new[]
             {
-                new ToolStripMenuItem("[" + Localization.Strings.NoTOTPEntriesFound + "]", Resources.TOTP_Error, OnClickOpenDatabase)
+                new ToolStripMenuItem("[" + Localization.Strings.NoTOTPEntriesFound + "]", Resources.TOTP_Error, OnClickShowDatabase)
                 {
                     Tag = pwDocument
                 }
