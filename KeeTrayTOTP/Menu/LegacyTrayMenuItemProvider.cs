@@ -151,7 +151,7 @@ namespace KeeTrayTOTP.Menu
             }
         }
 
-        public override void Dispose()
+        public override void Terminate()
         {
             // Remove Notify Icon menus.
             PluginHost.MainWindow.TrayContextMenu.Opening -= OnNotifyMenuOpening;

@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using KeePass.Plugins;
 
@@ -6,6 +7,7 @@ namespace KeeTrayTOTP.Menu
 {
     public class MenuItemProvider : IDisposable
     {
+        private bool _isDisposed;
         internal MenuItemProviderBase TrayMenuItemProvider { get; private set; }
         internal MenuItemProviderBase EntryMenuItemProvider { get; private set; }
         internal MenuItemProviderBase MainMenuItemProvider { get; private set; }
@@ -68,9 +70,24 @@ namespace KeeTrayTOTP.Menu
 
         public void Dispose()
         {
-            TrayMenuItemProvider.Dispose();
-            EntryMenuItemProvider.Dispose();
-            MainMenuItemProvider.Dispose();
+            // Dispose of unmanaged resources.
+            Dispose(true);
+            // Suppress finalization.
+            GC.SuppressFinalize(this);
+        }
+
+        protected void Dispose(bool disposing)
+        {
+            if (_isDisposed) return;
+
+            if (disposing)
+            {
+                TrayMenuItemProvider.Terminate();
+                EntryMenuItemProvider.Terminate();
+                MainMenuItemProvider.Terminate();
+            }
+
+            _isDisposed = true;
         }
     }
 }

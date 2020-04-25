@@ -1,3 +1,4 @@
+using System;
 using System.Windows.Forms;
 
 namespace KeeTrayTOTP.Menu
@@ -6,7 +7,7 @@ namespace KeeTrayTOTP.Menu
     {
         public abstract ToolStripMenuItem ProvideMenuItem();
 
-        public virtual void Dispose()
+        public virtual void Terminate()
         {}
     }
 }
