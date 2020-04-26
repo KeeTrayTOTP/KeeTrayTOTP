@@ -14,14 +14,14 @@ namespace KeeTrayTOTP.Menu
     /// <summary>
     ///     This MenuItemProvider provides the legacy implementation of the KeeTrayTOTP plugin.
     ///     It will place each totp enabled entry in the root dropdown menu.
-    ///     This is not recommended as it is using an approach that is not recommended from the keepass author.
+    ///     This is not recommended as it is using an approach that is not recommended from the KeePass author.
     ///     see https://keepass.info/help/v2_dev/plg_index.html#co_menuitem
     /// </summary>
     /// <remarks>
-    ///     The provider has to keep track of the items itself, as they are not handled by keepass,
+    ///     The provider has to keep track of the items itself, as they are not handled by KeePass,
     ///     cause we "inject" them and bypass the intended way.
     /// </remarks>
-    public class LegacyTrayMenuItemProvider : TrayMenuItemProvider
+    public sealed class LegacyTrayMenuItemProvider : TrayMenuItemProvider, IDisposable
     {
         private ToolStripMenuItem _niMenuTitle;
         private ToolStripSeparator _niMenuSeparator;
@@ -121,9 +121,9 @@ namespace KeeTrayTOTP.Menu
 
         private void CreateMenuItemForOtherDatabases(IList<ToolStripMenuItem> items)
         {
-            var tabcontrol = PluginHost.MainWindow.Controls.OfType<TabControl>().FirstOrDefault();
+            var tabControl = PluginHost.MainWindow.Controls.OfType<TabControl>().FirstOrDefault();
             var nonSelectedTabs =
-                tabcontrol.TabPages.OfType<TabPage>().Where(c => c != tabcontrol.SelectedTab).ToList();
+                tabControl.TabPages.OfType<TabPage>().Where(c => c != tabControl.SelectedTab).ToList();
 
             int i = 1;
             foreach (var tab in nonSelectedTabs)
@@ -150,22 +150,29 @@ namespace KeeTrayTOTP.Menu
             }
         }
 
-        public override void Terminate()
+        public void Dispose()
         {
-            // Remove Notify Icon menus.
             PluginHost.MainWindow.TrayContextMenu.Opening -= OnNotifyMenuOpening;
             PluginHost.MainWindow.TrayContextMenu.Opened -= OnTrayContextMenuOpened;
 
             PluginHost.MainWindow.TrayContextMenu.Items.Remove(_niMenuTitle);
-            _niMenuTitle.Dispose();
+            PluginHost.MainWindow.TrayContextMenu.Items.Remove(_niMenuSeparator);
+
+            if (_niMenuTitle != null)
+            {
+                _niMenuTitle.Dispose();
+            }
+
+            if (_niMenuSeparator != null)
+            {
+                _niMenuSeparator.Dispose();
+            }
+
             foreach (var menu in _niMenuList)
             {
                 PluginHost.MainWindow.TrayContextMenu.Items.Remove(menu);
                 menu.Dispose();
             }
-
-            PluginHost.MainWindow.TrayContextMenu.Items.Remove(_niMenuSeparator);
-            _niMenuSeparator.Dispose();
         }
     }
 }

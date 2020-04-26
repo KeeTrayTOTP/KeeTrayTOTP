@@ -8,20 +8,17 @@ using KeePass.Util.Spr;
 using KeePassLib;
 using KeePassLib.Utility;
 using KeeTrayTOTP.Helpers;
-using KeeTrayTOTP.Localization;
 using KeeTrayTOTP.Properties;
 
 namespace KeeTrayTOTP.Menu
 {
-    public class TrayMenuItemProvider : MenuItemProviderBase
+    public class TrayMenuItemProvider : IMenuItemProvider
     {
         protected readonly KeeTrayTOTPExt Plugin;
         protected readonly IPluginHost PluginHost;
         protected readonly DocumentManagerEx DocumentManager;
 
         private bool _trimTrayMenuTextEnabled;
-
-        private ToolStripMenuItem _rootTrayMenuItem;
 
         public TrayMenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
         {
@@ -30,16 +27,16 @@ namespace KeeTrayTOTP.Menu
             PluginHost = pluginHost;
         }
 
-        public override ToolStripMenuItem ProvideMenuItem()
+        public virtual ToolStripMenuItem ProvideMenuItem()
         {
-            _rootTrayMenuItem = new ToolStripMenuItem(Strings.TrayTOTPPlugin, Resources.TOTP);
+            var rootTrayMenuItem = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin, Resources.TOTP);
 
-            _rootTrayMenuItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
-            _rootTrayMenuItem.DropDownOpening += OnRootDropDownOpening;
-            _rootTrayMenuItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
-            _rootTrayMenuItem.DropDownClosed += OnDropDownClosed;
+            rootTrayMenuItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
+            rootTrayMenuItem.DropDownOpening += OnRootDropDownOpening;
+            rootTrayMenuItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
+            rootTrayMenuItem.DropDownClosed += OnDropDownClosed;
 
-            return _rootTrayMenuItem;
+            return rootTrayMenuItem;
         }
 
         private void OnRootDropDownOpening(object sender, EventArgs e)
@@ -65,7 +62,7 @@ namespace KeeTrayTOTP.Menu
             {
                 return new []
                 {
-                    new ToolStripMenuItem(Strings.NoDatabaseIsOpened, Resources.TOTP_Error)
+                    new ToolStripMenuItem(Localization.Strings.NoDatabaseIsOpened, Resources.TOTP_Error)
                 };
             }
 
@@ -85,7 +82,7 @@ namespace KeeTrayTOTP.Menu
             if (!document.Database.IsOpen)
             {
                 var documentName = UrlUtil.GetFileName(document.LockedIoc.Path);
-                documentName += " [" + Strings.Locked + "]";
+                documentName += " [" + Localization.Strings.Locked + "]";
                 mainDropDownItem = new ToolStripMenuItem(documentName, Resources.TOTP_Error, OnClickOpenDatabase);
             }
             else

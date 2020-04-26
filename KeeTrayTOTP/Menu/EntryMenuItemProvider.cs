@@ -7,7 +7,7 @@ using KeePassLib;
 
 namespace KeeTrayTOTP.Menu
 {
-    public class EntryMenuItemProvider : MenuItemProviderBase
+    public class EntryMenuItemProvider : IMenuItemProvider
     {
         private readonly KeeTrayTOTPExt _plugin;
         private readonly IPluginHost _pluginHost;
@@ -18,7 +18,7 @@ namespace KeeTrayTOTP.Menu
             _pluginHost = pluginHost;
         }
 
-        public override ToolStripMenuItem ProvideMenuItem()
+        public ToolStripMenuItem ProvideMenuItem()
         {
             var rootEntryMenuItem = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin, Properties.Resources.TOTP);
 

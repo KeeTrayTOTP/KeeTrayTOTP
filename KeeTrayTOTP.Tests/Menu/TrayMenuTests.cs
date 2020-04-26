@@ -1,15 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 using FluentAssertions;
 using KeePass.App.Configuration;
 using KeePass.Forms;
 using KeePass.Plugins;
 using KeePass.UI;
-using KeePassLib;
-using KeePassLib.Keys;
-using KeePassLib.Security;
-using KeePassLib.Serialization;
 using KeeTrayTOTP.Menu;
 using KeeTrayTOTP.Tests.Extensions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -51,7 +46,7 @@ namespace KeeTrayTOTP.Tests.Menu
 
             sut.Count.Should().Be(1);
             sut.First().Text.Should().Be(Localization.Strings.NoDatabaseIsOpened,
-                "because, there is no open database. (Keepass always provides a (new) PwDocument, even if there is no database open.");
+                "because, there is no open database. (KeePass always provides a (new) PwDocument, even if there is no database open.");
         }
 
 
@@ -60,7 +55,7 @@ namespace KeeTrayTOTP.Tests.Menu
         {
             var documents = new List<PwDocument>(new[]
             {
-                new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4),
+                new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4)
             });
 
             var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
@@ -90,7 +85,7 @@ namespace KeeTrayTOTP.Tests.Menu
             var documents = new List<PwDocument>(new[]
             {
                 new PwDocument().New().WithNonTotpEntries(4).WithTotpEnabledEntries(4),
-                new PwDocument().New().WithNonTotpEntries(4).WithTotpEnabledEntries(4),
+                new PwDocument().New().WithNonTotpEntries(4).WithTotpEnabledEntries(4)
             });
 
             var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
@@ -127,6 +122,21 @@ namespace KeeTrayTOTP.Tests.Menu
             sut.Count.Should().Be(2);
             sut.Should().OnlyContain(s => s.Text.Contains("[" + Localization.Strings.Locked + "]"),
                 "because, all databases are locked.");
+        }
+
+        [TestMethod]
+        public void BuildMenuItemsForRootDropDown_ShouldCreateDisabledMenuItems_IfTotpSettingsNotValid()
+        {
+            var documents = new List<PwDocument>(new[]
+            {
+                new PwDocument().New().WithFaultyTotpEnabledEntries(2)
+            });
+
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+
+            sut.Count.Should().Be(2);
+            sut.Should().OnlyContain(s => !s.Enabled, 
+                "because all entries contain invalid settings and can't be used");
         }
 
         private static KeeTrayTOTPExt CreatePluginHostMock(out Mock<IPluginHost> host)

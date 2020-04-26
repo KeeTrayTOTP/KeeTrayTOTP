@@ -1,5 +1,4 @@
-﻿using System.Windows.Forms;
-using FluentAssertions;
+﻿using FluentAssertions;
 using KeePass.App.Configuration;
 using KeePass.Forms;
 using KeePass.Plugins;

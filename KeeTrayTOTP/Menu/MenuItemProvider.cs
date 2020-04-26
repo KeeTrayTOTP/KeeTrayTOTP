@@ -1,15 +1,16 @@
 using System;
+using System.Linq;
 using System.Windows.Forms;
 using KeePass.Plugins;
 
 namespace KeeTrayTOTP.Menu
 {
-    public class MenuItemProvider : IDisposable
+    public sealed class MenuItemProvider : IDisposable
     {
         private bool _isDisposed;
-        internal MenuItemProviderBase TrayMenuItemProvider { get; private set; }
-        internal MenuItemProviderBase EntryMenuItemProvider { get; private set; }
-        internal MenuItemProviderBase MainMenuItemProvider { get; private set; }
+        internal TrayMenuItemProvider TrayMenuItemProvider { get; private set; }
+        internal EntryMenuItemProvider EntryMenuItemProvider { get; private set; }
+        internal MainMenuItemProvider MainMenuItemProvider { get; private set; }
 
         public MenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
         {
@@ -32,39 +33,17 @@ namespace KeeTrayTOTP.Menu
             {
                 // Provide a menu item for the main location(s)
                 case PluginMenuType.Main:
-                    return ProvideMainMenuItem();
+                    return MainMenuItemProvider.ProvideMenuItem();
 
                 case PluginMenuType.Entry:
-                    return ProvideEntryMenuItem();
+                    return EntryMenuItemProvider.ProvideMenuItem();
 
                 case PluginMenuType.Tray:
-                    return ProvideTrayMenuItem();
+                    return TrayMenuItemProvider.ProvideMenuItem();
 
-                case PluginMenuType.Group:
-                    return ProvideGroupMenuItem();
                 default:
                     return null; // No menu items in other locations
             }
-        }
-
-        protected ToolStripMenuItem ProvideTrayMenuItem()
-        {
-            return TrayMenuItemProvider != null ? TrayMenuItemProvider.ProvideMenuItem() : null;
-        }
-
-        protected ToolStripMenuItem ProvideEntryMenuItem()
-        {
-            return EntryMenuItemProvider != null ? EntryMenuItemProvider.ProvideMenuItem() : null;
-        }
-
-        protected ToolStripMenuItem ProvideMainMenuItem()
-        {
-            return MainMenuItemProvider != null ? MainMenuItemProvider.ProvideMenuItem() : null;
-        }
-
-        protected ToolStripMenuItem ProvideGroupMenuItem()
-        {
-            return null;
         }
 
         public void Dispose()
@@ -75,15 +54,20 @@ namespace KeeTrayTOTP.Menu
             GC.SuppressFinalize(this);
         }
 
-        protected void Dispose(bool disposing)
+        private void Dispose(bool disposing)
         {
             if (_isDisposed) return;
 
             if (disposing)
             {
-                TrayMenuItemProvider.Terminate();
-                EntryMenuItemProvider.Terminate();
-                MainMenuItemProvider.Terminate();
+                var disposableTypes =
+                    new IMenuItemProvider[] {TrayMenuItemProvider, EntryMenuItemProvider, MainMenuItemProvider}
+                        .OfType<IDisposable>();
+
+                foreach (var disposable in disposableTypes)
+                {
+                    disposable.Dispose();
+                }
             }
 
             _isDisposed = true;

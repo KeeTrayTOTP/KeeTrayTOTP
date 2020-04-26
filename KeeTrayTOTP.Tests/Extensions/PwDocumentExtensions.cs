@@ -37,6 +37,18 @@ namespace KeeTrayTOTP.Tests.Extensions
             return pwDocument;
         }
 
+        public static PwDocument WithFaultyTotpEnabledEntries(this PwDocument pwDocument, int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                pwDocument.Database.RootGroup.AddEntry(
+                    new PwEntry(true, true).WithInvalidTotpSettings(),
+                    true);
+            }
+
+            return pwDocument;
+        }
+
         public static PwDocument WithNonTotpEntries(this PwDocument pwDocument, int count)
         {
             for (int i = 0; i < count; i++)

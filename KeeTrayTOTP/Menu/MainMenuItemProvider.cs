@@ -4,7 +4,7 @@ using KeePass.UI;
 
 namespace KeeTrayTOTP.Menu
 {
-    public class MainMenuItemProvider : MenuItemProviderBase
+    public class MainMenuItemProvider : IMenuItemProvider
     {
         private readonly KeeTrayTOTPExt _plugin;
 
@@ -23,7 +23,7 @@ namespace KeeTrayTOTP.Menu
             UIUtil.ShowDialogAndDestroy(new FormAbout());
         }
 
-        public override ToolStripMenuItem ProvideMenuItem()
+        public ToolStripMenuItem ProvideMenuItem()
         {
             var rootMainMenuItem =
                 new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin, Properties.Resources.TOTP);

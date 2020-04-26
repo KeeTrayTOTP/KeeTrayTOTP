@@ -98,7 +98,7 @@
     <Compile Include="Libraries\Base32.cs" />
     <Compile Include="Libraries\TimeCorrectionProvider.cs" />
     <Compile Include="Libraries\TOTPEncoder.cs" />
-    <Compile Include="Menu\MenuItemProviderBase.cs" />
+    <Compile Include="Menu\IMenuItemProvider.cs" />
     <Compile Include="Menu\TrayMenuItemProvider.cs" />
     <Compile Include="SetupTOTP.cs">
       <SubType>Form</SubType>
