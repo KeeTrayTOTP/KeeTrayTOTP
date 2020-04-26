@@ -120,6 +120,12 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="ColumnTOTPCode" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="ColumnTOTPStatus" xml:space="preserve">
+    <value>TOTP Status</value>
+  </data>
   <data name="ConnectionFailed" xml:space="preserve">
     <value>Connection failed!</value>
   </data>
@@ -264,6 +270,9 @@
   </data>
   <data name="TOTP" xml:space="preserve">
     <value>TOTP</value>
+  </data>
+  <data name="TOTPEnabled" xml:space="preserve">
+    <value>TOTP Enabled</value>
   </data>
   <data name="TOTPSeed" xml:space="preserve">
     <value>TOTP Seed</value>

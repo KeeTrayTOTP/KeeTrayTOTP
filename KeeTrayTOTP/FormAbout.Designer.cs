@@ -72,6 +72,7 @@
             this.columnHeader2});
             this.ListViewAbout.FullRowSelect = true;
             this.ListViewAbout.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.ListViewAbout.HideSelection = false;
             this.ListViewAbout.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
             listViewItem2,
@@ -86,6 +87,8 @@
             this.ListViewAbout.TabIndex = 0;
             this.ListViewAbout.UseCompatibleStateImageBehavior = false;
             this.ListViewAbout.View = System.Windows.Forms.View.Details;
+            this.ListViewAbout.MouseClick += new System.Windows.Forms.MouseEventHandler(this.ListViewAbout_MouseClick);
+            this.ListViewAbout.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ListViewAbout_MouseMove);
             // 
             // columnHeader1
             // 
