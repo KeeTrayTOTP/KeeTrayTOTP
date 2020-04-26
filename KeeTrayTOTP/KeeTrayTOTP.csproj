@@ -141,7 +141,11 @@
     <Compile Include="TrayTOTP_Plugin.cs" />
     <Compile Include="TrayTOTP_TimeCorrectionCollection.cs" />
     <Compile Include="TrayTOTP_ColumnProvider.cs" />
-	<Compile Include="obj\ReleasePlgx\KeeTrayTOTP.Version.cs" Condition=" false " />
+	<Compile Include="obj\ReleasePlgx\KeeTrayTOTP.Version.cs" Condition=" 'A' == 'B' ">
+      <!-- include automatic generated version in the plgx file 
+	  (KeePass and PlgxTool ignore conditions) -->
+	  <Visible>false</Visible>
+	</Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormAbout.resx">
