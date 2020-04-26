@@ -27,14 +27,26 @@ jobs:
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
 
+    - name: Install dotnet-sonarscanner
+      run: dotnet tool install --global dotnet-sonarscanner
+      
+    - name: SonarScanner Begin
+      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.host.url="https://sonarcloud.io"
+
     - name: MSBuild (With Plgx)
       run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
+
+    - name: SonarScanner End
+      run: dotnet sonarscanner end
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     - name: Upload plgx
       uses: actions/upload-artifact@v1
       with:
         name: KeeTrayTOTP.plgx
-        path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
+        path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx        
 
     - name: Create prerelease
       uses: "marvinpinto/action-automatic-releases@latest"

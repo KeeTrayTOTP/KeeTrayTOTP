@@ -120,6 +120,12 @@
   <data name="About" xml:space="preserve">
     <value>About</value>
   </data>
+  <data name="ColumnTOTPCode" xml:space="preserve">
+    <value>TOTP</value>
+  </data>
+  <data name="ColumnTOTPStatus" xml:space="preserve">
+    <value>TOTP Status</value>
+  </data>
   <data name="ConnectionFailed" xml:space="preserve">
     <value>Connection failed!</value>
   </data>
@@ -150,6 +156,15 @@
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
+  </data>
+  <data name="Locked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="NoDatabaseIsOpened" xml:space="preserve">
+    <value>No database is opened!</value>
+  </data>
+  <data name="NoTOTPEntriesFound" xml:space="preserve">
+    <value>No TOTP Entries found</value>
   </data>
   <data name="NoTOTPSeedFound" xml:space="preserve">
     <value>No TOTP Seed found!</value>
@@ -203,6 +218,9 @@
   </data>
   <data name="SetupInvalidCharacter" xml:space="preserve">
     <value>Invalid character</value>
+  </data>
+  <data name="SetupInvalidPadding" xml:space="preserve">
+    <value>Padding (=) can only appear at the end!</value>
   </data>
   <data name="SetupInvalidUrl" xml:space="preserve">
     <value>Invalid URL!</value>
@@ -264,6 +282,9 @@
   </data>
   <data name="TOTP" xml:space="preserve">
     <value>TOTP</value>
+  </data>
+  <data name="TOTPEnabled" xml:space="preserve">
+    <value>TOTP Enabled</value>
   </data>
   <data name="TOTPSeed" xml:space="preserve">
     <value>TOTP Seed</value>

@@ -70,6 +70,24 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to TOTP.
+        /// </summary>
+        internal static string ColumnTOTPCode {
+            get {
+                return ResourceManager.GetString("ColumnTOTPCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TOTP Status.
+        /// </summary>
+        internal static string ColumnTOTPStatus {
+            get {
+                return ResourceManager.GetString("ColumnTOTPStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Connection failed!.
         /// </summary>
         internal static string ConnectionFailed {
@@ -156,6 +174,33 @@ namespace KeeTrayTOTP.Localization {
         internal static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Locked.
+        /// </summary>
+        internal static string Locked {
+            get {
+                return ResourceManager.GetString("Locked", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No database is opened!.
+        /// </summary>
+        internal static string NoDatabaseIsOpened {
+            get {
+                return ResourceManager.GetString("NoDatabaseIsOpened", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No TOTP Entries found.
+        /// </summary>
+        internal static string NoTOTPEntriesFound {
+            get {
+                return ResourceManager.GetString("NoTOTPEntriesFound", resourceCulture);
             }
         }
         
@@ -309,6 +354,15 @@ namespace KeeTrayTOTP.Localization {
         internal static string SetupInvalidCharacter {
             get {
                 return ResourceManager.GetString("SetupInvalidCharacter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Padding (=) can only appear at the end!.
+        /// </summary>
+        internal static string SetupInvalidPadding {
+            get {
+                return ResourceManager.GetString("SetupInvalidPadding", resourceCulture);
             }
         }
         
@@ -489,6 +543,15 @@ namespace KeeTrayTOTP.Localization {
         internal static string TOTP {
             get {
                 return ResourceManager.GetString("TOTP", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to TOTP Enabled.
+        /// </summary>
+        internal static string TOTPEnabled {
+            get {
+                return ResourceManager.GetString("TOTPEnabled", resourceCulture);
             }
         }
         

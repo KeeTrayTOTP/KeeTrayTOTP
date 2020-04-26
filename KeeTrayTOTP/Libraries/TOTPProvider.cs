@@ -68,7 +68,7 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Instantiate a new TOTP_Generator.
         /// </summary>
-        public TOTPProvider(string[] settings, ref TimeCorrectionCollection tcc)
+        public TOTPProvider(string[] settings, TimeCorrectionCollection tcc)
         {
             this._duration = Convert.ToInt16(settings[0]);
 
@@ -136,26 +136,6 @@ namespace KeeTrayTOTP.Libraries
                 var elapsedSeconds = (long)Math.Floor((Now - UnixEpoch).TotalSeconds); //Compute current counter for current time.
                 return elapsedSeconds / _duration; //Applies specified interval to computed counter.
             }
-        }
-
-        /// <summary>
-        /// Converts an unsigned integer to binary data.
-        /// </summary>
-        /// <param name="n">Unsigned Integer.</param>
-        /// <returns>Binary data.</returns>
-        private byte[] GetBytes(ulong n)
-        {
-            byte[] b = new byte[8];
-            b[0] = (byte)(n >> 56);
-            b[1] = (byte)(n >> 48);
-            b[2] = (byte)(n >> 40);
-            b[3] = (byte)(n >> 32);
-            b[4] = (byte)(n >> 24);
-            b[5] = (byte)(n >> 16);
-            b[6] = (byte)(n >> 8);
-            b[7] = (byte)n;
-
-            return b;
         }
 
         /// <summary>
