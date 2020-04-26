@@ -71,6 +71,39 @@ namespace KeeTrayTOTP.Tests
         }
 
         [TestMethod]
+        public void GetUri_ShouldContainNonDefaultParameters()
+        {
+            var uri = new Uri(MinimalKeyUri);
+
+            var keyUri = new KeyUri(uri);
+            keyUri.Algorithm = "SHA256";
+            keyUri.Digits = 8;
+            keyUri.Period = 60;
+
+            var absoluteUri = keyUri.GetUri().AbsoluteUri;
+            absoluteUri.Should().Contain("period=60");
+            absoluteUri.Should().Contain("digits=8");
+            absoluteUri.Should().Contain("algorithm=SHA256");
+        }
+
+
+        [TestMethod]
+        public void GetUri_ShouldContainDefaultParameters()
+        {
+            var uri = new Uri(MinimalKeyUri);
+
+            var keyUri = new KeyUri(uri);
+            keyUri.Algorithm = "SHA1";
+            keyUri.Digits = 6;
+            keyUri.Period = 30;
+
+            var absoluteUri = keyUri.GetUri().AbsoluteUri;
+            absoluteUri.Should().NotContain("period=");
+            absoluteUri.Should().NotContain("digits=");
+            absoluteUri.Should().NotContain("algorithm=");
+        }
+
+        [TestMethod]
         public void MinimalUrl_ShouldDefaultPeriodTo30()
         {
             var uri = new Uri(MinimalKeyUri);
@@ -127,6 +160,7 @@ namespace KeeTrayTOTP.Tests
         [DataRow("otpauth://totp/?secret=ABABABABABABABAB&algorithm=SHA256&digits=6", "No label")]
         [DataRow("otpauth://totp/SomeLabel?secret=&algorithm=SHA256&digits=6", "No secret provided.")]
         [DataRow("otpauth://totp/SomeLabel?algorithm=SHA256&digits=6", "No secret provided.")]
+        [DataRow("otpauth://totp/SomeLabel?secret=ABABABA%3D%3D%3DABABAB&algorithm=SHA256&digits=6", "Secret is not valid base32.")]
         [DataRow("otpauth://totp/SomeLabel?secret=ABABABAB@ABABABAB&algorithm=SHA256&digits=6", "Secret is not valid base32.")]
         [DataRow("otpauth://totp/SomeLabel?secret=ABABABABABABABAB&algorithm=&digits=6", "Not a valid algorithm")]
         [DataRow("otpauth://totp/SomeLabel?secret=ABABABABABABABAB&algorithm=SHA12&digits=6", "Not a valid algorithm")]
