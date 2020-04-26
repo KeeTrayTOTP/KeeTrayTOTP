@@ -26,16 +26,14 @@ namespace KeeTrayTOTP
             }
             this.Type = EnsureValidType(uri);
 
-            var query = ParseQueryString(uri.Query);
+            var parsedQuery = ParseQueryString(uri.Query);
 
-            // REQUIRED: The secret parameter is an arbitrary key value encoded in Base32 according to RFC 3548.
-            // The padding specified in RFC 3548 section 2.2 is not required and should be omitted.
-            this.Secret = EnsureValidSecret(query);
-            this.Algorithm = EnsureValidAlgorithm(query);
-            this.Digits = EnsureValidDigits(query);
-            this.Period = EnsureValidPeriod(query);
+            this.Secret = EnsureValidSecret(parsedQuery);
+            this.Algorithm = EnsureValidAlgorithm(parsedQuery);
+            this.Digits = EnsureValidDigits(parsedQuery);
+            this.Period = EnsureValidPeriod(parsedQuery);
 
-            EnsureValidLabelAndIssuer(uri, query);
+            EnsureValidLabelAndIssuer(uri, parsedQuery);
         }
 
         private void EnsureValidLabelAndIssuer(Uri uri, NameValueCollection query)
