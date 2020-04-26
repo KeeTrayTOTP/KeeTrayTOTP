@@ -141,6 +141,7 @@
     <Compile Include="TrayTOTP_Plugin.cs" />
     <Compile Include="TrayTOTP_TimeCorrectionCollection.cs" />
     <Compile Include="TrayTOTP_ColumnProvider.cs" />
+	<Compile Include="obj\ReleasePlgx\KeeTrayTOTP.Version.cs" Condition=" false " />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormAbout.resx">
