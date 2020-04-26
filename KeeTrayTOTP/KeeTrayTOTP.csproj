@@ -73,6 +73,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KeyUri.cs" />
     <Compile Include="Libraries\DropDownLocationCalculator.cs" />
     <Compile Include="FormAbout.cs">
       <SubType>Form</SubType>
