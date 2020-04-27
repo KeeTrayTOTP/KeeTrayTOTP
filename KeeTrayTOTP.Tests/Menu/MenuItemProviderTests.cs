@@ -35,8 +35,8 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void MenuItemProvider_ShouldReturnTheLegacyTrayMenuItemProvider_IfSetInConfig()
         {
-            _host.Object.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, true);
             _plugin.Initialize(_host.Object);
+            _plugin.Settings.LegacyTrayMenuProviderEnable = true;
 
             var sut = new MenuItemProvider(_plugin, _host.Object);
 
