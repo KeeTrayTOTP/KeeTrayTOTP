@@ -34,7 +34,6 @@ namespace KeeTrayTOTP
         internal const string keeobj_string_EntryContextMenuEntriesSubMenu_Name = "m_ctxEntryMassModify";
         internal const string keeobj_string_EntryContextMenuEntriesSubMenuSeperator1_Name = "m_ctxEntrySelectedSep1";
 
-        internal const string setname_bool_LegacyTrayMenuProvider_Enable = "traymenulegacymenuprovider_enable";
         /// <summary>
         /// Form Help Global Reference.
         /// </summary>

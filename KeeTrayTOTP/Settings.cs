@@ -1,5 +1,4 @@
 ﻿using KeePass.App.Configuration;
-using KeePass.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +16,7 @@ namespace KeeTrayTOTP
             internal const string EntryContextSetupVisible = "entrycontextsetup_visible";
 
             internal const string FirstInstallShown = "firstinstall_shown";
+            internal const string LegacyTrayMenuProviderEnable = "traymenulegacymenuprovider_enable";
             internal const string NotifyContextVisible = "notifycontext_visible";
 
             internal const string TimeCorrectionEnable = "timecorrection_enable";
@@ -86,6 +86,12 @@ namespace KeeTrayTOTP
         {
             get { return _keePassCustomConfig.GetBool(SettingKeys.NotifyContextVisible, true); }
             set { _keePassCustomConfig.SetBool(SettingKeys.NotifyContextVisible, value); }
+        }
+
+        public bool LegacyTrayMenuProviderEnable
+        {
+            get { return _keePassCustomConfig.GetBool(SettingKeys.LegacyTrayMenuProviderEnable, false); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.LegacyTrayMenuProviderEnable, value); }
         }
 
         public bool TrimTrayText
@@ -159,6 +165,7 @@ namespace KeeTrayTOTP
             // Menus
             _keePassCustomConfig.SetString(SettingKeys.EntryContextCopyVisible, null);
             _keePassCustomConfig.SetString(SettingKeys.EntryContextSetupVisible, null);
+            _keePassCustomConfig.SetString(SettingKeys.LegacyTrayMenuProviderEnable, null);
             _keePassCustomConfig.SetString(SettingKeys.NotifyContextVisible, null);
 
             // TOTP Column
