@@ -21,7 +21,6 @@ namespace KeeTrayTOTP
         /// Plugin Host.
         /// </summary>
         private readonly KeeTrayTOTPExt _plugin;
-        private readonly Settings _settings;
 
         /// <summary>
         /// Windows Form Constructor.
@@ -30,7 +29,6 @@ namespace KeeTrayTOTP
         internal FormSettings(KeeTrayTOTPExt plugin)
         {
             _plugin = plugin; //Defines variable from argument.
-            _settings = plugin.Settings;
             InitializeComponent(); //Form Initialization.
         }
 
