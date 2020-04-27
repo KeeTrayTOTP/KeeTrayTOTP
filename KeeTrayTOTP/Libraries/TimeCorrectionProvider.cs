@@ -52,11 +52,6 @@ namespace KeeTrayTOTP.Libraries
         /// </summary>
         public bool LastUpdateSucceeded { get; private set; }
 
-        static TimeCorrectionProvider()
-        {
-            Interval = KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime;
-        }
-
         /// <summary>
         /// Instanciates a new TOTP_TimeCorrection using the specified URL to contact the server.
         /// </summary>

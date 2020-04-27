@@ -35,10 +35,8 @@ namespace KeeTrayTOTP.Menu
                 entryMenuSetupTotp.Enabled = false;
                 entryMenuShowQrCode.Enabled = false;
 
-                entryMenuCopyTotp.Visible =
-                    _pluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_EntryContextCopy_Visible, true);
-                entryMenuSetupTotp.Visible =
-                    _pluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_EntryContextSetup_Visible, true);
+                entryMenuCopyTotp.Visible = _plugin.Settings.EntryContextCopyVisible;
+                entryMenuSetupTotp.Visible = _plugin.Settings.EntryContextSetupVisible;
 
                 if (_pluginHost.MainWindow.GetSelectedEntriesCount() == 1)
                 {
@@ -83,7 +81,7 @@ namespace KeeTrayTOTP.Menu
             }
 
             var rawSeed = _plugin.SeedGet(entry).ReadString();
-            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "");
+            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "").TrimEnd('=');
             var issuer = entry.Strings.Get("Title").ReadString();
             var username = entry.Strings.Get("UserName").ReadString();
             UIUtil.ShowDialogAndDestroy(new ShowQR(cleanSeed, issuer, username));

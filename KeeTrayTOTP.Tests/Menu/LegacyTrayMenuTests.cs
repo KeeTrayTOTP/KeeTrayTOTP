@@ -27,7 +27,7 @@ namespace KeeTrayTOTP.Tests.Menu
         public void LegacyTrayMenuItemProvider_ShouldAddItemsDirectlyToMainWindowsTrayContextMenu()
         {
             var plugin = CreatePluginHostMock(out var host);
-            host.Object.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, true);
+            host.Object.CustomConfig.SetBool("traymenulegacymenuprovider_enable", true);
             var oldItemCount = host.Object.MainWindow.TrayContextMenu.Items.Count;
             
             plugin.Initialize(host.Object);

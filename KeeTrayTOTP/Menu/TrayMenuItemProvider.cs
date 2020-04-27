@@ -18,8 +18,6 @@ namespace KeeTrayTOTP.Menu
         protected readonly IPluginHost PluginHost;
         protected readonly DocumentManagerEx DocumentManager;
 
-        private bool _trimTrayMenuTextEnabled;
-
         public TrayMenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
         {
             Plugin = plugin;
@@ -48,7 +46,6 @@ namespace KeeTrayTOTP.Menu
             }
 
             rootTrayMenuItem.DropDownItems.Clear();
-            _trimTrayMenuTextEnabled = PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TrimTrayText, false);
 
             var documents = PluginHost.MainWindow.DocumentManager.Documents;
 
@@ -223,8 +220,8 @@ namespace KeeTrayTOTP.Menu
         private string TrimMenuItemTitleIfNecessary(string entryTitle, string entryUsername)
         {
             if (string.IsNullOrEmpty(entryUsername) ||
-                (_trimTrayMenuTextEnabled &&
-                 entryTitle.Length + entryUsername.Length > KeeTrayTOTPExt.setstat_trim_text_length))
+                (Plugin.Settings.TrimTrayText &&
+                 entryTitle.Length + entryUsername.Length > Plugin.Settings.TrimTextLength))
             {
                 return entryTitle.ExtWithSpaceAfter();
             }

@@ -64,7 +64,7 @@ namespace KeeTrayTOTP.Menu
             }
 
             _niMenuList.Clear();
-            if (PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_NotifyContext_Visible, true))
+            if (Plugin.Settings.NotifyContextVisible)
             {
                 _niMenuTitle.Visible = true;
                 _niMenuSeparator.Visible = true;
