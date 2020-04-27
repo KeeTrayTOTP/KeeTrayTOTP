@@ -7,13 +7,7 @@ namespace KeeTrayTOTP.Tests
     [TestClass]
     public class SettingsTests
     {
-        private readonly Settings sut;
-
-        public SettingsTests()
-        {
-            var customConfig = new AceCustomConfig();
-            sut = new Settings(customConfig);
-        }
+        private readonly Settings sut = new Settings(new AceCustomConfig());
 
         [TestMethod]
         public void AutoTypeEnable_GetAndSetChangeCorrectField()
