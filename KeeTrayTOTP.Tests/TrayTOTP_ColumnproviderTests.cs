@@ -14,7 +14,6 @@ namespace KeeTrayTOTP.Tests
     public class TrayTOTP_ColumnproviderTests : IDisposable
     {
         private readonly KeeTrayTOTPExt _plugin;
-        private readonly IPluginHost _pluginHost;
 
         const string InvalidSeed = "C5CYMIHWQUUZMKUGZHGEOSJSQDE4L===!";
         const string ValidSeed = "JBSWY3DPEHPK3PXP";
@@ -22,7 +21,7 @@ namespace KeeTrayTOTP.Tests
 
         public TrayTOTP_ColumnproviderTests()
         {
-            (_plugin, _pluginHost) = CreateInitializedPlugin();
+            (_plugin, _) = CreateInitializedPlugin();
         }
 
         [DataRow(ValidSeed, ValidSettings, "TOTP Enabled")]

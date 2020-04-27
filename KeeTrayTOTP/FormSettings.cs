@@ -21,6 +21,7 @@ namespace KeeTrayTOTP
         /// Plugin Host.
         /// </summary>
         private readonly KeeTrayTOTPExt _plugin;
+        private readonly Settings _settings;
 
         /// <summary>
         /// Windows Form Constructor.
@@ -29,6 +30,7 @@ namespace KeeTrayTOTP
         internal FormSettings(KeeTrayTOTPExt plugin)
         {
             _plugin = plugin; //Defines variable from argument.
+            _settings = plugin.Settings;
             InitializeComponent(); //Form Initialization.
         }
 
@@ -436,19 +438,19 @@ namespace KeeTrayTOTP
 
         private void WorkerReset_DoWork(object sender, DoWorkEventArgs e)
         {
-            // Menus
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_EntryContextCopy_Visible, null);
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_EntryContextSetup_Visible, null);
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_NotifyContext_Visible, null);
-
-            // TOTP Column
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_TOTPColumnCopy_Enable, null);
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_TOTPColumnTimer_Visible, null);
-
-            // Auto-Type
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_AutoType_Enable, null);
+            // Get a reference to old settings (for AutoType)
             string oldAutoTypeFieldName = _plugin.Settings.AutoTypeFieldName.ExtWithBrackets();
+
+            // Reset the settings
+            _plugin.Settings.Reset();
+
+            // Apply the new settings
+            Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(_plugin.Settings.TimeCorrectionRefreshTime);
+            _plugin.TimeCorrections.ResetThenAddRangeFromString(string.Empty);
+
+            // Auto Type
             string newAutoTypeFieldName = Localization.Strings.TOTP.ExtWithBrackets();
+            KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Add(newAutoTypeFieldName);
             KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Remove(oldAutoTypeFieldName);
             _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.DefaultAutoTypeSequence = _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.DefaultAutoTypeSequence.Replace(oldAutoTypeFieldName, newAutoTypeFieldName);
             foreach (var group in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetGroups(true))
@@ -462,18 +464,6 @@ namespace KeeTrayTOTP
                     }
                 }
             }
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_AutoType_FieldName, null);
-            KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Add(newAutoTypeFieldName);
-
-            // Time Correction
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_bool_TimeCorrection_Enable, null);
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_ulong_TimeCorrection_RefreshTime, null);
-            Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(KeeTrayTOTPExt.setdef_TimeCorrection_RefreshTime);
-            _plugin.TimeCorrections.ResetThenAddRangeFromString(string.Empty);
-
-            // Storage
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_TOTPSeed_StringName, null);
-            _plugin.PluginHost.CustomConfig.SetString(KeeTrayTOTPExt.setname_string_TOTPSettings_StringName, null);
         }
 
         private void WorkerReset_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

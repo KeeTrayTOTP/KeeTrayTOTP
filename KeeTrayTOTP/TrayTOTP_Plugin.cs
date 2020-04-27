@@ -38,41 +38,6 @@ namespace KeeTrayTOTP
         internal const string keeobj_string_EntryContextMenuEntriesSubMenuSeperator1_Name = "m_ctxEntrySelectedSep1";
 
         /// <summary>
-        /// Constants (custom string key).
-        /// </summary>
-        internal const string setname_string_TimeCorrection_List = "traytotp_timecorrection_list";
-
-        /// <summary>
-        /// Constants (setting names).
-        /// </summary>
-        internal const string setname_bool_FirstInstall_Shown = "firstinstall_shown";
-        internal const string setname_bool_EntryContextCopy_Visible = "entrycontextcopy_visible";
-        internal const string setname_bool_EntryContextSetup_Visible = "entrycontextsetup_visible";
-        internal const string setname_bool_NotifyContext_Visible = "notifycontext_visible";
-        internal const string setname_bool_TOTPColumnCopy_Enable = "totpcolumncopy_enable";
-        internal const string setname_bool_TOTPColumnTimer_Visible = "totpcolumntimer_visible";
-        internal const string setname_bool_AutoType_Enable = "autotype_enable";
-        internal const string setname_string_AutoType_FieldName = "autotype_fieldname";
-        internal const string setname_bool_TimeCorrection_Enable = "timecorrection_enable";
-        internal const string setname_ulong_TimeCorrection_RefreshTime = "timecorrection_refreshtime";
-        internal const string setname_string_TOTPSeed_StringName = "totpseed_stringname";
-        internal const string setname_string_TOTPSettings_StringName = "totpsettings_stringname";
-        internal const string setname_bool_TrimTrayText = "traytotp_trim_tray_text";
-
-        /// <summary>
-        /// Constants (default settings values).
-        /// </summary>
-        internal const string setdef_string_AutoType_FieldName = "TOTP";
-        internal const int setdef_TimeCorrection_RefreshTime = 60;
-
-        /// <summary>
-        /// Constants (static settings value).
-        /// </summary>
-        internal const int setstat_int_EntryList_RefreshRate = 300;
-        internal const int setstat_trim_text_length = 25;
-        internal readonly ReadOnlyCollection<string> setstat_allowed_lengths = new ReadOnlyCollection<string>(new[] { "6", "7", "8", "S" });
-
-        /// <summary>
         /// Form Help Global Reference.
         /// </summary>
         private FormHelp _helpForm;
@@ -268,13 +233,13 @@ namespace KeeTrayTOTP
             PluginHost.ColumnProviderPool.Add(columnProvider);
 
             // Refresh Timer.
-            _liRefreshTimer.Interval = setstat_int_EntryList_RefreshRate;
+            _liRefreshTimer.Interval = Settings.EntryListRefreshRate;
             _liRefreshTimer.Enabled = true;
             _liRefreshTimer.Tick += OnTimerTick;
 
             //Time Correction.
-            TimeCorrections = new TimeCorrectionCollection(Settings.TimeCorrectionEnable);
             TimeCorrectionProvider.Interval = Convert.ToInt16(Settings.TimeCorrectionRefreshTime);
+            TimeCorrections = new TimeCorrectionCollection(Settings.TimeCorrectionEnable);
             TimeCorrections.AddRangeFromList(Settings.TimeCorrectionList);
 
             return true;
@@ -428,7 +393,7 @@ namespace KeeTrayTOTP
                         var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
                         var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
                         string trayTitle;
-                        if ((Settings.TrimTrayText && entryTitle.Length + entryUsername.Length > setstat_trim_text_length) || string.IsNullOrEmpty(entryUsername))
+                        if ((Settings.TrimTrayText && entryTitle.Length + entryUsername.Length > Settings.TrimTextLength) || string.IsNullOrEmpty(entryUsername))
                         {
                             trayTitle = entryTitle.ExtWithSpaceAfter();
                         }
@@ -746,7 +711,7 @@ namespace KeeTrayTOTP
                 return false;
             }
 
-            if (!setstat_allowed_lengths.Contains(settings[1]))
+            if (!Settings.AllowedLengths.Contains(settings[1]))
             {
                 return false;
             }
