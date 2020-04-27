@@ -188,9 +188,8 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Returns all URLs in one string in order to save them to KeePass settings.
+        /// Returns all time correction URLs
         /// </summary>
-        /// <returns>String seperated by a colon.</returns>
         internal IEnumerable<string> GetTimeCorrectionUrls()
         {
             return _timeCorrections.Select(c => c.Url);
