@@ -203,7 +203,7 @@ namespace KeeTrayTOTP
 
             PluginHost = host;
 
-            Settings = new Settings(host);
+            Settings = new Settings(host.CustomConfig);
 
             // Instantiate Help Form.
             _helpForm = new FormHelp();

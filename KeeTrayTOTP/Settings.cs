@@ -1,4 +1,5 @@
-﻿using KeePass.Plugins;
+﻿using KeePass.App.Configuration;
+using KeePass.Plugins;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -47,12 +48,12 @@ namespace KeeTrayTOTP
             internal static readonly ReadOnlyCollection<string> AllowedLengths = new ReadOnlyCollection<string>(new[] { "6", "7", "8", "S" });
         }
 
-        private readonly IPluginHost _pluginHost;
+        private readonly AceCustomConfig _keePassCustomConfig;
 
-        public Settings(IPluginHost pluginHost)
+        public Settings(AceCustomConfig keepassCustomConfig)
         {
-            this._pluginHost = pluginHost;
-        }      
+            this._keePassCustomConfig = keepassCustomConfig;
+        }
 
         public ReadOnlyCollection<string> AllowedLengths
         {
@@ -71,111 +72,111 @@ namespace KeeTrayTOTP
 
         public bool EntryContextCopyVisible
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.EntryContextCopyVisible, true); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.EntryContextCopyVisible, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.EntryContextCopyVisible, true); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.EntryContextCopyVisible, value); }
         }
 
         public bool EntryContextSetupVisible
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.EntryContextSetupVisible, true); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.EntryContextSetupVisible, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.EntryContextSetupVisible, true); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.EntryContextSetupVisible, value); }
         }
 
         public bool NotifyContextVisible
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.NotifyContextVisible, true); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.NotifyContextVisible, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.NotifyContextVisible, true); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.NotifyContextVisible, value); }
         }
 
         public bool TrimTrayText
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.TrimTrayText, false); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.TrimTrayText, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.TrimTrayText, false); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.TrimTrayText, value); }
         }
 
         public bool TOTPColumnCopyEnable
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.TOTPColumnCopyEnable, true); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.TOTPColumnCopyEnable, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.TOTPColumnCopyEnable, true); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.TOTPColumnCopyEnable, value); }
         }
 
         public bool TOTPColumnTimerVisible
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.TOTPColumnTimerVisible, true); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.TOTPColumnTimerVisible, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.TOTPColumnTimerVisible, true); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.TOTPColumnTimerVisible, value); }
         }
 
         public bool AutoTypeEnable
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.AutoTypeEnable, true); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.AutoTypeEnable, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.AutoTypeEnable, true); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.AutoTypeEnable, value); }
         }
 
         public string AutoTypeFieldName
         {
-            get { return _pluginHost.CustomConfig.GetString(SettingKeys.AutoTypeFieldName, SettingDefaults.AutoTypeFieldName); }
-            set { _pluginHost.CustomConfig.SetString(SettingKeys.AutoTypeFieldName, value); }
+            get { return _keePassCustomConfig.GetString(SettingKeys.AutoTypeFieldName, SettingDefaults.AutoTypeFieldName); }
+            set { _keePassCustomConfig.SetString(SettingKeys.AutoTypeFieldName, value); }
         }
 
         public bool TimeCorrectionEnable
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.TimeCorrectionEnable, false); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.TimeCorrectionEnable, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.TimeCorrectionEnable, false); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.TimeCorrectionEnable, value); }
         }
 
         public ulong TimeCorrectionRefreshTime
         {
-            get { return _pluginHost.CustomConfig.GetULong(SettingKeys.TimeCorrectionRefreshTime, SettingDefaults.TimeCorrectionRefreshTime); }
-            set { _pluginHost.CustomConfig.SetULong(SettingKeys.TimeCorrectionRefreshTime, value); }
+            get { return _keePassCustomConfig.GetULong(SettingKeys.TimeCorrectionRefreshTime, SettingDefaults.TimeCorrectionRefreshTime); }
+            set { _keePassCustomConfig.SetULong(SettingKeys.TimeCorrectionRefreshTime, value); }
         }
 
         public IEnumerable<string> TimeCorrectionList
         {
-            get { return _pluginHost.CustomConfig.GetString(SettingKeys.TimeCorrectionList, string.Empty).Split(';'); }
-            set { _pluginHost.CustomConfig.SetString(SettingKeys.TimeCorrectionList, string.Join(";", value)); }
+            get { return _keePassCustomConfig.GetString(SettingKeys.TimeCorrectionList, string.Empty).Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries); }
+            set { _keePassCustomConfig.SetString(SettingKeys.TimeCorrectionList, string.Join(";", value)); }
         }
 
         public string TOTPSeedStringName
         {
-            get { return _pluginHost.CustomConfig.GetString(SettingKeys.TOTPSeedStringName, Localization.Strings.TOTPSeed); }
-            set { _pluginHost.CustomConfig.SetString(SettingKeys.TOTPSeedStringName, value); }
+            get { return _keePassCustomConfig.GetString(SettingKeys.TOTPSeedStringName, Localization.Strings.TOTPSeed); }
+            set { _keePassCustomConfig.SetString(SettingKeys.TOTPSeedStringName, value); }
         }
 
         public string TOTPSettingsStringName
         {
-            get { return _pluginHost.CustomConfig.GetString(SettingKeys.TOTPSettingsStringName, Localization.Strings.TOTPSettings); }
-            set { _pluginHost.CustomConfig.SetString(SettingKeys.TOTPSettingsStringName, value); }
+            get { return _keePassCustomConfig.GetString(SettingKeys.TOTPSettingsStringName, Localization.Strings.TOTPSettings); }
+            set { _keePassCustomConfig.SetString(SettingKeys.TOTPSettingsStringName, value); }
         }
 
         public bool FirstInstallShown
         {
-            get { return _pluginHost.CustomConfig.GetBool(SettingKeys.FirstInstallShown, false); }
-            set { _pluginHost.CustomConfig.SetBool(SettingKeys.FirstInstallShown, value); }
+            get { return _keePassCustomConfig.GetBool(SettingKeys.FirstInstallShown, false); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.FirstInstallShown, value); }
         }
 
         internal void Reset()
         {
             // Menus
-            _pluginHost.CustomConfig.SetString(SettingKeys.EntryContextCopyVisible, null);
-            _pluginHost.CustomConfig.SetString(SettingKeys.EntryContextSetupVisible, null);
-            _pluginHost.CustomConfig.SetString(SettingKeys.NotifyContextVisible, null);
+            _keePassCustomConfig.SetString(SettingKeys.EntryContextCopyVisible, null);
+            _keePassCustomConfig.SetString(SettingKeys.EntryContextSetupVisible, null);
+            _keePassCustomConfig.SetString(SettingKeys.NotifyContextVisible, null);
 
             // TOTP Column
-            _pluginHost.CustomConfig.SetString(SettingKeys.TOTPColumnCopyEnable, null);
-            _pluginHost.CustomConfig.SetString(SettingKeys.TOTPColumnTimerVisible, null);
+            _keePassCustomConfig.SetString(SettingKeys.TOTPColumnCopyEnable, null);
+            _keePassCustomConfig.SetString(SettingKeys.TOTPColumnTimerVisible, null);
 
             // Auto-Type
-            _pluginHost.CustomConfig.SetString(SettingKeys.AutoTypeEnable, null);
+            _keePassCustomConfig.SetString(SettingKeys.AutoTypeEnable, null);
 
-            _pluginHost.CustomConfig.SetString(SettingKeys.AutoTypeFieldName, null);
+            _keePassCustomConfig.SetString(SettingKeys.AutoTypeFieldName, null);
 
             // Time Correction
-            _pluginHost.CustomConfig.SetString(SettingKeys.TimeCorrectionEnable, null);
-            _pluginHost.CustomConfig.SetString(SettingKeys.TimeCorrectionRefreshTime, null);
+            _keePassCustomConfig.SetString(SettingKeys.TimeCorrectionEnable, null);
+            _keePassCustomConfig.SetString(SettingKeys.TimeCorrectionRefreshTime, null);
 
             // Storage
-            _pluginHost.CustomConfig.SetString(SettingKeys.TOTPSeedStringName, null);
-            _pluginHost.CustomConfig.SetString(SettingKeys.TOTPSettingsStringName, null);
+            _keePassCustomConfig.SetString(SettingKeys.TOTPSeedStringName, null);
+            _keePassCustomConfig.SetString(SettingKeys.TOTPSettingsStringName, null);
         }
     }
 }
