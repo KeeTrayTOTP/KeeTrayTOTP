@@ -2,21 +2,18 @@ using System;
 using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
-using System.ComponentModel;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Text.RegularExpressions;
 using KeePass.App.Configuration;
 using KeePass.Plugins;
 using KeePass.UI;
 using KeePass.Util;
 using KeePass.Util.Spr;
-
 using KeePassLib;
 using KeePassLib.Utility;
 using KeePassLib.Security;
 using KeeTrayTOTP.Libraries;
-using KeeTrayTOTP.Localization;
+using KeeTrayTOTP.Menu;
 
 namespace KeeTrayTOTP
 {
@@ -37,25 +34,11 @@ namespace KeeTrayTOTP
         internal const string keeobj_string_EntryContextMenuEntriesSubMenu_Name = "m_ctxEntryMassModify";
         internal const string keeobj_string_EntryContextMenuEntriesSubMenuSeperator1_Name = "m_ctxEntrySelectedSep1";
 
+        internal const string setname_bool_LegacyTrayMenuProvider_Enable = "traymenulegacymenuprovider_enable";
         /// <summary>
         /// Form Help Global Reference.
         /// </summary>
         private FormHelp _helpForm;
-
-        /// <summary>
-        /// Notify Icon Context Menu Title.
-        /// </summary>
-        private ToolStripMenuItem _niMenuTitle;
-
-        /// <summary>
-        /// Notify Icon Context Menu List.
-        /// </summary>
-        private readonly List<ToolStripMenuItem> _niMenuList = new List<ToolStripMenuItem>();
-
-        /// <summary>
-        /// Notify Icon Context Menu Separator.
-        /// </summary>
-        private ToolStripSeparator _niMenuSeperator;
 
         /// <summary>
         /// Provides columns to KeePass
@@ -90,6 +73,11 @@ namespace KeeTrayTOTP
         private int _liRefreshTimerPreviousCounter;
 
         /// <summary>
+        /// This provider is used for providing menu items to the keepass host.
+        /// </summary>
+        private MenuItemProvider _menuItemProvider;
+
+        /// <summary>
         /// Time Correction Collection.
         /// </summary>
         internal TimeCorrectionCollection TimeCorrections;
@@ -109,83 +97,12 @@ namespace KeeTrayTOTP
 
         public override ToolStripMenuItem GetMenuItem(PluginMenuType type)
         {
-            // Provide a menu item for the main location(s)
-            if (type == PluginMenuType.Main)
+            if (_menuItemProvider != null)
             {
-                var toMenuTrayTOTP = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin);
-                toMenuTrayTOTP.Image = Properties.Resources.TOTP;
-
-                var toSubMenuSettings = new ToolStripMenuItem(Localization.Strings.Settings);
-                toSubMenuSettings.Image = Properties.Resources.TOTP_Settings;
-                toSubMenuSettings.Click += OnMenuSettingsClick;
-
-                toMenuTrayTOTP.DropDownItems.Add(toSubMenuSettings);
-                var toSubMenuSeparator1 = new ToolStripSeparator();
-                toMenuTrayTOTP.DropDownItems.Add(toSubMenuSeparator1);
-                var toSubMenuHelp = new ToolStripMenuItem(Localization.Strings.Help);
-                toSubMenuHelp.Image = Properties.Resources.TOTP_Help;
-                toSubMenuHelp.Click += OnMenuHelpClick;
-                toMenuTrayTOTP.DropDownItems.Add(toSubMenuHelp);
-                var toSubMenuAbout = new ToolStripMenuItem(Localization.Strings.About + "...");
-                toSubMenuAbout.Image = Properties.Resources.TOTP_Info;
-                toSubMenuAbout.Click += OnMenuAboutClick;
-                toMenuTrayTOTP.DropDownItems.Add(toSubMenuAbout);
-
-                return toMenuTrayTOTP;
-            }
-            else if (type == PluginMenuType.Entry)
-            {
-                var enMenuTrayTotp = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin);
-                enMenuTrayTotp.Image = Properties.Resources.TOTP;
-
-                var enMenuCopyTotp = new ToolStripMenuItem(Localization.Strings.CopyTOTP);
-                enMenuCopyTotp.Image = Properties.Resources.TOTP;
-                enMenuCopyTotp.ShortcutKeys = (Keys)Shortcut.CtrlT;
-                enMenuCopyTotp.Click += OnEntryMenuTOTPClick;
-                var enMenuSetupTotp = new ToolStripMenuItem(Localization.Strings.SetupTOTP);
-                enMenuSetupTotp.Image = Properties.Resources.TOTP_Setup;
-                enMenuSetupTotp.ShortcutKeys = (Keys)Shortcut.CtrlShiftI;
-                enMenuSetupTotp.Click += OnEntryMenuSetupClick;
-                var enMenuShowQr = new ToolStripMenuItem(Localization.Strings.ShowQR);
-                enMenuShowQr.Image = Properties.Resources.TOTP_Setup;
-                enMenuShowQr.ShortcutKeys = (Keys)Shortcut.CtrlShiftJ;
-                enMenuShowQr.Click += OnEntryMenuShowQRClick;
-
-                enMenuTrayTotp.DropDownItems.Add(enMenuCopyTotp);
-                enMenuTrayTotp.DropDownItems.Add(enMenuSetupTotp);
-                enMenuTrayTotp.DropDownItems.Add(enMenuShowQr);
-
-                enMenuTrayTotp.DropDownOpening += (object sender, EventArgs e) =>
-                {
-                    enMenuCopyTotp.Enabled = false;
-                    enMenuSetupTotp.Enabled = false;
-
-                    enMenuCopyTotp.Visible = Settings.EntryContextCopyVisible;
-
-                    if (PluginHost.MainWindow.GetSelectedEntriesCount() == 1)
-                    {
-                        var currentEntry = PluginHost.MainWindow.GetSelectedEntry(true);
-                        if (SettingsCheck(currentEntry) && SeedCheck(currentEntry) && SettingsValidate(currentEntry))
-                        {
-                            enMenuCopyTotp.Enabled = true;
-                            enMenuCopyTotp.Tag = currentEntry;
-                        }
-
-                        enMenuSetupTotp.Enabled = true;
-                    }
-
-                    enMenuSetupTotp.Visible = Settings.EntryContextSetupVisible;
-                };
-
-                enMenuTrayTotp.DropDownClosed += (object sender, EventArgs e) =>
-                {
-                    enMenuCopyTotp.Enabled = true;
-                };
-
-                return enMenuTrayTotp;
+                return _menuItemProvider.GetMenuItem(type);
             }
 
-            return null; // No menu items in other locations
+            return null;
         }
 
         /// <summary>
@@ -205,21 +122,13 @@ namespace KeeTrayTOTP
 
             Settings = new Settings(host.CustomConfig);
 
+            _menuItemProvider = new MenuItemProvider(this, PluginHost);
+
             // Instantiate Help Form.
             _helpForm = new FormHelp();
 
             // Register events.
             PluginHost.MainWindow.Shown += MainWindow_Shown;
-
-            // Notify Icon Context Menus.
-            PluginHost.MainWindow.TrayContextMenu.Opening += OnNotifyMenuOpening;
-            _niMenuTitle = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin);
-            _niMenuTitle.Image = Properties.Resources.TOTP;
-            PluginHost.MainWindow.TrayContextMenu.Items.Insert(0, _niMenuTitle);
-            _niMenuSeperator = new ToolStripSeparator();
-            PluginHost.MainWindow.TrayContextMenu.Items.Insert(1, _niMenuSeperator);
-
-            PluginHost.MainWindow.TrayContextMenu.Opened += OnTrayContextMenuOpened;
 
             // Register auto-type function.
             if (Settings.AutoTypeEnable)
@@ -245,12 +154,6 @@ namespace KeeTrayTOTP
             return true;
         }
 
-        private void OnTrayContextMenuOpened(object sender, EventArgs e)
-        {
-            var contextMenuStrip = (ContextMenuStrip)sender;
-            var dropDownLocationCalculator = new DropDownLocationCalculator(contextMenuStrip.Size);
-            contextMenuStrip.Location = dropDownLocationCalculator.CalculateLocationForDropDown(Cursor.Position);
-        }
 
         /// <summary>
         /// Occurs when the main window is shown.
@@ -275,21 +178,11 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Tools Menu Tray TOTP Settings Click.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnMenuSettingsClick(object sender, EventArgs e)
-        {
-            UIUtil.ShowDialogAndDestroy(new FormSettings(this));
-        }
-
-        /// <summary>
         /// Tools Menu Tray TOTP Help Click.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnMenuHelpClick(object sender, EventArgs e)
+        internal void OnMenuHelpClick(object sender, EventArgs e)
         {
             if (!_helpForm.Visible)
             {
@@ -302,228 +195,27 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Tools Menu Tray TOTP About Click.
+        /// Get all the password entries in all groups and filter entries that are expired or have invalid TOTP settings.
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnMenuAboutClick(object sender, EventArgs e)
+        /// <returns></returns>
+        internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries()
         {
-            UIUtil.ShowDialogAndDestroy(new FormAbout());
-        }
-
-        /// <summary>
-        /// Entry Context Menu Copy Click.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnEntryMenuTOTPClick(object sender, EventArgs e)
-        {
-            PwEntry pe = PluginHost.MainWindow.GetSelectedEntry(false);
-
-            if (pe != null)
-            {
-                TOTPCopyToClipboard(pe);
-            }
-        }
-
-        /// <summary>
-        /// Entry Context Menu Setup Click.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnEntryMenuSetupClick(object sender, EventArgs e)
-        {
-            if (PluginHost.MainWindow.GetSelectedEntriesCount() == 1)
-            {
-                UIUtil.ShowDialogAndDestroy(new SetupTOTP(this, PluginHost.MainWindow.GetSelectedEntry(true)));
-                PluginHost.MainWindow.RefreshEntriesList();
-            }
-        }
-
-        /// <summary>
-        /// Entry Context Menu Show QR Click.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnEntryMenuShowQRClick(object sender, EventArgs e)
-        {
-            if (PluginHost.MainWindow.GetSelectedEntriesCount() != 1)
-            {
-                return;
-            }
-
-            var entry = PluginHost.MainWindow.GetSelectedEntry(true);
-
-            if (!SeedCheck(entry))
-            {
-                return;
-            }
-
-            var rawSeed = this.SeedGet(entry).ReadString();
-            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "").TrimEnd('=');
-            var issuer = entry.Strings.Get("Title").ReadString();
-            var username = entry.Strings.Get("UserName").ReadString();
-            UIUtil.ShowDialogAndDestroy(new ShowQR(cleanSeed, issuer, username));
-
-            PluginHost.MainWindow.RefreshEntriesList();
-        }
-
-        /// <summary>
-        /// Notify Icon Context Menu Opening.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnNotifyMenuOpening(object sender, CancelEventArgs e)
-        {
-            foreach (var menu in _niMenuList)
-            {
-                PluginHost.MainWindow.TrayContextMenu.Items.Remove(menu);
-            }
-            _niMenuList.Clear();
-            if (Settings.NotifyContextVisible)
-            {
-                _niMenuTitle.Visible = true;
-                _niMenuSeperator.Visible = true;
-                if (PluginHost.MainWindow.ActiveDatabase.IsOpen)
-                {
-                    foreach (PwEntry entry in GetVisibleAndValidPasswordEntries())
-                    {
-                        var entryTitle = entry.Strings.ReadSafe(PwDefs.TitleField);
-
-                        var context = new SprContext(entry, PluginHost.MainWindow.ActiveDatabase, SprCompileFlags.All, false, false);
-                        var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
-                        string trayTitle;
-                        if ((Settings.TrimTrayText && entryTitle.Length + entryUsername.Length > Settings.TrimTextLength) || string.IsNullOrEmpty(entryUsername))
-                        {
-                            trayTitle = entryTitle.ExtWithSpaceAfter();
-                        }
-                        else
-                        {
-                            trayTitle = entryTitle.ExtWithSpaceAfter() + entryUsername.ExtWithParenthesis();
-                        }
-
-                        var newMenu = new ToolStripMenuItem(trayTitle, Properties.Resources.TOTP_Key, OnNotifyMenuTOTPClick);
-                        newMenu.Tag = entry;
-                        if (!SettingsValidate(entry))
-                        {
-                            newMenu.Enabled = false;
-                            newMenu.Image = Properties.Resources.TOTP_Error;
-                        }
-                        _niMenuList.Add(newMenu);
-                    }
-                    if (_niMenuList.Count > 0)
-                    {
-                        _niMenuList.Sort((p1, p2) => string.Compare(p1.Text, p2.Text, true));
-                        for (int i = 0; i <= _niMenuList.Count - 1; i++)
-                        {
-                            PluginHost.MainWindow.TrayContextMenu.Items.Insert(i + 1, _niMenuList[i]);
-                        }
-                    }
-                    else
-                    {
-                        var newMenu = new ToolStripMenuItem(Localization.Strings.NoTOTPSeedFound);
-                        newMenu.Image = Properties.Resources.TOTP_None;
-                        _niMenuList.Add(newMenu);
-                        PluginHost.MainWindow.TrayContextMenu.Items.Insert(1, _niMenuList[0]);
-                    }
-
-                    CreateMenuItemForOtherDatabases(_niMenuList);
-                }
-                else
-                {
-                    if (PluginHost.MainWindow.IsFileLocked(null))
-                    {
-                        var newMenu = new ToolStripMenuItem(Localization.Strings.DatabaseIsLocked);
-                        newMenu.Image = Properties.Resources.TOTP_Lock;
-                        _niMenuList.Add(newMenu);
-                        PluginHost.MainWindow.TrayContextMenu.Items.Insert(1, _niMenuList[0]);
-                    }
-                    else
-                    {
-                        var newMenu = new ToolStripMenuItem(Localization.Strings.DatabaseIsNotOpen);
-                        newMenu.Image = Properties.Resources.TOTP_Error;
-                        _niMenuList.Add(newMenu);
-                        PluginHost.MainWindow.TrayContextMenu.Items.Insert(1, _niMenuList[0]);
-                    }
-                }
-            }
-            else
-            {
-                _niMenuTitle.Visible = false;
-                _niMenuSeperator.Visible = false;
-            }
+            return GetVisibleAndValidPasswordEntries(PluginHost.MainWindow.ActiveDatabase.RootGroup);
         }
 
         /// <summary>
         /// Get all the password entries in all groups and filter entries that are expired or have invalid TOTP settings.
         /// </summary>
         /// <returns></returns>
-        private IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries()
+        internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries(PwGroup pwGroup)
         {
-            var entries = PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true);
+            var entries = pwGroup.GetEntries(true);
 
             return entries
                 .Where(entry => !entry.IsExpired())
                 .Where(entry => SettingsCheck(entry) && SeedCheck(entry));
         }
 
-        /// <summary>
-        /// Creates the necessary menu items to switch to another database
-        /// </summary>
-        /// <param name="items"></param>
-        private void CreateMenuItemForOtherDatabases(IList<ToolStripMenuItem> items)
-        {
-            var tabcontrol = PluginHost.MainWindow.Controls.OfType<TabControl>().FirstOrDefault();
-            var nonSelectedTabs = tabcontrol.TabPages.OfType<TabPage>().Where(c => c != tabcontrol.SelectedTab).ToList();
-
-            int i = 1;
-            foreach (var tab in nonSelectedTabs)
-            {
-                var item = new ToolStripMenuItem(string.Format(Strings.SwitchTo, tab.Text))
-                {
-                    Tag = tab
-                };
-                item.Click += SwitchToOtherDatabase;
-                items.Add(item);
-
-                PluginHost.MainWindow.TrayContextMenu.Items.Insert(i++, item);
-            }
-        }
-
-        private void SwitchToOtherDatabase(object sender, EventArgs e)
-        {
-            var tabControl = PluginHost.MainWindow.Controls.OfType<TabControl>().FirstOrDefault();
-            var changeDbToolStripItem = sender as ToolStripMenuItem;
-            if (changeDbToolStripItem != null)
-            {
-                var databaseTab = changeDbToolStripItem.Tag as TabPage;
-                if (databaseTab != null)
-                {
-                    tabControl.SelectedTab = databaseTab;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Entry Notify Menu Copy Click.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void OnNotifyMenuTOTPClick(object sender, EventArgs e)
-        {
-            ToolStripMenuItem tsi = sender as ToolStripMenuItem;
-            if (tsi == null)
-            {
-                return;
-            }
-
-            PwEntry pe = tsi.Tag as PwEntry;
-
-            if (pe != null)
-            {
-                TOTPCopyToClipboard(pe);
-            }
-        }
 
         /// <summary>
         /// Timer Event that occurs to refresh the entry list.
@@ -858,18 +550,11 @@ namespace KeeTrayTOTP
             // Unregister internal events.
             PluginHost.MainWindow.Shown -= MainWindow_Shown;
 
-            // Remove Notify Icon menus.
-            PluginHost.MainWindow.TrayContextMenu.Opening -= OnNotifyMenuOpening;
-            PluginHost.MainWindow.TrayContextMenu.Opened -= OnTrayContextMenuOpened;
-            PluginHost.MainWindow.TrayContextMenu.Items.Remove(_niMenuTitle);
-            _niMenuTitle.Dispose();
-            foreach (var menu in _niMenuList)
+            // Dispose menu items
+            if (_menuItemProvider != null)
             {
-                PluginHost.MainWindow.TrayContextMenu.Items.Remove(menu);
-                menu.Dispose();
+                _menuItemProvider.Dispose();
             }
-            PluginHost.MainWindow.TrayContextMenu.Items.Remove(_niMenuSeperator);
-            _niMenuSeperator.Dispose();
 
             // Unregister auto-type function.
             if (SprEngine.FilterPlaceholderHints.Contains(Settings.AutoTypeFieldName.ExtWithBrackets()))

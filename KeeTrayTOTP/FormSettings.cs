@@ -294,6 +294,7 @@ namespace KeeTrayTOTP
             CheckBoxShowCopyTOTPEntryMenu.Checked = _plugin.Settings.EntryContextCopyVisible;
             CheckBoxShowSetupTOTPEntryMenu.Checked = _plugin.Settings.EntryContextSetupVisible;
             CheckBoxShowTOTPEntriesTrayMenu.Checked = _plugin.Settings.NotifyContextVisible;
+            CheckBoxEnableLegacyTrayMenuProvider.Checked = _plugin.PluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, false);
             CheckBoxTrimTrayText.Checked = _plugin.Settings.TrimTrayText;
             if (WorkerLoad.CancellationPending) { e.Cancel = true; return; }
 
@@ -362,6 +363,7 @@ namespace KeeTrayTOTP
             _plugin.Settings.EntryContextCopyVisible = CheckBoxShowCopyTOTPEntryMenu.Checked;
             _plugin.Settings.EntryContextSetupVisible = CheckBoxShowSetupTOTPEntryMenu.Checked;
             _plugin.Settings.NotifyContextVisible = CheckBoxShowTOTPEntriesTrayMenu.Checked;
+            _plugin.PluginHost.CustomConfig.SetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, CheckBoxEnableLegacyTrayMenuProvider.Checked);
             _plugin.Settings.TrimTrayText = CheckBoxTrimTrayText.Checked;
 
             if (WorkerSave.CancellationPending) { e.Cancel = true; return; }

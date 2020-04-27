@@ -31,7 +31,6 @@ namespace KeeTrayTOTP.Tests
             sut.AutoTypeFieldName.Should().Be("xxxx");
         }
 
-
         [TestMethod]
         public void EntryContextCopyVisible_GetAndSetChangeCorrectField()
         {

@@ -157,6 +157,15 @@
   <data name="Help" xml:space="preserve">
     <value>Help</value>
   </data>
+  <data name="Locked" xml:space="preserve">
+    <value>Locked</value>
+  </data>
+  <data name="NoDatabaseIsOpened" xml:space="preserve">
+    <value>No database is opened!</value>
+  </data>
+  <data name="NoTOTPEntriesFound" xml:space="preserve">
+    <value>No TOTP Entries found</value>
+  </data>
   <data name="NoTOTPSeedFound" xml:space="preserve">
     <value>No TOTP Seed found!</value>
   </data>

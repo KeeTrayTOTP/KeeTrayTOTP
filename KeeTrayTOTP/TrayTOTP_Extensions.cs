@@ -1,5 +1,4 @@
 ﻿using KeePassLib;
-using KeeTrayTOTP.Libraries;
 using System;
 
 namespace KeeTrayTOTP
