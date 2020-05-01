@@ -14,7 +14,7 @@ namespace KeeTrayTOTP.Menu
 
         public MenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
         {
-            if (pluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_LegacyTrayMenuProvider_Enable, false))
+            if (plugin.Settings.LegacyTrayMenuProviderEnable)
             {
                 TrayMenuItemProvider = new LegacyTrayMenuItemProvider(plugin, pluginHost);
             }

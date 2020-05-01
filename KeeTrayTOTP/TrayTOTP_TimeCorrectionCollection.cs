@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 using KeeTrayTOTP.Libraries;
@@ -66,7 +67,7 @@ namespace KeeTrayTOTP
         /// Populates the Time Correction Collection with the URL list specified.
         /// </summary>
         /// <param name="urLs">URLs.</param>
-        internal void AddRangeFromList(List<string> urLs)
+        internal void AddRangeFromList(IEnumerable<string> urLs)
         {
             foreach (var url in urLs)
             {
@@ -187,18 +188,11 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Returns all URLs in one string in order to save them to KeePass settings.
+        /// Returns all time correction URLs
         /// </summary>
-        /// <returns>String seperated by a colon.</returns>
-        internal string ToSetting()
+        internal IEnumerable<string> GetTimeCorrectionUrls()
         {
-            //Temporary string to build the string from multiple strings.
-            var @return = string.Empty;
-            foreach (var timeCorrection in _timeCorrections)
-            {
-                @return = @return + timeCorrection.Url + ";";
-            }
-            return @return.TrimEnd(';');
+            return _timeCorrections.Select(c => c.Url);
         }
     }
 }
