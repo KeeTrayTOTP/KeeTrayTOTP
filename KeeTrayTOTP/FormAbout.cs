@@ -85,7 +85,7 @@ namespace KeeTrayTOTP
         {
             get
             {
-                return ThisAssembly.GitCommitDate.ToString("yyyy-MM-dd HH:mm:ss");
+                return ThisAssembly.GitCommitDate.ToString("o");
             }
         }
 
