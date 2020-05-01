@@ -37,7 +37,7 @@ namespace KeeTrayTOTP
             ListViewAbout.Items[0].SubItems.Add(AssemblyTitle);
             ListViewAbout.Items[1].SubItems.Add(AssemblyCompany);
             ListViewAbout.Items[2].SubItems.Add(AssemblyVersion);
-            ListViewAbout.Items[3].SubItems.Add(AssemblyTrademark);
+            ListViewAbout.Items[3].SubItems.Add(CommitDate);
             ListViewAbout.Items[4].SubItems.Add(SupportUrl.AbsoluteUri);
             LabelCopyright.Text = AssemblyCopyright;
 
@@ -51,8 +51,7 @@ namespace KeeTrayTOTP
         {
             get
             {
-                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyTitleAttribute>();
-                return attribute != null ? attribute.Title : null;
+                return ThisAssembly.AssemblyName;
             }
         }
 
@@ -63,32 +62,7 @@ namespace KeeTrayTOTP
         {
             get
             {
-                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyInformationalVersionAttribute>();
-                return attribute != null ? attribute.InformationalVersion: null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the assembly's description
-        /// </summary>
-        internal string AssemblyDescription
-        {
-            get
-            {
-                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyDescriptionAttribute>();
-                return attribute != null ? attribute.Description : null;
-            }
-        }
-
-        /// <summary>
-        /// Gets the assembly's product name
-        /// </summary>
-        internal string AssemblyProduct
-        {
-            get
-            {
-                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyProductAttribute>();
-                return attribute != null ? attribute.Product : null;
+                return ThisAssembly.AssemblyInformationalVersion;
             }
         }
 
@@ -99,20 +73,19 @@ namespace KeeTrayTOTP
         {
             get
             {
-                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyCopyrightAttribute>();
+                var attribute = GetAssemblyAttribute<AssemblyCopyrightAttribute>();
                 return attribute != null ? attribute.Copyright : null;
             }
         }
 
         /// <summary>
-        /// Gets the assembly's trademark
-        ///  </summary>
-        internal string AssemblyTrademark
+        /// Gets the commit date
+        /// </summary>
+        internal string CommitDate
         {
             get
             {
-                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyTrademarkAttribute>();
-                return attribute != null ? attribute.Trademark : null;
+                return ThisAssembly.GitCommitDate.ToString("yyyy-MM-dd HH:mm:ss");
             }
         }
 
@@ -123,7 +96,7 @@ namespace KeeTrayTOTP
         {
             get
             {
-                var attribute = Assembly.GetExecutingAssembly().GetCustomAttribute<AssemblyCompanyAttribute>();
+                var attribute = GetAssemblyAttribute<AssemblyCompanyAttribute>();
                 return attribute != null ? attribute.Company : null;
             }
         }
@@ -142,7 +115,7 @@ namespace KeeTrayTOTP
         {
             var hit = ListViewAbout.HitTest(e.Location);
             if (hit.Item != null && hit.Item == ListViewAbout.Items[4] && hit.SubItem == ListViewAbout.Items[4].SubItems[1])
-            { 
+            {
                 System.Diagnostics.Process.Start(SupportUrl.ToString());
             }
         }
@@ -156,7 +129,6 @@ namespace KeeTrayTOTP
             ListViewAbout.Items[RowIndex].UseItemStyleForSubItems = false;
             ListViewAbout.Items[RowIndex].SubItems[1].Font = new Font("Microsoft Sans Serif", 8, FontStyle.Underline);
             ListViewAbout.Items[RowIndex].SubItems[1].ForeColor = color;
-
         }
 
         /// <summary>
@@ -167,11 +139,19 @@ namespace KeeTrayTOTP
         private void ListViewAbout_MouseMove(object sender, MouseEventArgs e)
         {
             var hit = ListViewAbout.HitTest(e.Location);
-            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1] && hit.Item == ListViewAbout.Items[4]) {
+            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1] && hit.Item == ListViewAbout.Items[4])
+            {
                 ListViewAbout.Cursor = Cursors.Hand;
-            } else {
-                ListViewAbout.Cursor = Cursors.Default; 
             }
+            else
+            {
+                ListViewAbout.Cursor = Cursors.Default;
+            }
+        }
+
+        private static T GetAssemblyAttribute<T>() where T : Attribute
+        {
+            return Assembly.GetExecutingAssembly().GetCustomAttribute(typeof(T)) as T;
         }
     }
 }
