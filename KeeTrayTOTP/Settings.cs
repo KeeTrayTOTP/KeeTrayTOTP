@@ -45,7 +45,6 @@ namespace KeeTrayTOTP
             internal const int TimeCorrectionRefreshTime = 60;
             internal const int TrimTextLength = 25;
             internal const int EntryListRefreshRate = 300;
-            internal static readonly ReadOnlyCollection<string> AllowedLengths = new ReadOnlyCollection<string>(new[] { "6", "7", "8", "S" });
         }
 
         private readonly AceCustomConfig _keePassCustomConfig;
@@ -53,11 +52,6 @@ namespace KeeTrayTOTP
         public Settings(AceCustomConfig keepassCustomConfig)
         {
             this._keePassCustomConfig = keepassCustomConfig;
-        }
-
-        public ReadOnlyCollection<string> AllowedLengths
-        {
-            get { return SettingDefaults.AllowedLengths; }
         }
 
         public int TrimTextLength

@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using KeePass.Plugins;
 using KeePass.UI;
 using KeePassLib;
+using KeeTrayTOTP.Helpers;
 
 namespace KeeTrayTOTP.Menu
 {
@@ -41,8 +42,8 @@ namespace KeeTrayTOTP.Menu
                 if (_pluginHost.MainWindow.GetSelectedEntriesCount() == 1)
                 {
                     var currentEntry = _pluginHost.MainWindow.GetSelectedEntry(true);
-                    if (_plugin.SettingsCheck(currentEntry) && _plugin.SeedCheck(currentEntry) &&
-                        _plugin.SettingsValidate(currentEntry))
+                    if (_plugin.TOTPEntryValidator.SettingsCheck(currentEntry) && _plugin.TOTPEntryValidator.SeedCheck(currentEntry) &&
+                        _plugin.TOTPEntryValidator.SettingsValidate(currentEntry))
                     {
                         entryMenuCopyTotp.Enabled = true;
                         entryMenuShowQrCode.Enabled = true;
@@ -75,12 +76,12 @@ namespace KeeTrayTOTP.Menu
 
             var entry = _pluginHost.MainWindow.GetSelectedEntry(true);
 
-            if (!_plugin.SeedCheck(entry))
+            if (!_plugin.TOTPEntryValidator.SeedCheck(entry))
             {
                 return;
             }
 
-            var rawSeed = _plugin.SeedGet(entry).ReadString();
+            var rawSeed = _plugin.TOTPEntryValidator.SeedGet(entry).ReadString();
             var cleanSeed = Regex.Replace(rawSeed, @"\s+", "").TrimEnd('=');
             var issuer = entry.Strings.Get("Title").ReadString();
             var username = entry.Strings.Get("UserName").ReadString();

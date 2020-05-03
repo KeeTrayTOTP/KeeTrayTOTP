@@ -3,17 +3,16 @@ using System.Linq;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using KeePass.App.Configuration;
 using KeePass.Plugins;
 using KeePass.UI;
-using KeePass.Util;
 using KeePass.Util.Spr;
 using KeePassLib;
 using KeePassLib.Utility;
-using KeePassLib.Security;
 using KeeTrayTOTP.Libraries;
 using KeeTrayTOTP.Menu;
+using KeeTrayTOTP.Helpers;
+using KeePass.Util;
 
 namespace KeeTrayTOTP
 {
@@ -94,6 +93,8 @@ namespace KeeTrayTOTP
 
         public Settings Settings { get; private set; }
 
+        public TOTPEntryValidator TOTPEntryValidator { get; private set; }
+
         public override ToolStripMenuItem GetMenuItem(PluginMenuType type)
         {
             if (_menuItemProvider != null)
@@ -120,6 +121,7 @@ namespace KeeTrayTOTP
             PluginHost = host;
 
             Settings = new Settings(host.CustomConfig);
+            TOTPEntryValidator = new TOTPEntryValidator(Settings);
 
             _menuItemProvider = new MenuItemProvider(this, PluginHost);
 
@@ -196,7 +198,6 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Get all the password entries in all groups and filter entries that are expired or have invalid TOTP settings.
         /// </summary>
-        /// <returns></returns>
         internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries()
         {
             return GetVisibleAndValidPasswordEntries(PluginHost.MainWindow.ActiveDatabase.RootGroup);
@@ -212,9 +213,8 @@ namespace KeeTrayTOTP
 
             return entries
                 .Where(entry => !entry.IsExpired())
-                .Where(entry => SettingsCheck(entry) && SeedCheck(entry));
+                .Where(entry => TOTPEntryValidator.SettingsCheck(entry) && TOTPEntryValidator.SeedCheck(entry));
         }
-
 
         /// <summary>
         /// Timer Event that occurs to refresh the entry list.
@@ -247,7 +247,7 @@ namespace KeeTrayTOTP
                         _liGroupsPreviousSelected = selectedGroup;
                         foreach (var entry in selectedGroup.GetEntries(true))
                         {
-                            if (SettingsCheck(entry) && SeedCheck(entry))
+                            if (TOTPEntryValidator.SettingsCheck(entry) && TOTPEntryValidator.SeedCheck(entry))
                             {
                                 _liColumnTotpContains = true;
                             }
@@ -276,20 +276,20 @@ namespace KeeTrayTOTP
         {
             if ((e.Context.Flags & SprCompileFlags.ExtActive) == SprCompileFlags.ExtActive && e.Text.IndexOf(Settings.AutoTypeFieldName.ExtWithBrackets(), StringComparison.InvariantCultureIgnoreCase) >= 0)
             {
-                if (SettingsCheck(e.Context.Entry) && SeedCheck(e.Context.Entry))
+                if (TOTPEntryValidator.SettingsCheck(e.Context.Entry) && TOTPEntryValidator.SeedCheck(e.Context.Entry))
                 {
-                    if (SettingsValidate(e.Context.Entry))
+                    if (TOTPEntryValidator.SettingsValidate(e.Context.Entry))
                     {
-                        string[] settings = SettingsGet(e.Context.Entry);
+                        string[] settings = TOTPEntryValidator.SettingsGet(e.Context.Entry);
 
                         TOTPProvider totpGenerator = new TOTPProvider(settings, this.TimeCorrections);
 
                         string invalidCharacters;
 
-                        if (SeedValidate(e.Context.Entry, out invalidCharacters))
+                        if (TOTPEntryValidator.SeedValidate(e.Context.Entry, out invalidCharacters))
                         {
                             e.Context.Entry.Touch(false);
-                            string totp = totpGenerator.GenerateByByte(Base32.Decode(SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
+                            string totp = totpGenerator.GenerateByByte(Base32.Decode(TOTPEntryValidator.SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
                             e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, Settings.AutoTypeFieldName.ExtWithBrackets(), totp);
                         }
                         else
@@ -317,196 +317,25 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Check if specified Entry contains Settings that are not null.
-        /// </summary>
-        /// <param name="pe">Pasword Entry.</param>
-        /// <returns>Presence of Settings.</returns>
-        internal bool SettingsCheck(PwEntry pe)
-        {
-            return pe.Strings.Exists(Settings.TOTPSettingsStringName);
-        }
-
-        /// <summary>
-        /// Check if specified Entry's Interval and Length are valid.
-        /// </summary>
-        /// <param name="pe">Password Entry.</param>
-        /// <returns>Error(s) while validating Interval or Length.</returns>
-        internal bool SettingsValidate(PwEntry pe)
-        {
-            bool validInterval;
-            bool validLength;
-            bool validUrl;
-
-            return SettingsValidate(pe, out validInterval, out validLength, out validUrl);
-        }
-
-        /// <summary>
-        /// Check if specified Entry's Interval and Length are valid. The URL status is available as an out boolean.
-        /// </summary>
-        /// <param name="pe">Password Entry.</param>
-        /// <param name="isUrlValid">Url Validity.</param>
-        /// <returns>Error(s) while validating Interval or Length.</returns>
-        internal bool SettingsValidate(PwEntry pe, out bool isUrlValid)
-        {
-            bool validInterval; bool validLength; //Dummies
-
-            return SettingsValidate(pe, out validInterval, out validLength, out isUrlValid);
-        }
-
-        /// <summary>
-        /// Check if specified Entry's Interval and Length are valid. All settings statuses are available as out booleans.
-        /// </summary>
-        /// <param name="pe">Password Entry.</param>
-        /// <param name="isIntervalValid">Interval Validity.</param>
-        /// <param name="isLengthValid">Length Validity.</param>
-        /// <param name="isUrlValid">Url Validity.</param>
-        /// <returns>Error(s) while validating Interval or Length.</returns>
-        internal bool SettingsValidate(PwEntry pe, out bool isIntervalValid, out bool isLengthValid, out bool isUrlValid)
-        {
-            bool settingsValid;
-            try
-            {
-                string[] settings = SettingsGet(pe);
-
-                isIntervalValid = IntervalIsValid(settings);
-                isLengthValid = LengthIsValid(settings);
-
-                settingsValid = isIntervalValid && isLengthValid;
-
-                isUrlValid = UrlIsValid(settings);
-            }
-            catch (Exception)
-            {
-                isIntervalValid = false;
-                isLengthValid = false;
-                isUrlValid = false;
-                settingsValid = false;
-            }
-            return settingsValid;
-        }
-
-        private static bool UrlIsValid(string[] settings)
-        {
-            if (settings.Length < 3)
-            {
-                return false;
-            }
-
-            return settings[2].StartsWith("http://") || settings[2].StartsWith("https://");
-        }
-
-        private bool LengthIsValid(string[] settings)
-        {
-            if (settings.Length < 2)
-            {
-                return false;
-            }
-
-            if (!Settings.AllowedLengths.Contains(settings[1]))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private bool IntervalIsValid(string[] settings)
-        {
-            if (settings.Length == 0)
-            {
-                return false;
-            }
-
-            short interval;
-            if (!short.TryParse(settings[0], out interval))
-            {
-                return false;
-            }
-
-            if (interval < 0 && interval < 180)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        /// <summary>
-        /// Get the entry's Settings using the string name specified in the settings (or default).
-        /// </summary>
-        /// <param name="pe">Password Entry.</param>
-        /// <returns>String Array (Interval, Length, Url).</returns>
-        internal string[] SettingsGet(PwEntry pe)
-        {
-            return pe.Strings.Get(Settings.TOTPSettingsStringName).ReadString().Split(';');
-        }
-
-        /// <summary>
-        /// Check if the specified Entry contains a Seed.
-        /// </summary>
-        /// <param name="pe">Password Entry.</param>
-        /// <returns>Presence of the Seed.</returns>
-        internal bool SeedCheck(PwEntry pe)
-        {
-            return pe.Strings.Exists(Settings.TOTPSeedStringName);
-        }
-
-        /// <summary>
-        /// Validates the entry's Seed making sure it's a valid Base32 string.
-        /// </summary>
-        /// <param name="passwordEntry">Password Entry.</param>
-        /// <returns>Validity of the Seed's characters for Base32 format.</returns>
-        internal bool SeedValidate(PwEntry passwordEntry)
-        {
-            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().IsBase32();
-        }
-
-        /// <summary>
-        /// Validates the entry's Seed making sure it's a valid Base32 string. Invalid characters are available as out string.
-        /// </summary>
-        /// <param name="passwordEntry">Password Entry.</param>
-        /// <param name="invalidCharacters">Password Entry.</param>
-        /// <returns>Validity of the Seed's characters.</returns>
-        internal bool SeedValidate(PwEntry passwordEntry, out string invalidCharacters)
-        {
-            return SeedGet(passwordEntry).ReadString().ExtWithoutSpaces().IsBase32(out invalidCharacters);
-        }
-
-        /// <summary>
-        /// Get the entry's Seed using the string name specified in the settings (or default).
-        /// </summary>
-        /// <param name="pe">Password Entry.</param>
-        /// <returns>Protected Seed.</returns>
-        internal ProtectedString SeedGet(PwEntry pe)
-        {
-            return pe.Strings.Get(Settings.TOTPSeedStringName);
-        }
-
-        internal bool CanGenerateTOTP(PwEntry pe)
-        {
-            return SettingsCheck(pe) && SeedCheck(pe) && SettingsValidate(pe) && SeedValidate(pe);
-        }
-
-        /// <summary>
         /// Copies the specified entry's generated TOTP to the clipboard using the KeePass's clipboard function.
         /// </summary>
         /// <param name="pe">Password Entry.</param>
         internal void TOTPCopyToClipboard(PwEntry pe)
         {
-            if (SettingsCheck(pe) && SeedCheck(pe))
+            if (TOTPEntryValidator.SettingsCheck(pe) && TOTPEntryValidator.SeedCheck(pe))
             {
-                if (SettingsValidate(pe))
+                if (TOTPEntryValidator.SettingsValidate(pe))
                 {
-                    string[] settings = SettingsGet(pe);
+                    string[] settings = TOTPEntryValidator.SettingsGet(pe);
 
                     TOTPProvider totpGenerator = new TOTPProvider(settings, this.TimeCorrections);
 
                     string invalidCharacters;
-                    if (SeedValidate(pe, out invalidCharacters))
+                    if (TOTPEntryValidator.SeedValidate(pe,out invalidCharacters))
                     {
                         pe.Touch(false);
 
-                        string totp = totpGenerator.Generate(SeedGet(pe).ReadString().ExtWithoutSpaces());
+                        string totp = totpGenerator.Generate(TOTPEntryValidator.SeedGet(pe).ReadString().ExtWithoutSpaces());
 
                         ClipboardUtil.CopyAndMinimize(totp, true, PluginHost.MainWindow, pe, PluginHost.MainWindow.ActiveDatabase);
                         PluginHost.MainWindow.StartClipboardCountdown();

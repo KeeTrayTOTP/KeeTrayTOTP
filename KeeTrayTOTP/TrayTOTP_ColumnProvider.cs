@@ -53,14 +53,14 @@ namespace KeeTrayTOTP
 
         private string GetCellDataInternal(PwEntry pe, Func<PwEntry, string> innerValueFunc)
         {
-            var settingsCheck = _plugin.SettingsCheck(pe);
-            var seedCheck = _plugin.SeedCheck(pe);
+            var settingsCheck = _plugin.TOTPEntryValidator.SettingsCheck(pe);
+            var seedCheck = _plugin.TOTPEntryValidator.SeedCheck(pe);
 
             if (settingsCheck && seedCheck)
             {
-                if (_plugin.SettingsValidate(pe))
+                if (_plugin.TOTPEntryValidator.SettingsValidate(pe))
                 {
-                    if (_plugin.SeedValidate(pe))
+                    if (_plugin.TOTPEntryValidator.SeedValidate(pe))
                     {
                         return innerValueFunc(pe);
                     }
@@ -78,9 +78,9 @@ namespace KeeTrayTOTP
 
         private string GetInnerValueCode(PwEntry entry)
         {
-            string[] settings = _plugin.SettingsGet(entry);
+            string[] settings = _plugin.TOTPEntryValidator.SettingsGet(entry);
             var totpGenerator = new TOTPProvider(settings, _plugin.TimeCorrections);
-            return totpGenerator.GenerateByByte(Base32.Decode(_plugin.SeedGet(entry).ReadString().ExtWithoutSpaces())) + (_plugin.Settings.TOTPColumnTimerVisible ? totpGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
+            return totpGenerator.GenerateByByte(Base32.Decode(_plugin.TOTPEntryValidator.SeedGet(entry).ReadString().ExtWithoutSpaces())) + (_plugin.Settings.TOTPColumnTimerVisible ? totpGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
         }
 
         /// <summary>
@@ -99,7 +99,7 @@ namespace KeeTrayTOTP
         /// <param name="pe">Entry associated with the clicked cell.</param>
         public override void PerformCellAction(string columnName, PwEntry pe)
         {
-            if (!_plugin.CanGenerateTOTP(pe))
+            if (!_plugin.TOTPEntryValidator.CanGenerateTOTP(pe))
             {
                 UIUtil.ShowDialogAndDestroy(new SetupTOTP(_plugin, pe));
             }
