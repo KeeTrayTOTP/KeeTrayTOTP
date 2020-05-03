@@ -37,7 +37,7 @@ namespace KeeTrayTOTP
 
             Text = Localization.Strings.Setup + " - " + Localization.Strings.TrayTOTPPlugin; //Set form's name using constants.
 
-            if (_plugin.TOTPEntryValidator.SettingsCheck(_entry) || _plugin.TOTPEntryValidator.SeedCheck(_entry)) //Checks the the totp settings exists.
+            if (_plugin.TOTPEntryValidator.HasSeed(_entry)) //Checks the the totp settings exists.
             {
                 string[] settings = _plugin.TOTPEntryValidator.SettingsGet(_entry); //Gets the the existing totp settings.
                 bool validInterval;
@@ -70,7 +70,7 @@ namespace KeeTrayTOTP
                 DeleteSetupButton.Visible = false; //Hides the back button.
             }
 
-            if (_plugin.TOTPEntryValidator.SeedCheck(_entry))
+            if (_plugin.TOTPEntryValidator.HasSeed(_entry))
             {
                 TextBoxSeedSetup.Text = _plugin.TOTPEntryValidator.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
             }

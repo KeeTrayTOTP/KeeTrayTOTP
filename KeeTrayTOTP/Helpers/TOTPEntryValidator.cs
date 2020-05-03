@@ -18,15 +18,6 @@ namespace KeeTrayTOTP.Helpers
         }
 
         /// <summary>
-        /// Check if specified Entry contains Settings that are not null.
-        /// </summary>
-        /// <returns>Presence of Settings.</returns>
-        internal bool SettingsCheck(PwEntry entry)
-        {
-            return entry.Strings.Exists(_settings.TOTPSettingsStringName);
-        }
-
-        /// <summary>
         /// Check if specified Entry's Interval and Length are valid.
         /// </summary>
         /// <returns>Error(s) while validating Interval or Length.</returns>
@@ -82,6 +73,68 @@ namespace KeeTrayTOTP.Helpers
             return settingsValid;
         }
 
+        /// <summary>
+        /// Get the entry's Settings, or return defaults
+        /// </summary>
+        /// <returns>String Array (Interval, Length, Url).</returns>
+        internal string[] SettingsGet(PwEntry entry)
+        {
+            return HasExplicitSettings(entry)
+                ? entry.Strings.Get(_settings.TOTPSettingsStringName).ReadString().Split(';')
+                : new[] { "30", "6" };
+        }
+
+        /// <summary>
+        /// Check if the specified Entry contains a Seed.
+        /// </summary>
+        /// <returns>Presence of the Seed.</returns>
+        internal bool HasSeed(PwEntry entry)
+        {
+            return entry.Strings.Exists(_settings.TOTPSeedStringName);
+        }
+
+        /// <summary>
+        /// Validates the entry's Seed making sure it's a valid Base32 string.
+        /// </summary>
+        /// <returns>Validity of the Seed's characters for Base32 format.</returns>
+        internal bool SeedValidate(PwEntry entry)
+        {
+            return SeedGet(entry).ReadString().ExtWithoutSpaces().IsBase32();
+        }
+
+        /// <summary>
+        /// Validates the entry's Seed making sure it's a valid Base32 string. Invalid characters are available as out string.
+        /// </summary>
+        /// <param name="invalidCharacters">Password Entry.</param>
+        /// <returns>Validity of the Seed's characters.</returns>
+        internal bool SeedValidate(PwEntry entry, out string invalidCharacters)
+        {
+            return SeedGet(entry).ReadString().ExtWithoutSpaces().IsBase32(out invalidCharacters);
+        }
+
+        /// <summary>
+        /// Get the entry's Seed using the string name specified in the settings (or default).
+        /// </summary>
+        /// <returns>Protected Seed.</returns>
+        internal ProtectedString SeedGet(PwEntry entry)
+        {
+            return entry.Strings.Get(_settings.TOTPSeedStringName);
+        }
+
+        internal bool CanGenerateTOTP(PwEntry entry)
+        {
+            return HasSeed(entry) && SettingsValidate(entry) && SeedValidate(entry);
+        }
+
+        /// <summary>
+        /// Check if specified Entry contains Settings that are not null.
+        /// </summary>
+        /// <returns>Presence of Settings.</returns>
+        internal bool HasExplicitSettings(PwEntry entry)
+        {
+            return entry.Strings.Exists(_settings.TOTPSettingsStringName);
+        }
+
         private static bool UrlIsValid(string[] settings)
         {
             if (settings.Length < 3)
@@ -120,7 +173,7 @@ namespace KeeTrayTOTP.Helpers
                 return false;
             }
 
-            if (interval < 0 && interval < 180)
+            if (interval < 0)
             {
                 return false;
             }
@@ -128,56 +181,5 @@ namespace KeeTrayTOTP.Helpers
             return true;
         }
 
-        /// <summary>
-        /// Get the entry's Settings using the string name specified in the settings (or default).
-        /// </summary>
-        /// <param name="pe">Password Entry.</param>
-        /// <returns>String Array (Interval, Length, Url).</returns>
-        internal string[] SettingsGet(PwEntry entry)
-        {
-            return entry.Strings.Get(_settings.TOTPSettingsStringName).ReadString().Split(';');
-        }
-
-        /// <summary>
-        /// Check if the specified Entry contains a Seed.
-        /// </summary>
-        /// <returns>Presence of the Seed.</returns>
-        internal bool SeedCheck(PwEntry entry)
-        {
-            return entry.Strings.Exists(_settings.TOTPSeedStringName);
-        }
-
-        /// <summary>
-        /// Validates the entry's Seed making sure it's a valid Base32 string.
-        /// </summary>
-        /// <returns>Validity of the Seed's characters for Base32 format.</returns>
-        internal bool SeedValidate(PwEntry entry)
-        {
-            return SeedGet(entry).ReadString().ExtWithoutSpaces().IsBase32();
-        }
-
-        /// <summary>
-        /// Validates the entry's Seed making sure it's a valid Base32 string. Invalid characters are available as out string.
-        /// </summary>
-        /// <param name="invalidCharacters">Password Entry.</param>
-        /// <returns>Validity of the Seed's characters.</returns>
-        internal bool SeedValidate(PwEntry entry, out string invalidCharacters)
-        {
-            return SeedGet(entry).ReadString().ExtWithoutSpaces().IsBase32(out invalidCharacters);
-        }
-
-        /// <summary>
-        /// Get the entry's Seed using the string name specified in the settings (or default).
-        /// </summary>
-        /// <returns>Protected Seed.</returns>
-        internal ProtectedString SeedGet(PwEntry entry)
-        {
-            return entry.Strings.Get(_settings.TOTPSeedStringName);
-        }
-
-        internal bool CanGenerateTOTP(PwEntry entry)
-        {
-            return SettingsCheck(entry) && SeedCheck(entry) && SettingsValidate(entry) && SeedValidate(entry);
-        }
     }
 }

@@ -53,10 +53,7 @@ namespace KeeTrayTOTP
 
         private string GetCellDataInternal(PwEntry pe, Func<PwEntry, string> innerValueFunc)
         {
-            var settingsCheck = _plugin.TOTPEntryValidator.SettingsCheck(pe);
-            var seedCheck = _plugin.TOTPEntryValidator.SeedCheck(pe);
-
-            if (settingsCheck && seedCheck)
+            if (_plugin.TOTPEntryValidator.HasSeed(pe))
             {
                 if (_plugin.TOTPEntryValidator.SettingsValidate(pe))
                 {
@@ -68,7 +65,7 @@ namespace KeeTrayTOTP
                 }
                 return Localization.Strings.ErrorBadSettings;
             }
-            return (settingsCheck || seedCheck) ? Localization.Strings.ErrorStorage : string.Empty;
+            return _plugin.TOTPEntryValidator.HasExplicitSettings(pe) ? Localization.Strings.ErrorNoSeed : string.Empty;
         }
 
         private static string GetInnerValueStatus(PwEntry entry)

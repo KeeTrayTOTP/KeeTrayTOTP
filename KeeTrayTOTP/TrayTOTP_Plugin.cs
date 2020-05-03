@@ -211,9 +211,7 @@ namespace KeeTrayTOTP
         {
             var entries = pwGroup.GetEntries(true);
 
-            return entries
-                .Where(entry => !entry.IsExpired())
-                .Where(entry => TOTPEntryValidator.SettingsCheck(entry) && TOTPEntryValidator.SeedCheck(entry));
+            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry));
         }
 
         /// <summary>
@@ -247,7 +245,7 @@ namespace KeeTrayTOTP
                         _liGroupsPreviousSelected = selectedGroup;
                         foreach (var entry in selectedGroup.GetEntries(true))
                         {
-                            if (TOTPEntryValidator.SettingsCheck(entry) && TOTPEntryValidator.SeedCheck(entry))
+                            if (TOTPEntryValidator.HasSeed(entry))
                             {
                                 _liColumnTotpContains = true;
                             }
@@ -276,7 +274,7 @@ namespace KeeTrayTOTP
         {
             if ((e.Context.Flags & SprCompileFlags.ExtActive) == SprCompileFlags.ExtActive && e.Text.IndexOf(Settings.AutoTypeFieldName.ExtWithBrackets(), StringComparison.InvariantCultureIgnoreCase) >= 0)
             {
-                if (TOTPEntryValidator.SettingsCheck(e.Context.Entry) && TOTPEntryValidator.SeedCheck(e.Context.Entry))
+                if (TOTPEntryValidator.HasSeed(e.Context.Entry))
                 {
                     if (TOTPEntryValidator.SettingsValidate(e.Context.Entry))
                     {
@@ -311,7 +309,7 @@ namespace KeeTrayTOTP
                 else
                 {
                     e.Text = string.Empty;
-                    MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
+                    MessageService.ShowWarning(Localization.Strings.ErrorNoSeed);
                 }
             }
         }
@@ -322,7 +320,7 @@ namespace KeeTrayTOTP
         /// <param name="pe">Password Entry.</param>
         internal void TOTPCopyToClipboard(PwEntry pe)
         {
-            if (TOTPEntryValidator.SettingsCheck(pe) && TOTPEntryValidator.SeedCheck(pe))
+            if (TOTPEntryValidator.HasSeed(pe))
             {
                 if (TOTPEntryValidator.SettingsValidate(pe))
                 {
@@ -331,7 +329,7 @@ namespace KeeTrayTOTP
                     TOTPProvider totpGenerator = new TOTPProvider(settings, this.TimeCorrections);
 
                     string invalidCharacters;
-                    if (TOTPEntryValidator.SeedValidate(pe,out invalidCharacters))
+                    if (TOTPEntryValidator.SeedValidate(pe, out invalidCharacters))
                     {
                         pe.Touch(false);
 
@@ -356,7 +354,7 @@ namespace KeeTrayTOTP
             }
             else
             {
-                MessageService.ShowWarning(Localization.Strings.ErrorBadSettings);
+                MessageService.ShowWarning(Localization.Strings.ErrorNoSeed);
             }
         }
 

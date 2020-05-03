@@ -42,7 +42,7 @@ namespace KeeTrayTOTP.Menu
                 if (_pluginHost.MainWindow.GetSelectedEntriesCount() == 1)
                 {
                     var currentEntry = _pluginHost.MainWindow.GetSelectedEntry(true);
-                    if (_plugin.TOTPEntryValidator.SettingsCheck(currentEntry) && _plugin.TOTPEntryValidator.SeedCheck(currentEntry) &&
+                    if (_plugin.TOTPEntryValidator.HasSeed(currentEntry) &&
                         _plugin.TOTPEntryValidator.SettingsValidate(currentEntry))
                     {
                         entryMenuCopyTotp.Enabled = true;
@@ -76,7 +76,7 @@ namespace KeeTrayTOTP.Menu
 
             var entry = _pluginHost.MainWindow.GetSelectedEntry(true);
 
-            if (!_plugin.TOTPEntryValidator.SeedCheck(entry))
+            if (!_plugin.TOTPEntryValidator.HasSeed(entry))
             {
                 return;
             }
