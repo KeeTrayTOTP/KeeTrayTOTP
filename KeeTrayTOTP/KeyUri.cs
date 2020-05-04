@@ -1,7 +1,6 @@
 ﻿using KeeTrayTOTP.Libraries;
 using System;
 using System.Collections.Specialized;
-using System.Text.RegularExpressions;
 using System.Linq;
 
 namespace KeeTrayTOTP
@@ -68,7 +67,7 @@ namespace KeeTrayTOTP
         {
             if (uri.Host != "totp")
             {
-                throw new ArgumentOutOfRangeException("uri", "Only totp is supported.");         
+                throw new ArgumentOutOfRangeException("uri", "Only totp is supported.");
             }
             return uri.Host;
         }
@@ -103,7 +102,6 @@ namespace KeeTrayTOTP
             }
 
             return query["algorithm"] ?? DefaultAlgorithm;
-
         }
 
         private static string EnsureValidSecret(NameValueCollection query)
@@ -135,23 +133,18 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Naive (and probably buggy) query string parser, but we do not want a dependency on System.Web
         /// </summary>
-        private static NameValueCollection ParseQueryString(string s)
+        private static NameValueCollection ParseQueryString(string queryString)
         {
             var result = new NameValueCollection();
             // remove anything other than query string from url
-            s = s.Substring(s.IndexOf('?') + 1);
+            queryString = queryString.Substring(queryString.IndexOf('?') + 1);
 
-            foreach (var vp in Regex.Split(s, "&"))
+            foreach (var keyValue in queryString.Split('&'))
             {
-                var singlePair = Regex.Split(vp, "=");
+                var singlePair = keyValue.Split('=');
                 if (singlePair.Length == 2)
                 {
                     result.Add(singlePair[0], Uri.UnescapeDataString(singlePair[1]));
-                }
-                else
-                {
-                    // only one key with no value specified in query string
-                    result.Add(singlePair[0], null);
                 }
             }
 
@@ -176,9 +169,11 @@ namespace KeeTrayTOTP
             newQuery["secret"] = Secret;
             newQuery["issuer"] = Issuer;
 
-            var builder = new UriBuilder(ValidScheme, Type);
-            builder.Path = "/" + Uri.EscapeDataString(Issuer) + ":" + Uri.EscapeDataString(Label);
-            builder.Query = string.Join("&", newQuery.AllKeys.Select(key => key + "=" + newQuery[key]));
+            var builder = new UriBuilder(ValidScheme, Type)
+            {
+                Path = "/" + Uri.EscapeDataString(Issuer) + ":" + Uri.EscapeDataString(Label),
+                Query = string.Join("&", newQuery.AllKeys.Select(key => key + "=" + newQuery[key]))
+            };
 
             return builder.Uri;
         }
