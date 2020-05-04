@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace KeeTrayTOTP
 {
@@ -8,7 +9,9 @@ namespace KeeTrayTOTP
         string AutoTypeFieldName { get; set; }
         bool EntryContextCopyVisible { get; set; }
         bool EntryContextSetupVisible { get; set; }
+        int EntryListRefreshRate { get; }
         bool FirstInstallShown { get; set; }
+        bool LegacyTrayMenuProviderEnable { get; set; }
         bool NotifyContextVisible { get; set; }
         bool TimeCorrectionEnable { get; set; }
         IEnumerable<string> TimeCorrectionList { get; set; }
@@ -17,6 +20,7 @@ namespace KeeTrayTOTP
         bool TOTPColumnTimerVisible { get; set; }
         string TOTPSeedStringName { get; set; }
         string TOTPSettingsStringName { get; set; }
+        int TrimTextLength { get; }
         bool TrimTrayText { get; set; }
     }
 }

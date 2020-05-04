@@ -27,9 +27,9 @@ namespace KeeTrayTOTP.Tests
         [DataRow(ValidSeed, ValidSettings, "TOTP Enabled")]
         [DataRow(ValidSeed, ";6", "Error, bad settings!")]
         [DataRow(ValidSeed, "30", "Error, bad settings!")]
-        [DataRow(ValidSeed, null, "Error, storage!")]
+        [DataRow(ValidSeed, null, "TOTP Enabled")]
         [DataRow(InvalidSeed, ValidSettings, "Error, bad seed!")]
-        [DataRow(null, ValidSettings, "Error, storage!")]
+        [DataRow(null, ValidSettings, "Error, no seed!")]
         [DataRow(null, null, "")]
         [DataTestMethod]
         public void GetCellDataStatus_ShouldReturnExpectedValues(string seed, string settings, string expected)
@@ -52,9 +52,8 @@ namespace KeeTrayTOTP.Tests
 
         [DataRow(ValidSeed, ";6", "Error, bad settings!")]
         [DataRow(ValidSeed, "30", "Error, bad settings!")]
-        [DataRow(ValidSeed, null, "Error, storage!")]
         [DataRow(InvalidSeed, ValidSettings, "Error, bad seed!")]
-        [DataRow(null, ValidSettings, "Error, storage!")]
+        [DataRow(null, ValidSettings, "Error, no seed!")]
         [DataRow(null, null, "")]
         [DataTestMethod]
         public void GetCellDataCode_ShouldReturnExpectedValues(string seed, string settings, string expected)
