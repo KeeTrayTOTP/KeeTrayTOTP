@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using KeePass.UI;
 using KeePassLib;
 using KeePassLib.Security;
+using KeeTrayTOTP.Helpers;
 using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
@@ -36,13 +37,13 @@ namespace KeeTrayTOTP
 
             Text = Localization.Strings.Setup + " - " + Localization.Strings.TrayTOTPPlugin; //Set form's name using constants.
 
-            if (_plugin.SettingsCheck(_entry) || _plugin.SeedCheck(_entry)) //Checks the the totp settings exists.
+            if (_plugin.TOTPEntryValidator.HasSeed(_entry)) //Checks the the totp settings exists.
             {
-                string[] settings = _plugin.SettingsGet(_entry); //Gets the the existing totp settings.
+                string[] settings = _plugin.TOTPEntryValidator.SettingsGet(_entry); //Gets the the existing totp settings.
                 bool validInterval;
                 bool validLength;
                 bool validUrl;
-                _plugin.SettingsValidate(_entry, out validInterval, out validLength, out validUrl); //Validates the settings value.
+                _plugin.TOTPEntryValidator.SettingsValidate(_entry, out validInterval, out validLength, out validUrl); //Validates the settings value.
                 if (validInterval)
                 {
                     NumericIntervalSetup.Value = Convert.ToDecimal(settings[0]); //Checks if interval is valid and sets interval numeric to the setting value.
@@ -69,9 +70,9 @@ namespace KeeTrayTOTP
                 DeleteSetupButton.Visible = false; //Hides the back button.
             }
 
-            if (_plugin.SeedCheck(_entry))
+            if (_plugin.TOTPEntryValidator.HasSeed(_entry))
             {
-                TextBoxSeedSetup.Text = _plugin.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
+                TextBoxSeedSetup.Text = _plugin.TOTPEntryValidator.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
             }
 
             ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); //Gets existings time corrections and adds them in the combobox.
