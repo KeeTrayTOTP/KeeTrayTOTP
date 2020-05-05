@@ -13,11 +13,13 @@ namespace KeeTrayTOTP
         bool FirstInstallShown { get; set; }
         bool LegacyTrayMenuProviderEnable { get; set; }
         bool NotifyContextVisible { get; set; }
+        bool PreferKeyUri { get; set; }
         bool TimeCorrectionEnable { get; set; }
         IEnumerable<string> TimeCorrectionList { get; set; }
         ulong TimeCorrectionRefreshTime { get; set; }
         bool TOTPColumnCopyEnable { get; set; }
         bool TOTPColumnTimerVisible { get; set; }
+        string TOTPKeyUriStringName { get; set; }
         string TOTPSeedStringName { get; set; }
         string TOTPSettingsStringName { get; set; }
         int TrimTextLength { get; }

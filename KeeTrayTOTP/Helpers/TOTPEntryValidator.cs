@@ -1,5 +1,4 @@
 ﻿using KeePassLib;
-using KeePassLib.Security;
 using KeeTrayTOTP.Libraries;
 using System;
 using System.Collections.ObjectModel;
@@ -144,6 +143,41 @@ namespace KeeTrayTOTP.Helpers
         internal bool HasExplicitSettings(PwEntry entry)
         {
             return entry.Strings.Exists(_settings.TOTPSettingsStringName);
+        }
+
+        internal KeyUri ReadAsKeyUri(PwEntry entry)
+        {
+            if (entry.Strings.Exists(_settings.TOTPKeyUriStringName))
+            {
+                // load in this format
+                return new KeyUri(new Uri(entry.Strings.Get(_settings.TOTPKeyUriStringName).ReadString()));
+            }
+            else
+            {
+                if (!SettingsValidate(entry) || !SeedValidate(entry)) {
+                    throw new InvalidOperationException("Cannot generate KeyUri for entry");
+                }
+
+                var settings = SettingsGet(entry);
+                var seed = GetCleanSeed(entry);
+
+                return KeyUri.CreateFromLegacySettings(settings, seed);
+            }
+        }
+
+        internal void SetKeyUri(PwEntry entry)
+        {
+            if (_settings.PreferKeyUri)
+            {
+                // TODO: store in key uri format
+                // TODO: delete TOTP Seed
+                // TODO: delete TOTP Settings
+            }
+            else
+            {
+                // TODO: store in settings + seed
+                // TODO: delete key uri
+            }
         }
 
         private static bool UrlIsValid(string[] settings)

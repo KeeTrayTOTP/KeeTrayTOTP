@@ -31,45 +31,31 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Sets the time span that is used to match the server's UTC time to ensure accurate generation of Time-based One Time Passwords.
         /// </summary>
-        public TimeSpan TimeCorrection { get; set; }
-
-        public bool TimeCorrectionError { get; private set; }
+        private TimeSpan _timeCorrection;
 
         public TOTPProvider(TOTPEntryValidator totpEntryValidator, PwEntry entry, TimeCorrectionCollection tcc)
         {
-            var settings = totpEntryValidator.SettingsGet(entry);
+            var keyUri = totpEntryValidator.ReadAsKeyUri(entry);
 
-            this._seed = totpEntryValidator.GetByteSeed(entry);
-            this._duration = Convert.ToInt16(settings[0]);
+            this._seed = Base32.Decode(keyUri.Secret);
+            this._duration = keyUri.Period;
 
-            if (settings[1] == "S")
+            if (keyUri.Issuer == "Steam")
             {
-                this._length = 5;
                 this.Encoder = TOTPEncoder.Steam;
             }
             else
             {
-                this._length = Convert.ToInt16(settings[1]);
                 this.Encoder = TOTPEncoder.Rfc6238;
             }
 
-            if (settings.Length > 2 && settings[2] != string.Empty)
-            {
-                var tc = tcc[settings[2]];
+            this._length = keyUri.Digits;
 
-                if (tc != null)
-                {
-                    this.TimeCorrection = tc.TimeCorrection;
-                }
-                else
-                {
-                    this.TimeCorrection = TimeSpan.Zero;
-                    this.TimeCorrectionError = false;
-                }
-            }
-            else
+            this._timeCorrection = TimeSpan.Zero;
+            var tc = tcc[keyUri.TimeCorrectionUrl.AbsoluteUri];
+            if (tc != null)
             {
-                this.TimeCorrection = TimeSpan.Zero;
+                this._timeCorrection = tc.TimeCorrection;
             }
         }
 
@@ -92,7 +78,7 @@ namespace KeeTrayTOTP.Libraries
         {
             get
             {
-                return DateTime.UtcNow - TimeCorrection; // Computes current time minus time correction giving the corrected time.
+                return DateTime.UtcNow - _timeCorrection; // Computes current time minus time correction giving the corrected time.
             }
         }
 
@@ -104,7 +90,7 @@ namespace KeeTrayTOTP.Libraries
             get
             {
                 var elapsedSeconds = (long)Math.Floor((Now - UnixEpoch).TotalSeconds); // Compute current counter for current time.
-                return (ulong) (elapsedSeconds / _duration); // Applies specified interval to computed counter.
+                return (ulong)(elapsedSeconds / _duration); // Applies specified interval to computed counter.
             }
         }
 

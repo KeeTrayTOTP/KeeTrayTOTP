@@ -86,7 +86,6 @@ namespace KeeTrayTOTP.Tests
             absoluteUri.Should().Contain("algorithm=SHA256");
         }
 
-
         [TestMethod]
         public void GetUri_ShouldContainDefaultParameters()
         {
@@ -173,6 +172,21 @@ namespace KeeTrayTOTP.Tests
             Action act = () => new KeyUri(new Uri(uriString));
 
             act.Should().Throw<ArgumentOutOfRangeException>().WithMessage(msg + "*");
+        }
+
+        [TestMethod]
+        public void CreateFromLegacySettings()
+        {
+            var settings = new string[] { "30", "6", "https://www.nist.gov" };
+            var secret = "ABABABABABABABAB";
+
+            var keyUri = KeyUri.CreateFromLegacySettings(settings, secret);
+
+            keyUri.Secret.Should().Be(secret);
+            keyUri.Algorithm.Should().Be("SHA1");
+            keyUri.Period.Should().Be(30);
+            keyUri.Digits.Should().Be(6);
+            keyUri.TimeCorrectionUrl.Should().Be(new Uri("https://www.nist.gov"));
         }
     }
 }

@@ -280,24 +280,17 @@ namespace KeeTrayTOTP
                     {
                         string invalidCharacters;
 
-                        bool hasTimeCorrectionError = false;
                         if (TOTPEntryValidator.SeedValidate(e.Context.Entry, out invalidCharacters))
                         {
                             TOTPProvider totpGenerator = new TOTPProvider(TOTPEntryValidator, e.Context.Entry, this.TimeCorrections);
                             e.Context.Entry.Touch(false);
                             var totp = totpGenerator.Generate();
                             e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, Settings.AutoTypeFieldName.ExtWithBrackets(), totp);
-
-                            hasTimeCorrectionError = totpGenerator.TimeCorrectionError;
                         }
                         else
                         {
                             e.Text = string.Empty;
                             MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
-                        }
-                        if (hasTimeCorrectionError)
-                        {
-                            MessageService.ShowWarning(Localization.Strings.WarningBadURL);
                         }
                     }
                     else
@@ -339,10 +332,6 @@ namespace KeeTrayTOTP
                     else
                     {
                         MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
-                    }
-                    if (totpGenerator.TimeCorrectionError)
-                    {
-                        MessageService.ShowWarning(Localization.Strings.WarningBadURL);
                     }
                 }
                 else

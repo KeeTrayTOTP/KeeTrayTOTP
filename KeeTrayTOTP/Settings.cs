@@ -23,6 +23,7 @@ namespace KeeTrayTOTP
             internal const string TimeCorrectionEnable = "timecorrection_enable";
             internal const string TimeCorrectionRefreshTime = "timecorrection_refreshtime";
 
+            internal const string TOTPKeyUriStringName = "totp_keyuri";
             internal const string TOTPSeedStringName = "totpseed_stringname";
             internal const string TOTPSettingsStringName = "totpsettings_stringname";
 
@@ -137,6 +138,12 @@ namespace KeeTrayTOTP
             set { _keePassCustomConfig.SetString(SettingKeys.TimeCorrectionList, string.Join(";", value)); }
         }
 
+        public string TOTPKeyUriStringName
+        {
+            get { return _keePassCustomConfig.GetString(SettingKeys.TOTPKeyUriStringName, "KeyUri"); }
+            set { _keePassCustomConfig.SetString(SettingKeys.TOTPKeyUriStringName, value); }
+        }
+
         public string TOTPSeedStringName
         {
             get { return _keePassCustomConfig.GetString(SettingKeys.TOTPSeedStringName, Localization.Strings.TOTPSeed); }
@@ -184,6 +191,7 @@ namespace KeeTrayTOTP
 
             // Storage
             _keePassCustomConfig.SetString(SettingKeys.PreferKeyUri, null);
+            _keePassCustomConfig.SetString(SettingKeys.TOTPKeyUriStringName, null);
             _keePassCustomConfig.SetString(SettingKeys.TOTPSeedStringName, null);
             _keePassCustomConfig.SetString(SettingKeys.TOTPSettingsStringName, null);
         }
