@@ -208,7 +208,7 @@ namespace KeeTrayTOTP.Menu
 
             var menuItem = new ToolStripMenuItem(trayTitle, Resources.TOTP_Key, OnNotifyMenuTOTPClick);
             menuItem.Tag = entry;
-            if (!Plugin.SettingsValidate(entry))
+            if (!Plugin.TOTPEntryValidator.SettingsValidate(entry))
             {
                 menuItem.Enabled = false;
                 menuItem.Image = Resources.TOTP_Error;
