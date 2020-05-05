@@ -152,6 +152,16 @@ namespace KeeTrayTOTP.Tests
         }
 
         [TestMethod]
+        public void PreferKeyUri_GetAndSetChangeCorrectField()
+        {
+            sut.PreferKeyUri.Should().BeTrue("because that is the default value");
+            sut.PreferKeyUri =false;
+            sut.PreferKeyUri.Should().BeFalse("because the setting was changed to a non-default value");
+            sut.Reset();
+            sut.PreferKeyUri.Should().BeTrue( "because settings are reset");
+        }
+
+        [TestMethod]
         public void TrimTextLength_GetReturnsDefault()
         {
             sut.TrimTextLength.Should().Be(25, "because that is the default value");

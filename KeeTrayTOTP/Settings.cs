@@ -1,7 +1,6 @@
 ﻿using KeePass.App.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace KeeTrayTOTP
 {
@@ -18,6 +17,8 @@ namespace KeeTrayTOTP
             internal const string FirstInstallShown = "firstinstall_shown";
             internal const string LegacyTrayMenuProviderEnable = "traymenulegacymenuprovider_enable";
             internal const string NotifyContextVisible = "notifycontext_visible";
+
+            internal const string PreferKeyUri = "prefer_keyuri";
 
             internal const string TimeCorrectionEnable = "timecorrection_enable";
             internal const string TimeCorrectionRefreshTime = "timecorrection_refreshtime";
@@ -148,6 +149,12 @@ namespace KeeTrayTOTP
             set { _keePassCustomConfig.SetString(SettingKeys.TOTPSettingsStringName, value); }
         }
 
+        public bool PreferKeyUri
+        {
+            get { return _keePassCustomConfig.GetBool(SettingKeys.PreferKeyUri, true); }
+            set { _keePassCustomConfig.SetBool(SettingKeys.PreferKeyUri, value); }
+        }
+
         public bool FirstInstallShown
         {
             get { return _keePassCustomConfig.GetBool(SettingKeys.FirstInstallShown, false); }
@@ -176,6 +183,7 @@ namespace KeeTrayTOTP
             _keePassCustomConfig.SetString(SettingKeys.TimeCorrectionRefreshTime, null);
 
             // Storage
+            _keePassCustomConfig.SetString(SettingKeys.PreferKeyUri, null);
             _keePassCustomConfig.SetString(SettingKeys.TOTPSeedStringName, null);
             _keePassCustomConfig.SetString(SettingKeys.TOTPSettingsStringName, null);
         }
