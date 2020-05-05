@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -36,6 +37,7 @@ namespace KeeTrayTOTP
         /// Provides access to a specific collection item using the URL as a key.
         /// </summary>
         /// <param name="url">URL.</param>
+        /// <returns></returns>
         internal TimeCorrectionProvider this[string url]
         {
             get
@@ -65,7 +67,7 @@ namespace KeeTrayTOTP
         /// Populates the Time Correction Collection with the URL list specified.
         /// </summary>
         /// <param name="urLs">URLs.</param>
-        internal void AddRangeFromList(List<string> urLs)
+        internal void AddRangeFromList(IEnumerable<string> urLs)
         {
             foreach (var url in urLs)
             {
@@ -176,16 +178,21 @@ namespace KeeTrayTOTP
         /// <returns>String Array.</returns>
         internal object[] ToComboBox()
         {
-            return _timeCorrections.Select(c => c.Url).ToArray();
+            //Temporary string List to facilitate building the array.
+            var @return = new List<object>();
+            foreach (var timeCorrection in _timeCorrections)
+            {
+                @return.Add(timeCorrection.Url);
+            }
+            return @return.ToArray();
         }
 
         /// <summary>
-        /// Returns all URLs in one string in order to save them to KeePass settings.
+        /// Returns all time correction URLs
         /// </summary>
-        /// <returns>String seperated by a colon.</returns>
-        internal string ToSetting()
+        internal IEnumerable<string> GetTimeCorrectionUrls()
         {
-            return string.Join(";", _timeCorrections.Select(c => c.Url));
+            return _timeCorrections.Select(c => c.Url);
         }
     }
 }

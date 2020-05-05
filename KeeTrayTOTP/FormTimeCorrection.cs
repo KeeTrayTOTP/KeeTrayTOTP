@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 using KeePass.UI;
+using KeeTrayTOTP.Helpers;
 using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
@@ -56,14 +58,11 @@ namespace KeeTrayTOTP
             {
                 foreach (var pe in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true))
                 {
-                    if (pe.HasTotpSettings())
+                    string[] settings = _plugin.TOTPEntryValidator.SettingsGet(pe);
+                    bool validUrl;
+                    if (_plugin.TOTPEntryValidator.SettingsValidate(pe, out validUrl) && validUrl && !ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null)
                     {
-                        string[] settings = pe.GetTotpSettings();
-                        bool validUrl;
-                        if (pe.HasValidTotpSettings(out validUrl) && validUrl && !ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null)
-                        {
-                            ComboBoxUrlTimeCorrection.Items.Add(settings[2]);
-                        }
+                        ComboBoxUrlTimeCorrection.Items.Add(settings[2]);
                     }
                 }
             }

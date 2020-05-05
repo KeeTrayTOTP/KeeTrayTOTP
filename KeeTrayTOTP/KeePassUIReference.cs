@@ -95,7 +95,7 @@ namespace KeeTrayTOTP
             foreach (ListViewItem lvi in _listView.Items)
             {
                 var entry = ((PwListItem)lvi.Tag).Entry;
-                if (!entry.IsExpired() && entry.HasTotpSettings() && entry.HasTotpSeed() && entry.SeedValidate())
+                if (!entry.IsExpired() && _plugin.TOTPEntryValidator.CanGenerateTOTP(entry))
                 {
                     _pwToLvicache.TryAdd(entry, lvi);
                     _pwLastModifiedcache.TryAdd(entry, entry.LastModificationTime);
@@ -105,8 +105,8 @@ namespace KeeTrayTOTP
 
         private string GenerateOtpColumnValue(PwEntry passwordEntry)
         {
-            var totpGenerator = _cache.GetOrAdd(passwordEntry, (pe) => new TOTPProvider(pe.GetTotpSettings(), _plugin.TimeCorrections));
-            var timeRemaining = (_pluginHost.CustomConfig.GetBool(KeeTrayTOTPExt.setname_bool_TOTPColumnTimer_Visible, true)
+            var totpGenerator = _cache.GetOrAdd(passwordEntry, (pe) => new TOTPProvider(_plugin.TOTPEntryValidator.SettingsGet(pe), _plugin.TimeCorrections));
+            var timeRemaining = (_plugin.Settings.TOTPColumnTimerVisible
                 ? string.Format(" ({0})", totpGenerator.Timer)
                 : string.Empty);
 
@@ -117,7 +117,7 @@ namespace KeeTrayTOTP
             }
             else
             {
-                var key = Base32.Decode(passwordEntry.SeedGet().ReadString().ExtWithoutSpaces());
+                var key = Base32.Decode(_plugin.TOTPEntryValidator.SeedGet(passwordEntry).ReadString().ExtWithoutSpaces());
                 code = totpGenerator.GenerateByByte(key);
             }
 
