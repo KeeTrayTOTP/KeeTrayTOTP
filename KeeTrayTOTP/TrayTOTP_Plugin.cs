@@ -279,15 +279,15 @@ namespace KeeTrayTOTP
                     if (TOTPEntryValidator.SettingsValidate(e.Context.Entry))
                     {
                         string[] settings = TOTPEntryValidator.SettingsGet(e.Context.Entry);
-
-                        TOTPProvider totpGenerator = new TOTPProvider(settings, this.TimeCorrections);
+                        var key = Base32.Decode(TOTPEntryValidator.SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces());
+                        TOTPProvider totpGenerator = new TOTPProvider(settings, key, this.TimeCorrections);
 
                         string invalidCharacters;
 
                         if (TOTPEntryValidator.SeedValidate(e.Context.Entry, out invalidCharacters))
                         {
                             e.Context.Entry.Touch(false);
-                            string totp = totpGenerator.GenerateByByte(Base32.Decode(TOTPEntryValidator.SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces()));
+                            var totp = totpGenerator.Generate();
                             e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, Settings.AutoTypeFieldName.ExtWithBrackets(), totp);
                         }
                         else
@@ -324,16 +324,16 @@ namespace KeeTrayTOTP
             {
                 if (TOTPEntryValidator.SettingsValidate(pe))
                 {
-                    string[] settings = TOTPEntryValidator.SettingsGet(pe);
-
-                    TOTPProvider totpGenerator = new TOTPProvider(settings, this.TimeCorrections);
+                    var settings = TOTPEntryValidator.SettingsGet(pe);
+                    var key = Base32.Decode(TOTPEntryValidator.SeedGet(pe).ReadString().ExtWithoutSpaces());
+                    TOTPProvider totpGenerator = new TOTPProvider(settings, key, this.TimeCorrections);
 
                     string invalidCharacters;
                     if (TOTPEntryValidator.SeedValidate(pe, out invalidCharacters))
                     {
                         pe.Touch(false);
 
-                        string totp = totpGenerator.Generate(TOTPEntryValidator.SeedGet(pe).ReadString().ExtWithoutSpaces());
+                        var totp = totpGenerator.Generate();
 
                         ClipboardUtil.CopyAndMinimize(totp, true, PluginHost.MainWindow, pe, PluginHost.MainWindow.ActiveDatabase);
                         PluginHost.MainWindow.StartClipboardCountdown();

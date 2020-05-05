@@ -12,49 +12,17 @@ namespace KeeTrayTOTP.Libraries
         /// Time reference for TOTP generation.
         /// </summary>
         private static readonly DateTime UnixEpoch = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private readonly byte[] _seed;
 
         /// <summary>
         /// Duration of generation of each totp, in seconds.
         /// </summary>
-        private int _duration;
-        public int Duration
-        {
-            get
-            {
-                return this._duration;
-            }
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new Exception("Invalid Duration."); //Throws an exception if the duration is invalid as the class cannot work without it.
-                }
-
-                this._duration = value;
-            }
-        }
+        private readonly int _duration;
 
         /// <summary>
         /// Length of the generated totp.
         /// </summary>
-        private int _length;
-        public int Length
-        {
-            get
-            {
-                return this._length;
-            }
-            set
-            {
-                //Throws an exception if the length is invalid as the class cannot work without it.
-                if (value < 4 || value > 8)
-                {
-                    throw new Exception("Invalid Length.");
-                }
-
-                this._length = value; //Defines variable from argument.
-            }
-        }
+        private readonly int _length;
 
         public Func<byte[], int, string> Encoder { get; set; }
 
@@ -66,10 +34,11 @@ namespace KeeTrayTOTP.Libraries
         public bool TimeCorrectionError { get; private set; }
 
         /// <summary>
-        /// Instantiate a new TOTP_Generator.
+        /// Create a new TOTP Generator
         /// </summary>
-        public TOTPProvider(string[] settings, TimeCorrectionCollection tcc)
+        public TOTPProvider(string[] settings, byte[] seed, TimeCorrectionCollection tcc)
         {
+            this._seed = seed;
             this._duration = Convert.ToInt16(settings[0]);
 
             if (settings[1] == "S")
@@ -104,20 +73,9 @@ namespace KeeTrayTOTP.Libraries
         }
 
         /// <summary>
-        /// Returns current time with correction int UTC format.
-        /// </summary>
-        public DateTime Now
-        {
-            get
-            {
-                return DateTime.UtcNow - TimeCorrection; // Computes current time minus time correction giving the corrected time.
-            }
-        }
-
-        /// <summary>
         /// Returns the time remaining before counter incrementation.
         /// </summary>
-        public int Timer
+        public int SecondsRemaining
         {
             get
             {
@@ -127,45 +85,45 @@ namespace KeeTrayTOTP.Libraries
         }
 
         /// <summary>
-        /// Returns number of intervals that have elapsed.
+        /// Returns current time with correction in UTC format.
         /// </summary>
-        public long Counter
+        private DateTime Now
         {
             get
             {
-                var elapsedSeconds = (long)Math.Floor((Now - UnixEpoch).TotalSeconds); //Compute current counter for current time.
-                return elapsedSeconds / _duration; //Applies specified interval to computed counter.
+                return DateTime.UtcNow - TimeCorrection; // Computes current time minus time correction giving the corrected time.
+            }
+        }
+
+        /// <summary>
+        /// Returns number of intervals that have elapsed.
+        /// </summary>
+        private ulong Counter
+        {
+            get
+            {
+                var elapsedSeconds = (long)Math.Floor((Now - UnixEpoch).TotalSeconds); // Compute current counter for current time.
+                return (ulong) (elapsedSeconds / _duration); // Applies specified interval to computed counter.
             }
         }
 
         /// <summary>
         /// Generate a TOTP using provided binary data.
         /// </summary>
-        /// <param name="key">Key in String Format.</param>
         /// <returns>Time-based One Time Password encoded byte array.</returns>
-        public string Generate(string key)
+        public string Generate()
         {
-            return this.GenerateByByte(Base32.Decode(key));
-        }
-
-        /// <summary>
-        /// Generate a TOTP using provided binary data.
-        /// </summary>
-        /// <param name="key">Binary data.</param>
-        /// <returns>Time-based One Time Password encoded byte array.</returns>
-        public string GenerateByByte(byte[] key)
-        {
-            byte[] codeInterval = BitConverter.GetBytes((ulong)Counter);
+            var codeInterval = BitConverter.GetBytes(Counter);
 
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(codeInterval);
             }
 
-            using (var hmac = new HMACSHA1(key, true))
+            using (var hmac = new HMACSHA1(_seed, true))
             {
-                byte[] hash = hmac.ComputeHash(codeInterval); //Generates hash from key using counter.
-                hmac.Clear(); //Clear hash instance securing the key.
+                byte[] hash = hmac.ComputeHash(codeInterval);
+                hmac.Clear();
 
                 int start = hash[hash.Length - 1] & 0xf;
                 byte[] totp = new byte[4];

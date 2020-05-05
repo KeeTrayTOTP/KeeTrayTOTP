@@ -75,9 +75,10 @@ namespace KeeTrayTOTP
 
         private string GetInnerValueCode(PwEntry entry)
         {
-            string[] settings = _plugin.TOTPEntryValidator.SettingsGet(entry);
-            var totpGenerator = new TOTPProvider(settings, _plugin.TimeCorrections);
-            return totpGenerator.GenerateByByte(Base32.Decode(_plugin.TOTPEntryValidator.SeedGet(entry).ReadString().ExtWithoutSpaces())) + (_plugin.Settings.TOTPColumnTimerVisible ? totpGenerator.Timer.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
+            var settings = _plugin.TOTPEntryValidator.SettingsGet(entry);
+            var key = Base32.Decode(_plugin.TOTPEntryValidator.SeedGet(entry).ReadString().ExtWithoutSpaces());
+            var totpGenerator = new TOTPProvider(settings, key, _plugin.TimeCorrections);
+            return totpGenerator.Generate() + (_plugin.Settings.TOTPColumnTimerVisible ? totpGenerator.SecondsRemaining.ToString().ExtWithParenthesis().ExtWithSpaceBefore() : string.Empty);
         }
 
         /// <summary>
