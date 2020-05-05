@@ -174,6 +174,7 @@ namespace KeeTrayTOTP.Tests
             act.Should().Throw<ArgumentOutOfRangeException>().WithMessage(msg + "*");
         }
 
+        // TODO: more tests, e.g. steam, invalid urls, invalid lengths
         [TestMethod]
         public void CreateFromLegacySettings()
         {
