@@ -3,7 +3,6 @@ using System.Windows.Forms;
 using KeePass.UI;
 using KeePassLib;
 using KeePassLib.Security;
-using KeeTrayTOTP.Helpers;
 using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
@@ -64,15 +63,12 @@ namespace KeeTrayTOTP
 
                 DeleteSetupButton.Visible = true; //Shows the back button.
                 HelpProviderSetup.SetHelpString(DeleteSetupButton, Localization.Strings.SetupDelete);
+
+                TextBoxSeedSetup.Text = _plugin.TOTPEntryValidator.GetCleanSeed(_entry); //Checks if the seed exists and sets seed textbox to the seed value.
             }
             else
             {
                 DeleteSetupButton.Visible = false; //Hides the back button.
-            }
-
-            if (_plugin.TOTPEntryValidator.HasSeed(_entry))
-            {
-                TextBoxSeedSetup.Text = _plugin.TOTPEntryValidator.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
             }
 
             ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); //Gets existings time corrections and adds them in the combobox.

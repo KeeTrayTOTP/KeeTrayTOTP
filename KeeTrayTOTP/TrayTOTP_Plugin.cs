@@ -278,24 +278,24 @@ namespace KeeTrayTOTP
                 {
                     if (TOTPEntryValidator.SettingsValidate(e.Context.Entry))
                     {
-                        string[] settings = TOTPEntryValidator.SettingsGet(e.Context.Entry);
-                        var key = Base32.Decode(TOTPEntryValidator.SeedGet(e.Context.Entry).ReadString().ExtWithoutSpaces());
-                        TOTPProvider totpGenerator = new TOTPProvider(settings, key, this.TimeCorrections);
-
                         string invalidCharacters;
 
+                        bool hasTimeCorrectionError = false;
                         if (TOTPEntryValidator.SeedValidate(e.Context.Entry, out invalidCharacters))
                         {
+                            TOTPProvider totpGenerator = new TOTPProvider(TOTPEntryValidator, e.Context.Entry, this.TimeCorrections);
                             e.Context.Entry.Touch(false);
                             var totp = totpGenerator.Generate();
                             e.Text = StrUtil.ReplaceCaseInsensitive(e.Text, Settings.AutoTypeFieldName.ExtWithBrackets(), totp);
+
+                            hasTimeCorrectionError = totpGenerator.TimeCorrectionError;
                         }
                         else
                         {
                             e.Text = string.Empty;
                             MessageService.ShowWarning(Localization.Strings.ErrorBadSeed + invalidCharacters.ExtWithParenthesis().ExtWithSpaceBefore());
                         }
-                        if (totpGenerator.TimeCorrectionError)
+                        if (hasTimeCorrectionError)
                         {
                             MessageService.ShowWarning(Localization.Strings.WarningBadURL);
                         }
@@ -324,9 +324,7 @@ namespace KeeTrayTOTP
             {
                 if (TOTPEntryValidator.SettingsValidate(pe))
                 {
-                    var settings = TOTPEntryValidator.SettingsGet(pe);
-                    var key = Base32.Decode(TOTPEntryValidator.SeedGet(pe).ReadString().ExtWithoutSpaces());
-                    TOTPProvider totpGenerator = new TOTPProvider(settings, key, this.TimeCorrections);
+                    TOTPProvider totpGenerator = new TOTPProvider(TOTPEntryValidator, pe, this.TimeCorrections);
 
                     string invalidCharacters;
                     if (TOTPEntryValidator.SeedValidate(pe, out invalidCharacters))

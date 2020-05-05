@@ -1,4 +1,6 @@
-﻿using System;
+﻿using KeePassLib;
+using KeeTrayTOTP.Helpers;
+using System;
 using System.Security.Cryptography;
 
 namespace KeeTrayTOTP.Libraries
@@ -33,12 +35,11 @@ namespace KeeTrayTOTP.Libraries
 
         public bool TimeCorrectionError { get; private set; }
 
-        /// <summary>
-        /// Create a new TOTP Generator
-        /// </summary>
-        public TOTPProvider(string[] settings, byte[] seed, TimeCorrectionCollection tcc)
+        public TOTPProvider(TOTPEntryValidator totpEntryValidator, PwEntry entry, TimeCorrectionCollection tcc)
         {
-            this._seed = seed;
+            var settings = totpEntryValidator.SettingsGet(entry);
+
+            this._seed = totpEntryValidator.GetByteSeed(entry);
             this._duration = Convert.ToInt16(settings[0]);
 
             if (settings[1] == "S")

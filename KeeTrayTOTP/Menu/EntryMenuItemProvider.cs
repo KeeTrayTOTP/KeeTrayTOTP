@@ -81,8 +81,7 @@ namespace KeeTrayTOTP.Menu
                 return;
             }
 
-            var rawSeed = _plugin.TOTPEntryValidator.SeedGet(entry).ReadString();
-            var cleanSeed = Regex.Replace(rawSeed, @"\s+", "").TrimEnd('=');
+            var cleanSeed = _plugin.TOTPEntryValidator.GetCleanSeed(entry);            
             var issuer = entry.Strings.Get("Title").ReadString();
             var username = entry.Strings.Get("UserName").ReadString();
             UIUtil.ShowDialogAndDestroy(new ShowQR(cleanSeed, issuer, username));
