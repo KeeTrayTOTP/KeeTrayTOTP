@@ -39,24 +39,9 @@ namespace KeeTrayTOTP.Libraries
 
             this._seed = Base32.Decode(keyUri.Secret);
             this._duration = keyUri.Period;
-
-            if (keyUri.Issuer == "Steam")
-            {
-                this.Encoder = TOTPEncoder.Steam;
-            }
-            else
-            {
-                this.Encoder = TOTPEncoder.Rfc6238;
-            }
-
             this._length = keyUri.Digits;
-
-            this._timeCorrection = TimeSpan.Zero;
-            var tc = tcc[keyUri.TimeCorrectionUrl.AbsoluteUri];
-            if (tc != null)
-            {
-                this._timeCorrection = tc.TimeCorrection;
-            }
+            this._timeCorrection = tcc.GetTimeCorrection(keyUri.TimeCorrectionUrl);
+            this.Encoder = keyUri.Digits == 5 ? TOTPEncoder.Steam : TOTPEncoder.Rfc6238;
         }
 
         /// <summary>
@@ -66,7 +51,7 @@ namespace KeeTrayTOTP.Libraries
         {
             get
             {
-                var n = _duration - (int)((Now - UnixEpoch).TotalSeconds % _duration); // Computes the seconds left before counter incrementation.
+                var n = _duration - (int)((TimeCorrectedUtcNow - UnixEpoch).TotalSeconds % _duration); // Computes the seconds left before counter incrementation.
                 return n == 0 ? _duration : n; // Returns timer value from 30 to 1.
             }
         }
@@ -74,7 +59,7 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Returns current time with correction in UTC format.
         /// </summary>
-        private DateTime Now
+        private DateTime TimeCorrectedUtcNow
         {
             get
             {
@@ -89,7 +74,7 @@ namespace KeeTrayTOTP.Libraries
         {
             get
             {
-                var elapsedSeconds = (long)Math.Floor((Now - UnixEpoch).TotalSeconds); // Compute current counter for current time.
+                var elapsedSeconds = (long)Math.Floor((TimeCorrectedUtcNow - UnixEpoch).TotalSeconds); // Compute current counter for current time.
                 return (ulong)(elapsedSeconds / _duration); // Applies specified interval to computed counter.
             }
         }

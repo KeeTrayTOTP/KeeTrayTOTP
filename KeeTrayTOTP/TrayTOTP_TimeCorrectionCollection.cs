@@ -53,6 +53,22 @@ namespace KeeTrayTOTP
             }
         }
 
+        internal TimeSpan GetTimeCorrection(Uri timeCorrectionUrl)
+        {
+            if (timeCorrectionUrl == null)
+            {
+                return TimeSpan.Zero;
+            }
+
+            var timeCorrectionEntry = this[timeCorrectionUrl.AbsoluteUri];
+            if (timeCorrectionEntry != null)
+            {
+                return timeCorrectionEntry.TimeCorrection;
+            }
+
+            return TimeSpan.Zero;
+        }
+
         /// <summary>
         /// Handles Time Correction for TOTP Generators insuring generation accuracy.
         /// </summary>

@@ -152,9 +152,10 @@ namespace KeeTrayTOTP.Helpers
                 // load in this format
                 return new KeyUri(new Uri(entry.Strings.Get(_settings.TOTPKeyUriStringName).ReadString()));
             }
-            else
+            else if (SettingsValidate(entry) && HasSeed(entry))
             {
-                if (!SettingsValidate(entry) || !SeedValidate(entry)) {
+                if (!SeedValidate(entry))
+                {
                     throw new InvalidOperationException("Cannot generate KeyUri for entry");
                 }
 
@@ -163,26 +164,31 @@ namespace KeeTrayTOTP.Helpers
 
                 return KeyUri.CreateFromLegacySettings(settings, seed);
             }
+
+            return null;
         }
 
-        internal void SetKeyUri(PwEntry entry)
+        internal void SetKeyUri(PwEntry entry, KeyUri keyUri)
         {
             if (_settings.PreferKeyUri)
             {
-                // TODO: store in key uri format
-                // TODO: delete TOTP Seed
-                // TODO: delete TOTP Settings
+                entry.Strings.Set(_settings.TOTPKeyUriStringName, new KeePassLib.Security.ProtectedString(true, keyUri.GetUri().AbsoluteUri));
+                entry.Strings.Remove(_settings.TOTPSeedStringName);
+                entry.Strings.Remove(_settings.TOTPSettingsStringName);
             }
             else
             {
-                // TODO: store in settings + seed
-                // TODO: delete key uri
+                entry.Strings.Set(_settings.TOTPSeedStringName, new KeePassLib.Security.ProtectedString(true, keyUri.Secret));
+                string settings = keyUri.ToLegacySettings();
+                entry.Strings.Set(_settings.TOTPSettingsStringName, new KeePassLib.Security.ProtectedString(true, settings));
+                entry.Strings.Remove(_settings.TOTPKeyUriStringName);
             }
         }
 
         private static bool UrlIsValid(string[] settings)
         {
             if (settings.Length < 3)
+        
             {
                 return false;
             }
@@ -225,6 +231,5 @@ namespace KeeTrayTOTP.Helpers
 
             return true;
         }
-
     }
 }

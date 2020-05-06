@@ -2,7 +2,6 @@
 using System.Windows.Forms;
 using KeePass.UI;
 using KeePassLib;
-using KeePassLib.Security;
 using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
@@ -36,42 +35,30 @@ namespace KeeTrayTOTP
 
             Text = Localization.Strings.Setup + " - " + Localization.Strings.TrayTOTPPlugin; //Set form's name using constants.
 
-            if (_plugin.TOTPEntryValidator.HasSeed(_entry)) //Checks the the totp settings exists.
-            {
-                string[] settings = _plugin.TOTPEntryValidator.SettingsGet(_entry); //Gets the the existing totp settings.
-                bool validInterval;
-                bool validLength;
-                bool validUrl;
-                _plugin.TOTPEntryValidator.SettingsValidate(_entry, out validInterval, out validLength, out validUrl); //Validates the settings value.
-                if (validInterval)
-                {
-                    NumericIntervalSetup.Value = Convert.ToDecimal(settings[0]); //Checks if interval is valid and sets interval numeric to the setting value.
-                }
+            var totpSettings = _plugin.TOTPEntryValidator.ReadAsKeyUri(_entry);
 
-                if (validLength) //Checks if length is valid.
-                {
-                    // Select the correct radio button
-                    RadioButtonLength6Setup.Checked = settings[1] == "6";
-                    RadioButtonLength7Setup.Checked = settings[1] == "7";
-                    RadioButtonLength8Setup.Checked = settings[1] == "8";
-                    RadioButtonSteamFormatSetup.Checked = settings[1] == "S";
-                }
-                if (validUrl)
-                {
-                    ComboBoxTimeCorrectionSetup.Text = settings[2]; //Checks if url is valid and sets time correction textbox to the setting value.
-                }
+            if (totpSettings != null) //Checks the the totp settings exists.
+            {
+                TextBoxSeedSetup.Text = totpSettings.Secret;
+                
+                NumericIntervalSetup.Value = totpSettings.Period;
+
+                // Select the correct radio button
+                RadioButtonLength6Setup.Checked = totpSettings.Digits == 6;
+                RadioButtonLength7Setup.Checked = totpSettings.Digits == 7;
+                RadioButtonLength8Setup.Checked = totpSettings.Digits == 8;
+                RadioButtonSteamFormatSetup.Checked = totpSettings.Digits == 5;
+                ComboBoxTimeCorrectionSetup.Text = totpSettings.TimeCorrectionUrl != null ? totpSettings.TimeCorrectionUrl.AbsoluteUri : null;
 
                 DeleteSetupButton.Visible = true; //Shows the back button.
                 HelpProviderSetup.SetHelpString(DeleteSetupButton, Localization.Strings.SetupDelete);
-
-                TextBoxSeedSetup.Text = _plugin.TOTPEntryValidator.GetCleanSeed(_entry); //Checks if the seed exists and sets seed textbox to the seed value.
             }
             else
             {
                 DeleteSetupButton.Visible = false; //Hides the back button.
             }
 
-            ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); //Gets existings time corrections and adds them in the combobox.
+            ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); // Gets existing time corrections and adds them in the combobox.
 
             HelpProviderSetup.SetHelpString(FinishSetupButton, Localization.Strings.SetupFinish);
 
@@ -162,29 +149,40 @@ namespace KeeTrayTOTP
             {
                 _entry.CreateBackup(_plugin.PluginHost.MainWindow.ActiveDatabase);
 
-                _entry.Strings.Set(_plugin.Settings.TOTPSeedStringName, new ProtectedString(true, TextBoxSeedSetup.Text));
+                // try to get the current keyUri / settings: dit crasht bij nieuwe entries!
+                var keyUri = _plugin.TOTPEntryValidator.ReadAsKeyUri(_entry);
 
-                string format = "";
-
+                // Change the settings
                 if (RadioButtonLength6Setup.Checked)
                 {
-                    format = "6";
+                    keyUri.Digits = 6;
                 }
                 else if (RadioButtonLength7Setup.Checked)
                 {
-                    format = "7";
+                    keyUri.Digits = 7;
                 }
                 else if (RadioButtonLength8Setup.Checked)
                 {
-                    format = "8";
+                    keyUri.Digits = 8;
                 }
                 else if (RadioButtonSteamFormatSetup.Checked)
                 {
-                    format = "S";
+                    keyUri.Digits = 5;
                 }
 
-                var settings = new ProtectedString(false, NumericIntervalSetup.Value.ToString() + ";" + format + (ComboBoxTimeCorrectionSetup.Text != string.Empty ? ";" : string.Empty) + ComboBoxTimeCorrectionSetup.Text);
-                _entry.Strings.Set(_plugin.Settings.TOTPSettingsStringName, settings);
+                keyUri.Secret = TextBoxSeedSetup.Text;
+                keyUri.Period = (int)NumericIntervalSetup.Value;
+                Uri timecorrectionUri;
+                if (string.IsNullOrWhiteSpace(ComboBoxTimeCorrectionSetup.Text) && Uri.TryCreate(ComboBoxTimeCorrectionSetup.Text, UriKind.Absolute, out timecorrectionUri))
+                {
+                    keyUri.TimeCorrectionUrl = timecorrectionUri;
+                }
+                else
+                {
+                    keyUri.TimeCorrectionUrl = null;
+                }
+
+                _plugin.TOTPEntryValidator.SetKeyUri(_entry, keyUri);
 
                 _entry.Touch(true);
 

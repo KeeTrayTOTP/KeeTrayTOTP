@@ -174,20 +174,27 @@ namespace KeeTrayTOTP.Tests
             act.Should().Throw<ArgumentOutOfRangeException>().WithMessage(msg + "*");
         }
 
-        // TODO: more tests, e.g. steam, invalid urls, invalid lengths
-        [TestMethod]
-        public void CreateFromLegacySettings()
+        [DataTestMethod]
+        [DataRow("30;6;https://www.nist.gov", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?secret=ABABABABABABABAB&issuer=SomeIssuer&timecorrectionurl=https%3A%2F%2Fwww.nist.gov%2F")]
+        [DataRow("30;6", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?secret=ABABABABABABABAB&issuer=SomeIssuer")]
+        [DataRow("30;5", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?digits=5&secret=ABABABABABABABAB&issuer=SomeIssuer")]
+        [DataRow("30;7", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?digits=7&secret=ABABABABABABABAB&issuer=SomeIssuer")]
+        [DataRow("30;S", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?digits=5&secret=ABABABABABABABAB&issuer=SomeIssuer")]
+        [DataRow("60;S;https://store.steampowered.com/", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?period=60&digits=5&secret=ABABABABABABABAB&issuer=SomeIssuer&timecorrectionurl=https%3A%2F%2Fstore.steampowered.com%2F")]
+        public void KeyUri_SerializeDeserialize_ShouldPreserveInformation(string inputSettings, string secret, string expectedUri)
         {
-            var settings = new string[] { "30", "6", "https://www.nist.gov" };
-            var secret = "ABABABABABABABAB";
-
+            var settings = inputSettings.Split(';');
             var keyUri = KeyUri.CreateFromLegacySettings(settings, secret);
 
+            // Validate 
             keyUri.Secret.Should().Be(secret);
             keyUri.Algorithm.Should().Be("SHA1");
-            keyUri.Period.Should().Be(30);
-            keyUri.Digits.Should().Be(6);
-            keyUri.TimeCorrectionUrl.Should().Be(new Uri("https://www.nist.gov"));
+
+            keyUri.GetUri().AbsoluteUri.Should().Be(expectedUri);
+
+            // Convert the KeyUri instance made from settings and seed, parse the generated uri in a new instance and compare the two.
+            var keyUriFromLegacyKeyUri = new KeyUri(keyUri.GetUri());
+            keyUriFromLegacyKeyUri.Should().BeEquivalentTo(keyUri);
         }
     }
 }

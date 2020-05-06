@@ -20,7 +20,7 @@ namespace KeeTrayTOTP
             {
                 throw new ArgumentNullException("settings", "Should not be null.");
             }
-            if (settings.Length <= 2)
+            if (settings.Length < 2)
             {
                 throw new ArgumentOutOfRangeException("settings", "Should have at least two entries");
             }
@@ -29,15 +29,20 @@ namespace KeeTrayTOTP
                 throw new ArgumentOutOfRangeException("secret", "Should not be null.");
             }
 
-            var issuer = settings[1] == "S" ? "Steam" : "SomeIssuer";
+            var issuer = "SomeIssuer";
+            // TODO: add enum in class specifying which totp version to apply (RFC or STEAM)
             var digits = settings[1] == "S" ? "5" : settings[1];
             var period = settings[0];
             var tcurl = (settings.Length > 2) ? settings[2] : null;
 
             // Construct a uri
-            var uri = new Uri(string.Format("{0}://{1}/{2}:SomeLabel?secret={3}&period={4}&digits={5}&timecorrectionurl={6}", ValidScheme, ValidType, Uri.EscapeDataString(issuer), Uri.EscapeDataString(secret), Uri.EscapeDataString(period), Uri.EscapeDataString(digits), Uri.EscapeDataString(tcurl)));
+            var uri = string.Format("{0}://{1}/{2}:SomeLabel?secret={3}&period={4}&digits={5}", ValidScheme, ValidType, Uri.EscapeDataString(issuer), Uri.EscapeDataString(secret), Uri.EscapeDataString(period), Uri.EscapeDataString(digits));
+            if (tcurl != null)
+            {
+                uri += "&timecorrectionurl=" + Uri.EscapeDataString(tcurl);
+            }
 
-            return new KeyUri(uri);
+            return new KeyUri(new Uri(uri));
         }
 
         public KeyUri(Uri uri)
@@ -201,6 +206,16 @@ namespace KeeTrayTOTP
             return result;
         }
 
+        internal string ToLegacySettings()
+        {
+            var format = Digits == 5 ? "S" : Digits.ToString();
+            var period = Period.ToString();
+            var tc = TimeCorrectionUrl != null ? TimeCorrectionUrl.AbsoluteUri : null;
+            var parts = new string[] { format, period, tc };
+         
+            return string.Concat(';', parts.Where(c => c != null));
+        }
+
         public Uri GetUri()
         {
             var newQuery = new NameValueCollection();
@@ -220,7 +235,7 @@ namespace KeeTrayTOTP
             newQuery["issuer"] = Issuer;
             if (TimeCorrectionUrl != null)
             {
-                newQuery["timecorrectionurl"] = Uri.EscapeUriString(TimeCorrectionUrl.AbsoluteUri);
+                newQuery["timecorrectionurl"] = Uri.EscapeDataString(TimeCorrectionUrl.AbsoluteUri);
             }
 
             var builder = new UriBuilder(ValidScheme, Type)
