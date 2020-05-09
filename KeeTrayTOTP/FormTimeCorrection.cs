@@ -1,10 +1,8 @@
-﻿using System;
-using System.ComponentModel;
-using System.Linq;
-using System.Windows.Forms;
-using KeePass.UI;
-using KeeTrayTOTP.Helpers;
+﻿using KeePass.UI;
 using KeeTrayTOTP.Libraries;
+using System;
+using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace KeeTrayTOTP
 {
@@ -139,7 +137,7 @@ namespace KeeTrayTOTP
                 ButtonVerify.Enabled = true; //Enables the user to retry the URL validation.
                 ComboBoxUrlTimeCorrection.Enabled = true; //Enables the user to modify the last URL that was attempted to validate.
             }
-            ButtonCancel.Enabled = true; //Enables the user to discard the last URL that was attempted to validate. 
+            ButtonCancel.Enabled = true; //Enables the user to discard the last URL that was attempted to validate.
         }
 
         /// <summary>

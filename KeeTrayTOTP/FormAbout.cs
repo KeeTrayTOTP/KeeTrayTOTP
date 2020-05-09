@@ -1,8 +1,9 @@
-﻿using System;
+﻿using KeePass.UI;
+using KeeTrayTOTP.Localization;
+using System;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
-using KeePass.UI;
 
 namespace KeeTrayTOTP
 {
@@ -14,7 +15,7 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Tray TOTP Support Url
         /// </summary>
-        private static readonly Uri SupportUrl = new Uri("https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues", UriKind.Absolute);
+        private static readonly Uri SupportUrl = new Uri(Strings.SupportUrl, UriKind.Absolute);
 
         /// <summary>
         /// Windows Form Constructor.
@@ -33,7 +34,7 @@ namespace KeeTrayTOTP
         {
             GlobalWindowManager.AddWindow(this);
 
-            Text = Localization.Strings.About + " - " + Localization.Strings.TrayTOTPPlugin;
+            Text = Strings.About + " - " + Strings.TrayTOTPPlugin;
             ListViewAbout.Items[0].SubItems.Add(AssemblyTitle);
             ListViewAbout.Items[1].SubItems.Add(AssemblyCompany);
             ListViewAbout.Items[2].SubItems.Add(AssemblyVersion);
@@ -169,7 +170,7 @@ namespace KeeTrayTOTP
         {
             var hit = ListViewAbout.HitTest(e.Location);
             if (hit.Item != null && hit.Item == ListViewAbout.Items[4] && hit.SubItem == ListViewAbout.Items[4].SubItems[1])
-            { 
+            {
                 System.Diagnostics.Process.Start(SupportUrl.ToString());
             }
         }
@@ -194,10 +195,13 @@ namespace KeeTrayTOTP
         private void ListViewAbout_MouseMove(object sender, MouseEventArgs e)
         {
             var hit = ListViewAbout.HitTest(e.Location);
-            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1] && hit.Item == ListViewAbout.Items[4]) {
+            if (hit.SubItem != null && hit.SubItem == hit.Item.SubItems[1] && hit.Item == ListViewAbout.Items[4])
+            {
                 ListViewAbout.Cursor = Cursors.Hand;
-            } else {
-                ListViewAbout.Cursor = Cursors.Default; 
+            }
+            else
+            {
+                ListViewAbout.Cursor = Cursors.Default;
             }
         }
     }
