@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 using KeePass.Plugins;
 using KeePass.UI;
 using KeePass.Util.Spr;
@@ -10,6 +5,11 @@ using KeePassLib;
 using KeePassLib.Utility;
 using KeeTrayTOTP.Helpers;
 using KeeTrayTOTP.Properties;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace KeeTrayTOTP.Menu
 {
@@ -157,7 +157,7 @@ namespace KeeTrayTOTP.Menu
 
         protected IEnumerable<ToolStripMenuItem> CreateDatabaseSubMenuItemsFromPwDocument(PwDocument pwDocument)
         {
-            var validPwEntries = Plugin.GetVisibleAndValidPasswordEntries(pwDocument.Database.RootGroup).ToArray();
+            var validPwEntries = Plugin.GetVisibleAndValidPasswordEntries(pwDocument.Database).ToArray();
             if (validPwEntries.Length > 0)
             {
                 return validPwEntries.Select(entry => CreateMenuItemFromPwEntry(entry, pwDocument.Database));
@@ -267,6 +267,5 @@ namespace KeeTrayTOTP.Menu
                 Plugin.TOTPCopyToClipboard(pe);
             }
         }
-
     }
 }
