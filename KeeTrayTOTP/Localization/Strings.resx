@@ -233,6 +233,9 @@
   <data name="ShowQR" xml:space="preserve">
     <value>Show QR</value>
   </data>
+  <data name="SupportUrl" xml:space="preserve">
+    <value>https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues</value>
+  </data>
   <data name="SwitchTo" xml:space="preserve">
     <value>Switch to {0}</value>
     <comment>{0} is a database name</comment>

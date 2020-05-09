@@ -403,6 +403,15 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues.
+        /// </summary>
+        internal static string SupportUrl {
+            get {
+                return ResourceManager.GetString("SupportUrl", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Switch to {0}.
         /// </summary>
         internal static string SwitchTo {
