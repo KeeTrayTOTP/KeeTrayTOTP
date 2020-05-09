@@ -124,15 +124,6 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error.
-        /// </summary>
-        internal static string Error {
-            get {
-                return ResourceManager.GetString("Error", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Error, bad seed!.
         /// </summary>
         internal static string ErrorBadSeed {
@@ -151,20 +142,11 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error, no settings!.
+        ///   Looks up a localized string similar to Error, no seed!.
         /// </summary>
-        internal static string ErrorNoSettings {
+        internal static string ErrorNoSeed {
             get {
-                return ResourceManager.GetString("ErrorNoSettings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Error, storage!.
-        /// </summary>
-        internal static string ErrorStorage {
-            get {
-                return ResourceManager.GetString("ErrorStorage", resourceCulture);
+                return ResourceManager.GetString("ErrorNoSeed", resourceCulture);
             }
         }
         
@@ -394,33 +376,6 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Next step..
-        /// </summary>
-        internal static string SetupNext {
-            get {
-                return ResourceManager.GetString("SetupNext", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Previous step..
-        /// </summary>
-        internal static string SetupPrevious {
-            get {
-                return ResourceManager.GetString("SetupPrevious", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Create or applies changes to the current entry&apos;s TOTP Settings..
-        /// </summary>
-        internal static string SetupProceed {
-            get {
-                return ResourceManager.GetString("SetupProceed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Seed cannot be empty!.
         /// </summary>
         internal static string SetupSeedCantBeEmpty {
@@ -439,20 +394,20 @@ namespace KeeTrayTOTP.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to URL must include &quot;http&quot;!.
-        /// </summary>
-        internal static string SetupUrlMustContainHttp {
-            get {
-                return ResourceManager.GetString("SetupUrlMustContainHttp", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Show QR.
         /// </summary>
         internal static string ShowQR {
             get {
                 return ResourceManager.GetString("ShowQR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues.
+        /// </summary>
+        internal static string SupportUrl {
+            get {
+                return ResourceManager.GetString("SupportUrl", resourceCulture);
             }
         }
         

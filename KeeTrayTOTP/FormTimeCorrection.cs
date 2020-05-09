@@ -1,8 +1,8 @@
-﻿using System;
+﻿using KeePass.UI;
+using KeeTrayTOTP.Libraries;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using KeePass.UI;
-using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
 {
@@ -56,14 +56,11 @@ namespace KeeTrayTOTP
             {
                 foreach (var pe in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true))
                 {
-                    if (_plugin.SettingsCheck(pe))
+                    string[] settings = _plugin.TOTPEntryValidator.SettingsGet(pe);
+                    bool validUrl;
+                    if (_plugin.TOTPEntryValidator.SettingsValidate(pe, out validUrl) && validUrl && !ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null)
                     {
-                        string[] settings = _plugin.SettingsGet(pe);
-                        bool validUrl;
-                        if (_plugin.SettingsValidate(pe, out validUrl) && validUrl && !ComboBoxUrlTimeCorrection.Items.Contains(settings[2]) && _plugin.TimeCorrections[settings[2]] == null)
-                        {
-                            ComboBoxUrlTimeCorrection.Items.Add(settings[2]);
-                        }
+                        ComboBoxUrlTimeCorrection.Items.Add(settings[2]);
                     }
                 }
             }
@@ -140,7 +137,7 @@ namespace KeeTrayTOTP
                 ButtonVerify.Enabled = true; //Enables the user to retry the URL validation.
                 ComboBoxUrlTimeCorrection.Enabled = true; //Enables the user to modify the last URL that was attempted to validate.
             }
-            ButtonCancel.Enabled = true; //Enables the user to discard the last URL that was attempted to validate. 
+            ButtonCancel.Enabled = true; //Enables the user to discard the last URL that was attempted to validate.
         }
 
         /// <summary>

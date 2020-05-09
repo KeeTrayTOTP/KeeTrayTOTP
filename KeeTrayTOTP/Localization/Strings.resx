@@ -138,21 +138,14 @@
   <data name="DatabaseIsNotOpen" xml:space="preserve">
     <value>Database is not open!</value>
   </data>
-  <data name="Error" xml:space="preserve">
-    <value>Error</value>
-    <comment>Just the word "error"</comment>
-  </data>
   <data name="ErrorBadSeed" xml:space="preserve">
     <value>Error, bad seed!</value>
   </data>
   <data name="ErrorBadSettings" xml:space="preserve">
     <value>Error, bad settings!</value>
   </data>
-  <data name="ErrorNoSettings" xml:space="preserve">
-    <value>Error, no settings!</value>
-  </data>
-  <data name="ErrorStorage" xml:space="preserve">
-    <value>Error, storage!</value>
+  <data name="ErrorNoSeed" xml:space="preserve">
+    <value>Error, no seed!</value>
   </data>
   <data name="Help" xml:space="preserve">
     <value>Help</value>
@@ -231,26 +224,17 @@
   <data name="SetupMessageAskDeleteCurrentEntry" xml:space="preserve">
     <value>Are you sure you want to delete the current entry's TOTP settings?</value>
   </data>
-  <data name="SetupNext" xml:space="preserve">
-    <value>Next step.</value>
-  </data>
-  <data name="SetupPrevious" xml:space="preserve">
-    <value>Previous step.</value>
-  </data>
-  <data name="SetupProceed" xml:space="preserve">
-    <value>Create or applies changes to the current entry's TOTP Settings.</value>
-  </data>
   <data name="SetupSeedCantBeEmpty" xml:space="preserve">
     <value>Seed cannot be empty!</value>
   </data>
   <data name="SetupTOTP" xml:space="preserve">
     <value>Setup TOTP</value>
   </data>
-  <data name="SetupUrlMustContainHttp" xml:space="preserve">
-    <value>URL must include "http"!</value>
-  </data>
   <data name="ShowQR" xml:space="preserve">
     <value>Show QR</value>
+  </data>
+  <data name="SupportUrl" xml:space="preserve">
+    <value>https://github.com/KeeTrayTOTP/KeeTrayTOTP/issues</value>
   </data>
   <data name="SwitchTo" xml:space="preserve">
     <value>Switch to {0}</value>
