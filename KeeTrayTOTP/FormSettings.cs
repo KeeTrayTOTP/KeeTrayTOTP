@@ -1,7 +1,7 @@
-﻿using System;
+﻿using KeePass.UI;
+using System;
 using System.ComponentModel;
 using System.Windows.Forms;
-using KeePass.UI;
 
 namespace KeeTrayTOTP
 {
@@ -376,26 +376,14 @@ namespace KeeTrayTOTP
             _plugin.Settings.AutoTypeEnable = CheckBoxAutoType.Checked;
             if (CheckBoxAutoTypeFieldName.Checked)
             {
-                string oldAutoTypeFieldName = _plugin.Settings.AutoTypeFieldName.ExtWithBrackets();
-                string newAutoTypeFieldName = TextBoxAutoTypeFieldName.Text.ExtWithBrackets();
-                KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Remove(oldAutoTypeFieldName);
-                if (CheckBoxAutoTypeFieldRename.Checked) //Replace existing field of custom keystrokes from all entries and all groups
+                if (CheckBoxAutoTypeFieldRename.Checked) // Replace existing field of custom keystrokes from all entries and all groups
                 {
-                    _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.DefaultAutoTypeSequence = _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.DefaultAutoTypeSequence.Replace(oldAutoTypeFieldName, newAutoTypeFieldName);
-                    foreach (var group in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetGroups(true))
-                    {
-                        group.DefaultAutoTypeSequence = group.DefaultAutoTypeSequence.Replace(oldAutoTypeFieldName, newAutoTypeFieldName);
-                        foreach (var pe in group.GetEntries(false))
-                        {
-                            foreach (var association in pe.AutoType.Associations)
-                            {
-                                association.Sequence = association.Sequence.Replace(oldAutoTypeFieldName, newAutoTypeFieldName);
-                            }
-                        }
-                    }
+                    string oldAutoTypeFieldName = _plugin.Settings.AutoTypeFieldName.ExtWithBrackets();
+                    string newAutoTypeFieldName = TextBoxAutoTypeFieldName.Text.ExtWithBrackets();
+
+                    SetupAutoType(oldAutoTypeFieldName, newAutoTypeFieldName);
                 }
                 _plugin.Settings.AutoTypeFieldName = TextBoxAutoTypeFieldName.Text;
-                KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Add(newAutoTypeFieldName);
             }
             if (WorkerSave.CancellationPending) { e.Cancel = true; return; }
 
@@ -450,8 +438,14 @@ namespace KeeTrayTOTP
 
             // Auto Type
             string newAutoTypeFieldName = Localization.Strings.TOTP.ExtWithBrackets();
-            KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Add(newAutoTypeFieldName);
+            SetupAutoType(oldAutoTypeFieldName, newAutoTypeFieldName);
+        }
+
+        private void SetupAutoType(string oldAutoTypeFieldName, string newAutoTypeFieldName)
+        {
             KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Remove(oldAutoTypeFieldName);
+            KeePass.Util.Spr.SprEngine.FilterPlaceholderHints.Add(newAutoTypeFieldName);
+
             _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.DefaultAutoTypeSequence = _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.DefaultAutoTypeSequence.Replace(oldAutoTypeFieldName, newAutoTypeFieldName);
             foreach (var group in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetGroups(true))
             {

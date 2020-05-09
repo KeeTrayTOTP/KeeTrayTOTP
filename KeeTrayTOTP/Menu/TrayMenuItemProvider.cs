@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using KeePass.Plugins;
@@ -57,7 +58,7 @@ namespace KeeTrayTOTP.Menu
         {
             if (documents.IsNotAtLeastOneDocumentOpen())
             {
-                return new []
+                return new[]
                 {
                     new ToolStripMenuItem(Localization.Strings.NoDatabaseIsOpened, Resources.TOTP_Error)
                 };
@@ -91,7 +92,7 @@ namespace KeeTrayTOTP.Menu
                 mainDropDownItem.DropDownClosed += OnDropDownClosed;
                 mainDropDownItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
             }
-            
+
             mainDropDownItem.Tag = document;
             return mainDropDownItem;
         }
@@ -199,22 +200,45 @@ namespace KeeTrayTOTP.Menu
 
         protected ToolStripMenuItem CreateMenuItemFromPwEntry(PwEntry entry, PwDatabase pwDatabase)
         {
-            var context = new SprContext(entry, pwDatabase, SprCompileFlags.All, false, 
-                false);
+            var context = new SprContext(entry, pwDatabase, SprCompileFlags.All, false, false);
             var entryTitle = entry.Strings.ReadSafe(PwDefs.TitleField);
             var entryUsername = SprEngine.Compile(entry.Strings.ReadSafe(PwDefs.UserNameField), context);
 
             string trayTitle = TrimMenuItemTitleIfNecessary(entryTitle, entryUsername);
 
-            var menuItem = new ToolStripMenuItem(trayTitle, Resources.TOTP_Key, OnNotifyMenuTOTPClick);
-            menuItem.Tag = entry;
-            if (!Plugin.TOTPEntryValidator.SettingsValidate(entry))
+            var validEntry = Plugin.TOTPEntryValidator.SettingsValidate(entry);
+            var menuItem = new ToolStripMenuItem(trayTitle)
             {
-                menuItem.Enabled = false;
-                menuItem.Image = Resources.TOTP_Error;
-            }
+                Tag = entry,
+                Image = validEntry ? GetEntryImage(entry, pwDatabase) : Resources.TOTP_Error,
+                Enabled = validEntry,
+            };
+            menuItem.Click += OnNotifyMenuTOTPClick;
 
             return menuItem;
+        }
+
+        private Image GetEntryImage(PwEntry pe, PwDatabase pwDatabase)
+        {
+            if (pwDatabase != null)
+            {
+                if (!pe.CustomIconUuid.Equals(PwUuid.Zero))
+                {
+                    int w = DpiUtil.ScaleIntX(16);
+                    int h = DpiUtil.ScaleIntY(16);
+
+                    return pwDatabase.GetCustomIcon(pe.CustomIconUuid, w, h);
+                }
+                var iconId = (int)pe.IconId;
+                if (PluginHost.MainWindow.ClientIcons != null &&
+                    PluginHost.MainWindow.ClientIcons.Images != null &&
+                    PluginHost.MainWindow.ClientIcons.Images.Count > iconId)
+                {
+                    return PluginHost.MainWindow.ClientIcons.Images[iconId];
+                }
+            }
+
+            return Resources.TOTP_Key;
         }
 
         private string TrimMenuItemTitleIfNecessary(string entryTitle, string entryUsername)

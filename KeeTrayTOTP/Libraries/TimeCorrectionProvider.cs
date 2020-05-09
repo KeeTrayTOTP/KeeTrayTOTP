@@ -61,7 +61,7 @@ namespace KeeTrayTOTP.Libraries
         {
             if (string.IsNullOrEmpty(url))
             {
-                throw new Exception("Invalid URL."); //Throws exception if the URL is invalid as the class cannot work without it.
+                throw new ArgumentException("Invalid URL.", "url");
             }
 
             Url = url; //Defines variable from argument.
