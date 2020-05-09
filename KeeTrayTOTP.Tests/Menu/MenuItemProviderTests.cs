@@ -1,9 +1,7 @@
 ﻿using FluentAssertions;
-using KeePass.App.Configuration;
-using KeePass.Forms;
 using KeePass.Plugins;
-using KeePass.UI;
 using KeeTrayTOTP.Menu;
+using KeeTrayTOTP.Tests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 
@@ -18,8 +16,7 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestInitialize]
         public void Initialize()
         {
-            _plugin = CreatePluginHostMock(out var host);
-            _host = host;
+            (_plugin, _host) = PluginHostHelper.Create();
         }
 
         [TestMethod]
@@ -103,23 +100,6 @@ namespace KeeTrayTOTP.Tests.Menu
 
             var mainMenuItem = sut.GetMenuItem((PluginMenuType)4);
             mainMenuItem.Should().BeNull();
-        }
-
-        private static KeeTrayTOTPExt CreatePluginHostMock(out Mock<IPluginHost> host)
-        {
-            var plugin = new KeeTrayTOTPExt();
-            host = new Mock<IPluginHost>(MockBehavior.Strict);
-
-            var mainForm = new MainForm();
-            host.SetupGet(c => c.MainWindow).Returns(mainForm);
-
-            var customConfig = new AceCustomConfig();
-            host.SetupGet(c => c.CustomConfig).Returns(customConfig);
-
-            var columnProviderPool = new ColumnProviderPool();
-            host.SetupGet(c => c.ColumnProviderPool).Returns(columnProviderPool);
-
-            return plugin;
         }
     }
 }

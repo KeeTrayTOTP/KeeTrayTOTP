@@ -1,18 +1,18 @@
-using System;
-using System.Linq;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Collections.Generic;
 using KeePass.App.Configuration;
 using KeePass.Plugins;
 using KeePass.UI;
+using KeePass.Util;
 using KeePass.Util.Spr;
 using KeePassLib;
 using KeePassLib.Utility;
+using KeeTrayTOTP.Helpers;
 using KeeTrayTOTP.Libraries;
 using KeeTrayTOTP.Menu;
-using KeeTrayTOTP.Helpers;
-using KeePass.Util;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace KeeTrayTOTP
 {
@@ -200,18 +200,39 @@ namespace KeeTrayTOTP
         /// </summary>
         internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries()
         {
-            return GetVisibleAndValidPasswordEntries(PluginHost.MainWindow.ActiveDatabase.RootGroup);
+            return GetVisibleAndValidPasswordEntries(PluginHost.MainWindow.ActiveDatabase);
         }
 
         /// <summary>
         /// Get all the password entries in all groups and filter entries that are expired or have invalid TOTP settings.
         /// </summary>
-        /// <returns></returns>
-        internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries(PwGroup pwGroup)
+        internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries(PwDatabase pwDatabase)
         {
-            var entries = pwGroup.GetEntries(true);
+            var entries = pwDatabase.RootGroup.GetEntries(true);
+            var inRecycleBinFunc = CreateInRecycleBinFunc(pwDatabase);
 
-            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry));
+            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry) && !inRecycleBinFunc(entry));
+        }
+
+        /// <summary>
+        /// Create an optimal function for checking whether an entry is in the recycle bin
+        /// </summary>
+        /// <remarks>
+        /// Returns a func to prevent looking up the recycle bin for every entry.
+        /// </remarks>
+        /// <param name="pwDatabase"></param>
+        private static Func<PwEntry, bool> CreateInRecycleBinFunc(PwDatabase pwDatabase)
+        {
+            if (pwDatabase.RecycleBinEnabled)
+            {
+                var pgRecycleBin = pwDatabase.RootGroup.FindGroup(pwDatabase.RecycleBinUuid, true);
+                if (pgRecycleBin != null)
+                {
+                    return (PwEntry entry) => entry.IsContainedIn(pgRecycleBin);
+                }
+            }
+
+            return (PwEntry entry) => false;
         }
 
         /// <summary>
