@@ -16,45 +16,12 @@ namespace KeeTrayTOTP.Libraries
         /// <summary>
         /// Duration of generation of each totp, in seconds.
         /// </summary>
-        private int _duration;
-        public int Duration
-        {
-            get
-            {
-                return this._duration;
-            }
-            set
-            {
-                if (value <= 0)
-                {
-                    throw new Exception("Invalid Duration."); //Throws an exception if the duration is invalid as the class cannot work without it.
-                }
-
-                this._duration = value;
-            }
-        }
+        private readonly int _duration;
 
         /// <summary>
         /// Length of the generated totp.
         /// </summary>
-        private int _length;
-        public int Length
-        {
-            get
-            {
-                return this._length;
-            }
-            set
-            {
-                //Throws an exception if the length is invalid as the class cannot work without it.
-                if (value < 4 || value > 8)
-                {
-                    throw new Exception("Invalid Length.");
-                }
-
-                this._length = value; //Defines variable from argument.
-            }
-        }
+        private readonly int _length;
 
         public Func<byte[], int, string> Encoder { get; set; }
 
