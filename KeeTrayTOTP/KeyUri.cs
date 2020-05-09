@@ -7,12 +7,25 @@ namespace KeeTrayTOTP
 {
     public class KeyUri
     {
+        public enum TotpFormat
+        {
+            /// <summary>
+            /// Default format
+            /// </summary>
+            RFC6238,
+            /// <summary>
+            /// Custom format used by steam
+            /// </summary>
+            Steam,
+        }
+
         private static string[] ValidAlgorithms = new[] { "SHA1", "SHA256", "SHA512" };
         private const string DefaultAlgorithm = "SHA1";
         private const string ValidScheme = "otpauth";
         private const string ValidType = "totp";
         private const int DefaultDigits = 6;
         private const int DefaultPeriod = 30;
+        private const TotpFormat DefaultFormat = TotpFormat.RFC6238;
 
         public static KeyUri CreateFromLegacySettings(string[] settings, string secret)
         {
@@ -30,13 +43,13 @@ namespace KeeTrayTOTP
             }
 
             var issuer = "SomeIssuer";
-            // TODO: add enum in class specifying which totp version to apply (RFC or STEAM)
             var digits = settings[1] == "S" ? "5" : settings[1];
+            var format = settings[1] == "S" ? TotpFormat.Steam : TotpFormat.RFC6238;
             var period = settings[0];
             var tcurl = (settings.Length > 2) ? settings[2] : null;
 
             // Construct a uri
-            var uri = string.Format("{0}://{1}/{2}:SomeLabel?secret={3}&period={4}&digits={5}", ValidScheme, ValidType, Uri.EscapeDataString(issuer), Uri.EscapeDataString(secret), Uri.EscapeDataString(period), Uri.EscapeDataString(digits));
+            var uri = string.Format("{0}://{1}/{2}:SomeLabel?secret={3}&period={4}&digits={5}&format={6}", ValidScheme, ValidType, Uri.EscapeDataString(issuer), Uri.EscapeDataString(secret), Uri.EscapeDataString(period), Uri.EscapeDataString(digits), format.ToString());
             if (tcurl != null)
             {
                 uri += "&timecorrectionurl=" + Uri.EscapeDataString(tcurl);
@@ -64,6 +77,7 @@ namespace KeeTrayTOTP
             this.Period = EnsureValidPeriod(parsedQuery);
             this.Digits = EnsureValidDigits(parsedQuery);
             this.TimeCorrectionUrl = EnsureValidTimeCorrectionUrl(parsedQuery);
+            this.Format = EnsureValidFormat(parsedQuery);
 
             EnsureValidLabelAndIssuer(uri, parsedQuery);
         }
@@ -137,6 +151,17 @@ namespace KeeTrayTOTP
             return digits;
         }
 
+        private TotpFormat EnsureValidFormat(NameValueCollection query)
+        {
+            var format = DefaultFormat;
+            if (query.AllKeys.Contains("format") && !Enum.TryParse(query["format"], out format))
+            {
+                throw new ArgumentOutOfRangeException("query", "Not a valid TOTP Format");
+            }
+
+            return format;
+        }
+
         private int EnsureValidPeriod(NameValueCollection query)
         {
             int period = DefaultPeriod;
@@ -183,6 +208,7 @@ namespace KeeTrayTOTP
         public int Period { get; set; }
         public string Label { get; set; }
         public string Issuer { get; set; }
+        public TotpFormat Format { get; set; }
         public Uri TimeCorrectionUrl { get; set; }
 
         /// <summary>
@@ -212,24 +238,28 @@ namespace KeeTrayTOTP
             var period = Period.ToString();
             var tc = TimeCorrectionUrl != null ? TimeCorrectionUrl.AbsoluteUri : null;
             var parts = new string[] { format, period, tc };
-         
+
             return string.Concat(';', parts.Where(c => c != null));
         }
 
         public Uri GetUri()
         {
             var newQuery = new NameValueCollection();
-            if (Period != 30)
+            if (Period != DefaultPeriod)
             {
                 newQuery["period"] = Convert.ToString(Period);
             }
-            if (Digits != 6)
+            if (Digits != DefaultDigits)
             {
                 newQuery["digits"] = Convert.ToString(Digits);
             }
-            if (Algorithm != "SHA1")
+            if (Algorithm != DefaultAlgorithm)
             {
                 newQuery["algorithm"] = Algorithm;
+            }
+            if (Format != DefaultFormat)
+            {
+                newQuery["format"] = Format.ToString();
             }
             newQuery["secret"] = Secret;
             newQuery["issuer"] = Issuer;

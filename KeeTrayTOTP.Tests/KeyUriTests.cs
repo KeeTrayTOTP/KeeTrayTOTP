@@ -179,14 +179,14 @@ namespace KeeTrayTOTP.Tests
         [DataRow("30;6", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?secret=ABABABABABABABAB&issuer=SomeIssuer")]
         [DataRow("30;5", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?digits=5&secret=ABABABABABABABAB&issuer=SomeIssuer")]
         [DataRow("30;7", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?digits=7&secret=ABABABABABABABAB&issuer=SomeIssuer")]
-        [DataRow("30;S", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?digits=5&secret=ABABABABABABABAB&issuer=SomeIssuer")]
-        [DataRow("60;S;https://store.steampowered.com/", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?period=60&digits=5&secret=ABABABABABABABAB&issuer=SomeIssuer&timecorrectionurl=https%3A%2F%2Fstore.steampowered.com%2F")]
+        [DataRow("30;S", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?digits=5&format=Steam&secret=ABABABABABABABAB&issuer=SomeIssuer")]
+        [DataRow("60;S;https://store.steampowered.com/", "ABABABABABABABAB", "otpauth://totp/SomeIssuer:SomeLabel?period=60&digits=5&format=Steam&secret=ABABABABABABABAB&issuer=SomeIssuer&timecorrectionurl=https%3A%2F%2Fstore.steampowered.com%2F")]
         public void KeyUri_SerializeDeserialize_ShouldPreserveInformation(string inputSettings, string secret, string expectedUri)
         {
             var settings = inputSettings.Split(';');
             var keyUri = KeyUri.CreateFromLegacySettings(settings, secret);
 
-            // Validate 
+            // Validate
             keyUri.Secret.Should().Be(secret);
             keyUri.Algorithm.Should().Be("SHA1");
 
