@@ -209,26 +209,30 @@ namespace KeeTrayTOTP
         internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries(PwDatabase pwDatabase)
         {
             var entries = pwDatabase.RootGroup.GetEntries(true);
+            var inRecycleBinFunc = CreateInRecycleBinFunc(pwDatabase);
 
-            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry) && !InRecycleBin(pwDatabase, entry));
+            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry) && !inRecycleBinFunc(entry));
         }
 
         /// <summary>
-        /// Returns true when there is a recycle bin, and the entry is inside of it.
+        /// Create an optimal function for checking whether an entry is in the recycle bin
         /// </summary>
-        /// <param name="entry"></param>
-        private bool InRecycleBin(PwDatabase pwDatabase, PwEntry entry)
+        /// <remarks>
+        /// Returns a func to prevent looking up the recycle bin for every entry.
+        /// </remarks>
+        /// <param name="pwDatabase"></param>
+        private static Func<PwEntry, bool> CreateInRecycleBinFunc(PwDatabase pwDatabase)
         {
             if (pwDatabase.RecycleBinEnabled)
             {
                 var pgRecycleBin = pwDatabase.RootGroup.FindGroup(pwDatabase.RecycleBinUuid, true);
                 if (pgRecycleBin != null)
                 {
-                    return entry.IsContainedIn(pgRecycleBin);
+                    return (PwEntry entry) => entry.IsContainedIn(pgRecycleBin);
                 }
             }
 
-            return false;
+            return (PwEntry entry) => false;
         }
 
         /// <summary>
