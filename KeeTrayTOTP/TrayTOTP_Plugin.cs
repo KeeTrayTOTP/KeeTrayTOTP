@@ -1,18 +1,18 @@
-using System;
-using System.Linq;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Collections.Generic;
 using KeePass.App.Configuration;
 using KeePass.Plugins;
 using KeePass.UI;
+using KeePass.Util;
 using KeePass.Util.Spr;
 using KeePassLib;
 using KeePassLib.Utility;
+using KeeTrayTOTP.Helpers;
 using KeeTrayTOTP.Libraries;
 using KeeTrayTOTP.Menu;
-using KeeTrayTOTP.Helpers;
-using KeePass.Util;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace KeeTrayTOTP
 {
@@ -200,28 +200,28 @@ namespace KeeTrayTOTP
         /// </summary>
         internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries()
         {
-            return GetVisibleAndValidPasswordEntries(PluginHost.MainWindow.ActiveDatabase.RootGroup);
+            return GetVisibleAndValidPasswordEntries(PluginHost.MainWindow.ActiveDatabase);
         }
 
         /// <summary>
         /// Get all the password entries in all groups and filter entries that are expired or have invalid TOTP settings.
         /// </summary>
-        internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries(PwGroup pwGroup)
+        internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries(PwDatabase pwDatabase)
         {
-            var entries = pwGroup.GetEntries(true);
-                        
-            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry) && !InRecycleBin(entry));
+            var entries = pwDatabase.RootGroup.GetEntries(true);
+
+            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry) && !InRecycleBin(pwDatabase, entry));
         }
 
         /// <summary>
         /// Returns true when there is a recycle bin, and the entry is inside of it.
         /// </summary>
         /// <param name="entry"></param>
-        private bool InRecycleBin(PwEntry entry)
+        private bool InRecycleBin(PwDatabase pwDatabase, PwEntry entry)
         {
-            if (PluginHost.Database.RecycleBinEnabled)
+            if (pwDatabase.RecycleBinEnabled)
             {
-                var pgRecycleBin = PluginHost.Database.RootGroup.FindGroup(PluginHost.Database.RecycleBinUuid, true);
+                var pgRecycleBin = pwDatabase.RootGroup.FindGroup(pwDatabase.RecycleBinUuid, true);
                 if (pgRecycleBin != null)
                 {
                     return entry.IsContainedIn(pgRecycleBin);

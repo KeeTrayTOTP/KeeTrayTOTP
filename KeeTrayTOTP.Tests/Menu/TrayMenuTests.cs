@@ -1,27 +1,23 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
-using KeePass.Plugins;
+﻿using FluentAssertions;
 using KeePass.UI;
 using KeeTrayTOTP.Menu;
 using KeeTrayTOTP.Tests.Extensions;
 using KeeTrayTOTP.Tests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KeeTrayTOTP.Tests.Menu
 {
     [TestClass]
     public class TrayMenuTests
     {
-        private Mock<IPluginHost> _host;
         private TrayMenuItemProvider _trayMenuItemProvider;
 
         [TestInitialize]
         public void Initialize()
         {
             var (plugin, host) = PluginHostHelper.CreateAndInitialize();
-            _host = host;
 
             _trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
         }
@@ -51,8 +47,6 @@ namespace KeeTrayTOTP.Tests.Menu
         public void BuildMenuItemsForRootDropDown_ShouldReturnEntryMenuItems_IfThereIsOnlyASingleDatabase()
         {
             var pwDocument = new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4);
-
-            _host.Setup(c => c.Database).Returns(pwDocument.Database);
 
             var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
 
@@ -119,7 +113,6 @@ namespace KeeTrayTOTP.Tests.Menu
         {
             var pwDocument = new PwDocument().New().WithFaultyTotpEnabledEntries(2);
 
-            _host.Setup(c => c.Database).Returns(pwDocument.Database);
             var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
 
             sut.Count.Should().Be(2);
@@ -132,11 +125,9 @@ namespace KeeTrayTOTP.Tests.Menu
         {
             var pwDocument = new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4).WithDeletedTotpEnabledEntries(2);
 
-            _host.Setup(c => c.Database).Returns(pwDocument.Database);
-
             var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
 
-            sut.Count.Should().Be(4, 
+            sut.Count.Should().Be(4,
                 "because, valid entries in the recycle bin should not show up.");
         }
 
@@ -144,11 +135,9 @@ namespace KeeTrayTOTP.Tests.Menu
         public void BuildMenuItemsForRootDropDown_ShouldReturnEntryMenuItems_WhenRecycleBinNotEnabled()
         {
             var pwDocument = new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4).WithDeletedTotpEnabledEntries(2);
-            
+
             // Treat recycle bin as a regular folder
             pwDocument.Database.RecycleBinEnabled = false;
-      
-            _host.Setup(c => c.Database).Returns(pwDocument.Database);
 
             var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
 
