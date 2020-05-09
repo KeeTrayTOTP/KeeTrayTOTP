@@ -267,6 +267,5 @@ namespace KeeTrayTOTP.Menu
                 Plugin.TOTPCopyToClipboard(pe);
             }
         }
-
     }
 }

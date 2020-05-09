@@ -206,12 +206,29 @@ namespace KeeTrayTOTP
         /// <summary>
         /// Get all the password entries in all groups and filter entries that are expired or have invalid TOTP settings.
         /// </summary>
-        /// <returns></returns>
         internal IEnumerable<PwEntry> GetVisibleAndValidPasswordEntries(PwGroup pwGroup)
         {
             var entries = pwGroup.GetEntries(true);
+                        
+            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry) && !InRecycleBin(entry));
+        }
 
-            return entries.Where(entry => !entry.IsExpired() && TOTPEntryValidator.HasSeed(entry));
+        /// <summary>
+        /// Returns true when there is a recycle bin, and the entry is inside of it.
+        /// </summary>
+        /// <param name="entry"></param>
+        private bool InRecycleBin(PwEntry entry)
+        {
+            if (PluginHost.Database.RecycleBinEnabled)
+            {
+                var pgRecycleBin = PluginHost.Database.RootGroup.FindGroup(PluginHost.Database.RecycleBinUuid, true);
+                if (pgRecycleBin != null)
+                {
+                    return entry.IsContainedIn(pgRecycleBin);
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
