@@ -88,7 +88,9 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void WorkerWaitForCheck_DoWork(object sender, DoWorkEventArgs e)
         {
-            _testTimeCorrection = new TimeCorrectionProvider(ComboBoxUrlTimeCorrection.Text); //Creates a new Time Correction to validate the desired URL.
+            var url = ComboBoxUrlTimeCorrection.SynchronizedInvoke(() => ComboBoxUrlTimeCorrection.Text);
+
+            _testTimeCorrection = new TimeCorrectionProvider(url); //Creates a new Time Correction to validate the desired URL.
             while (!WorkerWaitForCheck.CancellationPending) //Waits for the validation to end or a cancellation.
             {
                 System.Threading.Thread.Sleep(100); //Waits
@@ -168,31 +170,11 @@ namespace KeeTrayTOTP
                 return; //Prevents the validation if input has an error.
             }
 
-            PictureBoxTimeCorrection.Image = ImageListErrorProvider.Images[1]; //Displays working icon.
-            LabelStatusTimeCorrection.Text = Localization.Strings.TcPleaseWaitVerifying; //Diplays attempt message.
-            ButtonVerify.Enabled = false; //Prevents the user to retry the URL validation.
-            ComboBoxUrlTimeCorrection.Enabled = false; //Prevents the user to modify the URL.
-            WorkerWaitForCheck.RunWorkerAsync(); //Starts the worker that handles the thread that handles the validation attempt.
-        }
-
-        /// <summary>
-        /// Button that closes the form and returns a dialog result OK.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ButtonOK_Click(object sender, EventArgs e)
-        {
-            //Dialog Result = OK
-        }
-
-        /// <summary>
-        /// Button that closes the form and returns a dialog result Cancel.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void ButtonCancel_Click(object sender, EventArgs e)
-        {
-            //Dialog Result = Cancel
+            PictureBoxTimeCorrection.Image = ImageListErrorProvider.Images[1];
+            LabelStatusTimeCorrection.Text = Localization.Strings.TcPleaseWaitVerifying;
+            ButtonVerify.Enabled = false;
+            ComboBoxUrlTimeCorrection.Enabled = false;
+            WorkerWaitForCheck.RunWorkerAsync();
         }
 
         private void FormTimeCorrection_FormClosed(object sender, FormClosedEventArgs e)

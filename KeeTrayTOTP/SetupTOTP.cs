@@ -1,10 +1,10 @@
-﻿using System;
-using System.Windows.Forms;
-using KeePass.UI;
+﻿using KeePass.UI;
 using KeePassLib;
 using KeePassLib.Security;
-using KeeTrayTOTP.Helpers;
 using KeeTrayTOTP.Libraries;
+using System;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace KeeTrayTOTP
 {
@@ -75,7 +75,7 @@ namespace KeeTrayTOTP
                 TextBoxSeedSetup.Text = _plugin.TOTPEntryValidator.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
             }
 
-            ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.ToComboBox()); //Gets existings time corrections and adds them in the combobox.
+            ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.GetTimeCorrectionUrls().ToArray()); //Gets existings time corrections and adds them in the combobox.
 
             HelpProviderSetup.SetHelpString(FinishSetupButton, Localization.Strings.SetupFinish);
 

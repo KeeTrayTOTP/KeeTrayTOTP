@@ -1,9 +1,7 @@
-﻿using System;
+﻿using KeeTrayTOTP.Libraries;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-
-using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP
 {
@@ -173,22 +171,7 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Returns all URLs in a string array for adding range to combobox.
-        /// </summary>
-        /// <returns>String Array.</returns>
-        internal object[] ToComboBox()
-        {
-            //Temporary string List to facilitate building the array.
-            var @return = new List<object>();
-            foreach (var timeCorrection in _timeCorrections)
-            {
-                @return.Add(timeCorrection.Url);
-            }
-            return @return.ToArray();
-        }
-
-        /// <summary>
-        /// Returns all time correction URLs
+        /// Returns all time correction url's
         /// </summary>
         internal IEnumerable<string> GetTimeCorrectionUrls()
         {

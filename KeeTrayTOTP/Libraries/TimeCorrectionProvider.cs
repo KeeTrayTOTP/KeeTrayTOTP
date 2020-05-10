@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Net;
 
 namespace KeeTrayTOTP.Libraries
 {
@@ -52,11 +54,6 @@ namespace KeeTrayTOTP.Libraries
         /// </summary>
         public bool LastUpdateSucceeded { get; private set; }
 
-        /// <summary>
-        /// Instanciates a new TOTP_TimeCorrection using the specified URL to contact the server.
-        /// </summary>
-        /// <param name="url">URL of the server to get check.</param>
-        /// <param name="enable">Enable or disable the time correction check.</param>
         public TimeCorrectionProvider(string url, bool enable = true)
         {
             if (string.IsNullOrEmpty(url))
@@ -64,18 +61,18 @@ namespace KeeTrayTOTP.Libraries
                 throw new ArgumentException("Invalid URL.", "url");
             }
 
-            Url = url; //Defines variable from argument.
-            _enable = enable; //Defines variable from argument.
-            LastUpdateDateTime = DateTime.MinValue; //Defines variable from non-constant default value.
-            _timeCorrection = TimeSpan.Zero; //Defines variable from non-constant default value.
-            _timer = new System.Timers.Timer(); //Instanciates timer.
-            _timer.Elapsed += Timer_Elapsed; //Handles the timer event
-            _timer.Interval = 1000; //Defines the timer interval to 1 seconds.
-            _timer.Enabled = _enable; //Defines the timer to run if the class is initially enabled.
-            _task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
+            Url = url;
+            _enable = enable;
+            LastUpdateDateTime = DateTime.MinValue;
+            _timeCorrection = TimeSpan.Zero;
+            _timer = new System.Timers.Timer();
+            _timer.Elapsed += Timer_Elapsed;
+            _timer.Interval = 1000;
+            _timer.Enabled = _enable;
+            _task = new System.Threading.Thread(UpdateTimeCorrection);
             if (_enable)
             {
-                _task.Start(); //Starts the new thread if the class is initially enabled.
+                _task.Start();
             }
         }
 
@@ -84,68 +81,63 @@ namespace KeeTrayTOTP.Libraries
         /// </summary>
         private void Timer_Elapsed(object sender, EventArgs e)
         {
-            _intervalStretcher++; //Increments timer.
-            if (_intervalStretcher >= (60 * Interval)) //Checks if the specified delay has been reached.
+            _intervalStretcher++;
+            if (_intervalStretcher >= (60 * Interval))
             {
-                _intervalStretcher = 0; //Resets the timer.
-                Task_Do(); //Attempts to run a new task
+                _intervalStretcher = 0;
+                EnsureTaskIsAlive();
             }
         }
 
-        /// <summary>
-        /// Instanciates a new task and starts it.
-        /// </summary>
-        /// <returns>Informs if reinstanciation of the task has succeeded or not. Will fail if the thread is still active from a previous time correction check.</returns>
-        private bool Task_Do()
+        private void EnsureTaskIsAlive()
         {
-            if (!_task.IsAlive) //Checks if the task is still running.
+            if (!_task.IsAlive)
             {
-                _task = new System.Threading.Thread(Task_Thread); //Instanciate a new task.
-                _task.Start(); //Starts the new thread.
-                return true; //Informs if successful
+                _task = new System.Threading.Thread(UpdateTimeCorrection);
+                _task.Start();
             }
-            return false; //Informs if failed
         }
 
         /// <summary>
-        /// Event that occurs when the timer has reached the required value. Attempts to get time correction from the server.
+        /// Attempts to get time correction from the server.
         /// </summary>
-        private void Task_Thread()
+        private void UpdateTimeCorrection()
         {
             try
             {
-                using (var webClient = new System.Net.WebClient())
+                EnsureTls11Tls12();
+
+                using (var webClient = new WebClient())
                 {
-                    webClient.DownloadData(Url); //Downloads the server's page using HTTP or HTTPS.
-                    var dateHeader = webClient.ResponseHeaders.Get("Date"); //Gets the date from the HTTP header of the downloaded page.
-                    _timeCorrection = DateTime.UtcNow - DateTime.Parse(dateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime(); //Compares the downloaded date to the systems date giving us a timespan.
-                    LastUpdateSucceeded = true; //Informs that the date check has succeeded.
+                    webClient.DownloadData(Url);
+                    var dateHeader = webClient.ResponseHeaders.Get("Date");
+                    _timeCorrection = DateTime.UtcNow - DateTime.Parse(dateHeader, System.Globalization.CultureInfo.InvariantCulture.DateTimeFormat).ToUniversalTime();
+                    LastUpdateSucceeded = true;
                 }
             }
             catch (Exception)
             {
-                LastUpdateSucceeded = false; //Informs that the date check has failed.
+                LastUpdateSucceeded = false;
             }
-            LastUpdateDateTime = DateTime.Now; //Informs when the last update has been attempted (succeeded or not).
+            LastUpdateDateTime = DateTime.Now;
         }
 
         /// <summary>
-        /// Perform a time correction check, may a few seconds.
+        /// The flags Tls11 and Tls12 in SecurityProtocolType have been
+        /// introduced in .NET 4.5 and must not be set when running under
+        /// older .NET versions (otherwise an exception is thrown)
         /// </summary>
-        /// <param name="resetTimer">Resets the timer to 0. Occurs even if the attempt to attempt a new time correction fails.</param>
-        /// <param name="forceCheck">Attempts to get time correction even if disabled.</param>
-        /// <returns>Informs if the time correction check was attempted or not. Will fail if the thread is still active from a previous time correction check.</returns>
-        public bool CheckNow(bool resetTimer = true, bool forceCheck = false)
+        private static void EnsureTls11Tls12()
         {
-            if (resetTimer) //Checks if the timer should be reset.
+            var enumType = typeof(SecurityProtocolType);
+            var protocolsToEnable = Enum.GetNames(enumType)
+                .Where(protocol => new[] { "Tls11", "Tls12" }.Contains(protocol, StringComparer.OrdinalIgnoreCase))
+                .Select(protocol => (SecurityProtocolType)Enum.Parse(enumType, protocol, true));
+
+            foreach (var protocolToEnable in protocolsToEnable)
             {
-                _intervalStretcher = 0; //Resets the timer.
+                ServicePointManager.SecurityProtocol |= protocolToEnable;
             }
-            if (forceCheck || _enable) //Checks if this check is forced or if time correction is enabled.
-            {
-                return Task_Do(); //Attempts to run a new task and informs if attempt to attemp is a success of fail
-            }
-            return false; //Informs if not attempted to attempt
         }
     }
 }

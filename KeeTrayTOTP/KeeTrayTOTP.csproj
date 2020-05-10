@@ -78,6 +78,7 @@
     <Compile Include="Helpers\ImageExtensions.cs" />
     <Compile Include="Helpers\TOTPEntryValidator.cs" />
     <Compile Include="ISettings.cs" />
+    <Compile Include="Libraries\CrossThreadUiExtensions.cs" />
     <Compile Include="Menu\EntryMenuItemProvider.cs" />
     <Compile Include="Menu\MainMenuItemProvider.cs" />
     <Compile Include="Menu\MenuItemProvider.cs" />

@@ -1,4 +1,5 @@
 ﻿using KeePass.UI;
+using KeeTrayTOTP.Libraries;
 using System;
 using System.ComponentModel;
 using System.Windows.Forms;
@@ -162,7 +163,14 @@ namespace KeeTrayTOTP
                 if (formTc.ShowDialog() == DialogResult.OK)
                 {
                     thisItem.SubItems[0].Text = formTc.ComboBoxUrlTimeCorrection.Text;
-                    thisItem.SubItems[1].Text = string.Empty;
+                    if (thisItem.SubItems.Count == 1)
+                    {
+                        thisItem.SubItems.Add(string.Empty);
+                    }
+                    else
+                    {
+                        thisItem.SubItems[1].Text = string.Empty;
+                    }
                     thisItem.ImageIndex = 0;
                 }
             }
@@ -208,11 +216,6 @@ namespace KeeTrayTOTP
 
             Working(true, true); //Set controls depending on the state of action.
             WorkerSave.RunWorkerAsync("OK");
-        }
-
-        private void ButtonCancel_Click(object sender, EventArgs e)
-        {
-            //Dialog Result = Cancel
         }
 
         private void ButtonApply_Click(object sender, EventArgs e)
@@ -392,7 +395,8 @@ namespace KeeTrayTOTP
             _plugin.TimeCorrections.Enable = CheckBoxTimeCorrection.Checked;
             _plugin.Settings.TimeCorrectionRefreshTime = Convert.ToUInt64(NumericTimeCorrectionInterval.Value);
             KeeTrayTOTP.Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(NumericTimeCorrectionInterval.Value);
-            _plugin.TimeCorrections.ResetThenAddRangeFromLvIs(ListViewTimeCorrectionList.Items);
+
+            ListViewTimeCorrectionList.SynchronizedInvoke(() => _plugin.TimeCorrections.ResetThenAddRangeFromLvIs(ListViewTimeCorrectionList.Items));
 
             _plugin.Settings.TimeCorrectionList = _plugin.TimeCorrections.GetTimeCorrectionUrls();
             if (WorkerSave.CancellationPending) { e.Cancel = true; return; }
