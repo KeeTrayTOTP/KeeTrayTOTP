@@ -24,10 +24,10 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Collections;
 
 namespace QRCoder
 {
@@ -110,6 +110,36 @@ namespace QRCoder
                 bitString = bitString.Substring(0, dataLength);
             }
 
+            List<CodewordBlock> codeWordWithECC = NewMethod(ref bitString, ref eccInfo);
+
+            string interleavedData = CreateInterleavedData(version, eccInfo, codeWordWithECC);
+
+            //Place interleaved data on module matrix
+            var qr = new QRCodeData(version);
+            var blockedModules = new List<Rectangle>();
+            ModulePlacer.PlaceFinderPatterns(ref qr, ref blockedModules);
+            ModulePlacer.ReserveSeperatorAreas(qr.ModuleMatrix.Count, ref blockedModules);
+            ModulePlacer.PlaceAlignmentPatterns(ref qr, this.alignmentPatternTable.Where(x => x.Version == version).Select(x => x.PatternPositions).First(), ref blockedModules);
+            ModulePlacer.PlaceTimingPatterns(ref qr, ref blockedModules);
+            ModulePlacer.PlaceDarkModule(ref qr, version, ref blockedModules);
+            ModulePlacer.ReserveVersionAreas(qr.ModuleMatrix.Count, version, ref blockedModules);
+            ModulePlacer.PlaceDataWords(ref qr, interleavedData, ref blockedModules);
+            var maskVersion = ModulePlacer.MaskCode(ref qr, version, ref blockedModules, eccLevel);
+            var formatStr = GetFormatString(eccLevel, maskVersion);
+
+            ModulePlacer.PlaceFormat(ref qr, formatStr);
+            if (version >= 7)
+            {
+                var versionString = GetVersionString(version);
+                ModulePlacer.PlaceVersion(ref qr, versionString);
+            }
+
+            ModulePlacer.AddQuietZone(ref qr);
+            return qr;
+        }
+
+        private List<CodewordBlock> NewMethod(ref string bitString, ref ErrorCorrectionCodeInfo eccInfo)
+        {
             // Calculate error correction words
             var codeWordWithECC = new List<CodewordBlock>();
             for (var i = 0; i < eccInfo.BlocksInGroup1; i++)
@@ -147,6 +177,11 @@ namespace QRCoder
                                 );
             }
 
+            return codeWordWithECC;
+        }
+
+        private string CreateInterleavedData(int version, ErrorCorrectionCodeInfo eccInfo, List<CodewordBlock> codeWordWithECC)
+        {
             //Interleave code words
             var interleavedWordsSb = new StringBuilder();
             for (var i = 0; i < Math.Max(eccInfo.CodewordsInGroup1, eccInfo.CodewordsInGroup2); i++)
@@ -172,29 +207,7 @@ namespace QRCoder
             }
             interleavedWordsSb.Append(new string('0', this.remainderBits[version - 1]));
             var interleavedData = interleavedWordsSb.ToString();
-
-            //Place interleaved data on module matrix
-            var qr = new QRCodeData(version);
-            var blockedModules = new List<Rectangle>();
-            ModulePlacer.PlaceFinderPatterns(ref qr, ref blockedModules);
-            ModulePlacer.ReserveSeperatorAreas(qr.ModuleMatrix.Count, ref blockedModules);
-            ModulePlacer.PlaceAlignmentPatterns(ref qr, this.alignmentPatternTable.Where(x => x.Version == version).Select(x => x.PatternPositions).First(), ref blockedModules);
-            ModulePlacer.PlaceTimingPatterns(ref qr, ref blockedModules);
-            ModulePlacer.PlaceDarkModule(ref qr, version, ref blockedModules);
-            ModulePlacer.ReserveVersionAreas(qr.ModuleMatrix.Count, version, ref blockedModules);
-            ModulePlacer.PlaceDataWords(ref qr, interleavedData, ref blockedModules);
-            var maskVersion = ModulePlacer.MaskCode(ref qr, version, ref blockedModules, eccLevel);
-            var formatStr = GetFormatString(eccLevel, maskVersion);
-
-            ModulePlacer.PlaceFormat(ref qr, formatStr);
-            if (version >= 7)
-            {
-                var versionString = GetVersionString(version);
-                ModulePlacer.PlaceVersion(ref qr, versionString);
-            }
-
-            ModulePlacer.AddQuietZone(ref qr);
-            return qr;
+            return interleavedData;
         }
 
         private static string GetFormatString(ErrorCorrectionLevel level, int maskVersion)
@@ -617,7 +630,7 @@ namespace QRCoder
                         score3 = 0;
                     var size = qrCode.ModuleMatrix.Count;
 
-                    //Penalty 1                   
+                    //Penalty 1
                     for (var y = 0; y < size; y++)
                     {
                         var modInRow = 0;
