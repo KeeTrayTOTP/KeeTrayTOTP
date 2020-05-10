@@ -75,7 +75,7 @@ namespace KeeTrayTOTP
                 TextBoxSeedSetup.Text = _plugin.TOTPEntryValidator.SeedGet(_entry).ReadString(); //Checks if the seed exists and sets seed textbox to the seed value.
             }
 
-            ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.GetTimeCorrectionUrls().ToArray()); //Gets existings time corrections and adds them in the combobox.
+            ComboBoxTimeCorrectionSetup.Items.AddRange(_plugin.TimeCorrections.GetTimeCorrectionUrls().ToArray());
 
             HelpProviderSetup.SetHelpString(FinishSetupButton, Localization.Strings.SetupFinish);
 

@@ -171,7 +171,7 @@ namespace KeeTrayTOTP
         }
 
         /// <summary>
-        /// Returns all time correction url's
+        /// Returns all time correction urls
         /// </summary>
         internal IEnumerable<string> GetTimeCorrectionUrls()
         {
