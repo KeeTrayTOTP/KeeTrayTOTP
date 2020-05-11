@@ -37,7 +37,7 @@ namespace KeeTrayTOTP.Tests.Menu
 
             sut.DropDownItems
                 .Cast<ToolStripMenuItem>()
-                .All(x => x.ShortcutKeys != Keys.None)
+                .All(menuItem => menuItem.ShortcutKeys != Keys.None)
                 .Should().BeTrue("because, all entries should have a shortcut key assigned.");
         }
     }
