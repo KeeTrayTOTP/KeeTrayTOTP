@@ -13,6 +13,12 @@ namespace KeeTrayTOTP.Menu
         private readonly KeeTrayTOTPExt _plugin;
         private readonly IPluginHost _pluginHost;
 
+        public EntryMenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
+        {
+            _plugin = plugin;
+            _pluginHost = pluginHost;
+        }
+
         public ToolStripMenuItem ProvideMenuItem()
         {
             var rootEntryMenuItem = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin, Properties.Resources.TOTP);
@@ -54,12 +60,6 @@ namespace KeeTrayTOTP.Menu
             rootEntryMenuItem.DropDownClosed += (sender, args) => entryMenuCopyTotp.Enabled = true;
 
             return rootEntryMenuItem;
-        }
-
-        public EntryMenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
-        {
-            _plugin = plugin;
-            _pluginHost = pluginHost;
         }
 
         private void OnEntryMenuSetupClick(object sender, EventArgs e)
