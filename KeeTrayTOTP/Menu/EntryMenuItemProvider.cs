@@ -13,19 +13,17 @@ namespace KeeTrayTOTP.Menu
         private readonly KeeTrayTOTPExt _plugin;
         private readonly IPluginHost _pluginHost;
 
-        public EntryMenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
-        {
-            _plugin = plugin;
-            _pluginHost = pluginHost;
-        }
-
         public ToolStripMenuItem ProvideMenuItem()
         {
             var rootEntryMenuItem = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin, Properties.Resources.TOTP);
 
-            var entryMenuCopyTotp = new ToolStripMenuItem(Localization.Strings.CopyTOTP, Properties.Resources.TOTP, OnEntryMenuTOTPClick, (Keys)Shortcut.CtrlT);
-            var entryMenuSetupTotp = new ToolStripMenuItem(Localization.Strings.SetupTOTP, Properties.Resources.TOTP_Setup, OnEntryMenuSetupClick, (Keys)Shortcut.CtrlShiftI);
-            var entryMenuShowQrCode = new ToolStripMenuItem(Localization.Strings.ShowQR, Properties.Resources.TOTP_Setup, OnEntryMenuShowQRClick, (Keys)Shortcut.CtrlShiftJ);
+            var entryMenuCopyTotp = new ToolStripMenuItem(Localization.Strings.CopyTOTP, Properties.Resources.TOTP, OnEntryMenuTOTPClick);
+            var entryMenuSetupTotp = new ToolStripMenuItem(Localization.Strings.SetupTOTP, Properties.Resources.TOTP_Setup, OnEntryMenuSetupClick);
+            var entryMenuShowQrCode = new ToolStripMenuItem(Localization.Strings.ShowQR, Properties.Resources.TOTP_Setup, OnEntryMenuShowQRClick);
+
+            entryMenuCopyTotp.ShortcutKeys = (Keys)Shortcut.CtrlT;
+            entryMenuSetupTotp.ShortcutKeys = (Keys)Shortcut.CtrlShiftI;
+            entryMenuShowQrCode.ShortcutKeys = (Keys)Shortcut.CtrlShiftJ;
 
             rootEntryMenuItem.DropDownItems.Add(entryMenuCopyTotp);
             rootEntryMenuItem.DropDownItems.Add(entryMenuSetupTotp);
@@ -56,6 +54,12 @@ namespace KeeTrayTOTP.Menu
             rootEntryMenuItem.DropDownClosed += (sender, args) => entryMenuCopyTotp.Enabled = true;
 
             return rootEntryMenuItem;
+        }
+
+        public EntryMenuItemProvider(KeeTrayTOTPExt plugin, IPluginHost pluginHost)
+        {
+            _plugin = plugin;
+            _pluginHost = pluginHost;
         }
 
         private void OnEntryMenuSetupClick(object sender, EventArgs e)
