@@ -51,3 +51,24 @@ jobs:
       with:
         name: KeeTrayTOTP.plgx
         path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
+        
+  build-mono:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install xvfb-run
+      run: sudo apt -y install xvfb
+
+    - name: Download nuget.exe
+      run: wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe 
+
+    - name: nuget restore
+      run: mono nuget.exe restore
+
+    - name: MSBuild
+      run: msbuild /target:build
+
+    - name: Run tests
+      run: xvfb-run dotnet vstest KeeTrayTOTP.Tests/bin/Debug/KeeTrayTOTP.Tests.dll
