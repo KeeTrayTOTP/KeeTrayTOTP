@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP.Menu
 {
@@ -24,6 +25,14 @@ namespace KeeTrayTOTP.Menu
             Plugin = plugin;
             DocumentManager = pluginHost.MainWindow.DocumentManager;
             PluginHost = pluginHost;
+            PluginHost.MainWindow.TrayContextMenu.Opened += TrayContextMenu_Opened;
+        }
+
+        private void TrayContextMenu_Opened(object sender, EventArgs e)
+        {
+            var contextMenuStrip = (ContextMenuStrip)sender;
+            var dropDownLocationCalculator = new DropDownLocationCalculator(contextMenuStrip.Size);
+            contextMenuStrip.Location = dropDownLocationCalculator.CalculateLocationForDropDown(Cursor.Position);
         }
 
         public virtual ToolStripMenuItem ProvideMenuItem()
