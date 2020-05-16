@@ -8,15 +8,6 @@ namespace KeeTrayTOTP.Helpers
     [DesignerCategory("")]
     public class ToolStripMenuItemEx : ToolStripMenuItem
     {
-        public ToolStripMenuItemEx()
-        {
-            ForceDropDownArrow = false;
-        }
-
-        public ToolStripMenuItemEx(string text) : base(text)
-        {
-        }
-
         public ToolStripMenuItemEx(string text, Image image) : base(text, image)
         {
         }
