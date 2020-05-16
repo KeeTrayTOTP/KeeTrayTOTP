@@ -32,17 +32,17 @@ namespace KeeTrayTOTP.Helpers
         {
             get
             {
-                var baseDropDownLocation = base.DropDownLocation;
-                var baseScreen = Screen.FromPoint(baseDropDownLocation);
+                var dropDownLocation = base.DropDownLocation;
                 
-                Screen screen = Screen.FromPoint(GetCurrentParent().PointToScreen(Point.Empty));
+                var screenOfDropDown = Screen.FromPoint(dropDownLocation);
+                var screenOfParentMenu = Screen.FromControl(Parent);
 
-                if (!screen.Equals(baseScreen))
+                if (!screenOfParentMenu.Equals(screenOfDropDown))
                 {
-                    baseDropDownLocation.Offset(0, -DropDown.Height);
+                    dropDownLocation.Offset(0, -DropDown.Height);
                 }
 
-                return baseDropDownLocation;
+                return dropDownLocation;
             }
         }
     }
