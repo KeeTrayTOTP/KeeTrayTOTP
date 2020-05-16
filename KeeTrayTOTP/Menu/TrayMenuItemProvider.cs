@@ -38,11 +38,9 @@ namespace KeeTrayTOTP.Menu
         public virtual ToolStripMenuItem ProvideMenuItem()
         {
             var rootTrayMenuItem = new ToolStripMenuItemEx(Localization.Strings.TrayTOTPPlugin, Resources.TOTP);
-
-            rootTrayMenuItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
+            rootTrayMenuItem.ForceDropDownArrow = true;
             rootTrayMenuItem.DropDownOpening += OnRootDropDownOpening;
             rootTrayMenuItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
-            rootTrayMenuItem.DropDownClosed += OnDropDownClosed;
 
             return rootTrayMenuItem;
         }
@@ -96,10 +94,9 @@ namespace KeeTrayTOTP.Menu
             {
                 var documentName = UrlUtil.GetFileName(document.Database.IOConnectionInfo.Path);
                 mainDropDownItem = new ToolStripMenuItemEx(documentName, ImageExtensions.CreateImageFromColor(document.Database.Color));
+                mainDropDownItem.ForceDropDownArrow = true;
                 mainDropDownItem.DropDownOpening += OnDatabaseDropDownOpening;
                 mainDropDownItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
-                mainDropDownItem.DropDownClosed += OnDropDownClosed;
-                mainDropDownItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
             }
 
             mainDropDownItem.Tag = document;
@@ -184,27 +181,6 @@ namespace KeeTrayTOTP.Menu
                     Tag = pwDocument
                 }
             };
-        }
-
-        /// <summary>
-        ///     This menu item is required to show the dropdown arrow in the tray context menu,
-        ///     even if the menu is still empty. (because we don't fill it until the opening event)
-        /// </summary>
-        private static ToolStripMenuItem CreatePseudoToolStripMenuItem()
-        {
-            return new ToolStripMenuItem();
-        }
-
-        private void OnDropDownClosed(object sender, EventArgs e)
-        {
-            var rootMenuItem = sender as ToolStripMenuItem;
-            if (rootMenuItem == null)
-            {
-                return;
-            }
-
-            rootMenuItem.DropDownItems.Clear();
-            rootMenuItem.DropDownItems.Add(new ToolStripMenuItem());
         }
 
         protected ToolStripMenuItem CreateMenuItemFromPwEntry(PwEntry entry, PwDatabase pwDatabase)

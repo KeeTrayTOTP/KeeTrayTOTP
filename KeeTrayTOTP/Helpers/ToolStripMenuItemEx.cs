@@ -10,6 +10,7 @@ namespace KeeTrayTOTP.Helpers
     {
         public ToolStripMenuItemEx()
         {
+            ForceDropDownArrow = false;
         }
 
         public ToolStripMenuItemEx(string text) : base(text)
@@ -43,6 +44,19 @@ namespace KeeTrayTOTP.Helpers
                 }
 
                 return dropDownLocation;
+            }
+        }
+
+        /// <summary>
+        /// Controls whether the drop-down arrow is displayed even if there are no visible drop-down items
+        /// </summary>
+        public bool ForceDropDownArrow { get; set; }
+
+        public override bool HasDropDownItems
+        {
+            get
+            {
+                return ForceDropDownArrow || base.HasDropDownItems;
             }
         }
     }
