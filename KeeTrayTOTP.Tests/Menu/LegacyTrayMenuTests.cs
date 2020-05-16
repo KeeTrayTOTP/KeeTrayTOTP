@@ -16,7 +16,7 @@ namespace KeeTrayTOTP.Tests.Menu
 
             var sut = legacyTrayMenuItemProvider.ProvideMenuItem();
 
-            sut.Should().BeNull();
+            sut.Should().BeNull("because we do not provide an official tray menu item in legacy mode.");
         }
 
         [TestMethod]
@@ -30,7 +30,7 @@ namespace KeeTrayTOTP.Tests.Menu
 
             var sut = host.Object.MainWindow.TrayContextMenu.Items.Count;
 
-            sut.Should().Be(oldItemCount + 2);
+            sut.Should().Be(oldItemCount + 2, "because we inject two menu items into the official KeePass tray menu");
         }
     }
 }
