@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using KeeTrayTOTP.Libraries;
 
 namespace KeeTrayTOTP.Menu
 {
@@ -24,11 +25,19 @@ namespace KeeTrayTOTP.Menu
             Plugin = plugin;
             DocumentManager = pluginHost.MainWindow.DocumentManager;
             PluginHost = pluginHost;
+            PluginHost.MainWindow.TrayContextMenu.Opened += TrayContextMenu_Opened;
+        }
+
+        private void TrayContextMenu_Opened(object sender, EventArgs e)
+        {
+            var contextMenuStrip = (ContextMenuStrip)sender;
+            var dropDownLocationCalculator = new DropDownLocationCalculator(contextMenuStrip.Size);
+            contextMenuStrip.Location = dropDownLocationCalculator.CalculateLocationForDropDown(Cursor.Position);
         }
 
         public virtual ToolStripMenuItem ProvideMenuItem()
         {
-            var rootTrayMenuItem = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin, Resources.TOTP);
+            var rootTrayMenuItem = new ToolStripMenuItemEx(Localization.Strings.TrayTOTPPlugin, Resources.TOTP);
 
             rootTrayMenuItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
             rootTrayMenuItem.DropDownOpening += OnRootDropDownOpening;
@@ -76,17 +85,17 @@ namespace KeeTrayTOTP.Menu
 
         private ToolStripMenuItem CreateDatabaseMenuItemForDocument(PwDocument document)
         {
-            ToolStripMenuItem mainDropDownItem;
+            ToolStripMenuItemEx mainDropDownItem;
             if (!document.Database.IsOpen)
             {
                 var documentName = UrlUtil.GetFileName(document.LockedIoc.Path);
                 documentName += " [" + Localization.Strings.Locked + "]";
-                mainDropDownItem = new ToolStripMenuItem(documentName, Resources.TOTP_Error, OnClickOpenDatabase);
+                mainDropDownItem = new ToolStripMenuItemEx(documentName, Resources.TOTP_Error, OnClickOpenDatabase);
             }
             else
             {
                 var documentName = UrlUtil.GetFileName(document.Database.IOConnectionInfo.Path);
-                mainDropDownItem = new ToolStripMenuItem(documentName, ImageExtensions.CreateImageFromColor(document.Database.Color));
+                mainDropDownItem = new ToolStripMenuItemEx(documentName, ImageExtensions.CreateImageFromColor(document.Database.Color));
                 mainDropDownItem.DropDownOpening += OnDatabaseDropDownOpening;
                 mainDropDownItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
                 mainDropDownItem.DropDownClosed += OnDropDownClosed;
