@@ -357,6 +357,13 @@ namespace KeeTrayTOTP
 
         private void WorkerSave_DoWork(object sender, DoWorkEventArgs e)
         {
+            if (InvokeRequired)
+            {
+                var safeCallDelegate = new SafeCallDelegate(WorkerSave_DoWork);
+                Invoke(safeCallDelegate, sender, e);
+                return;
+            }
+
             //Argument
             e.Result = e.Argument;
 
@@ -394,9 +401,9 @@ namespace KeeTrayTOTP
             _plugin.Settings.TimeCorrectionEnable = CheckBoxTimeCorrection.Checked;
             _plugin.TimeCorrections.Enable = CheckBoxTimeCorrection.Checked;
             _plugin.Settings.TimeCorrectionRefreshTime = Convert.ToUInt64(NumericTimeCorrectionInterval.Value);
-            KeeTrayTOTP.Libraries.TimeCorrectionProvider.Interval = Convert.ToInt16(NumericTimeCorrectionInterval.Value);
+            TimeCorrectionProvider.Interval = Convert.ToInt16(NumericTimeCorrectionInterval.Value);
 
-            ListViewTimeCorrectionList.SynchronizedInvoke(() => _plugin.TimeCorrections.ResetThenAddRangeFromLvIs(ListViewTimeCorrectionList.Items));
+            _plugin.TimeCorrections.ResetThenAddRangeFromLvIs(ListViewTimeCorrectionList.Items);
 
             _plugin.Settings.TimeCorrectionList = _plugin.TimeCorrections.GetTimeCorrectionUrls();
             if (WorkerSave.CancellationPending) { e.Cancel = true; return; }

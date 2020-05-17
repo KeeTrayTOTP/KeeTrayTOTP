@@ -88,7 +88,13 @@ namespace KeeTrayTOTP
         /// <param name="e"></param>
         private void WorkerWaitForCheck_DoWork(object sender, DoWorkEventArgs e)
         {
-            var url = ComboBoxUrlTimeCorrection.SynchronizedInvoke(() => ComboBoxUrlTimeCorrection.Text);
+            if (this.InvokeRequired)
+            {
+                this.Invoke(new MethodInvoker(() => WorkerWaitForCheck_DoWork(sender, e)));
+                return;
+            }
+
+            var url = ComboBoxUrlTimeCorrection.Text;
 
             _testTimeCorrection = new TimeCorrectionProvider(url); //Creates a new Time Correction to validate the desired URL.
             while (!WorkerWaitForCheck.CancellationPending) //Waits for the validation to end or a cancellation.
@@ -123,6 +129,7 @@ namespace KeeTrayTOTP
                     LabelStatusTimeCorrection.Text = Localization.Strings.TcSucces; //Diplays success message.
                     ButtonOK.Enabled = true; //Enables the user to add the time correction.
                     ButtonVerify.Visible = false; //Hides the verification button.
+                    ButtonOK.Select();
                 }
                 if (e.Result.ToString() == "fail") //Checks if thread has failed.
                 {
@@ -150,14 +157,9 @@ namespace KeeTrayTOTP
         private void ButtonVerify_Click(object sender, EventArgs e)
         {
             ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, string.Empty); //Clears input errors.
-            if (!ComboBoxUrlTimeCorrection.Text.StartsWith("http"))
+            if (!ComboBoxUrlTimeCorrection.Text.StartsWith("http://") && !ComboBoxUrlTimeCorrection.Text.StartsWith("https://"))
             {
-                ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlMustContainHttp); //Verifies if the URL is valid.
-            }
-
-            if (!ComboBoxUrlTimeCorrection.Text.Contains("://"))
-            {
-                ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlInvalid); //Verifies if the URL is valid.
+                ErrorProviderTimeCorrection.SetError(ComboBoxUrlTimeCorrection, Localization.Strings.TcUrlMustContainHttp); // Verifies if the URL is valid.
             }
 
             if (_plugin.TimeCorrections[ComboBoxUrlTimeCorrection.Text] != null)
@@ -180,6 +182,16 @@ namespace KeeTrayTOTP
         private void FormTimeCorrection_FormClosed(object sender, FormClosedEventArgs e)
         {
             GlobalWindowManager.RemoveWindow(this);
+        }
+
+        private void ComboBoxUrlTimeCorrection_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                ButtonVerify_Click(sender, e);
+                //Do something
+                e.Handled = true;
+            }
         }
     }
 }

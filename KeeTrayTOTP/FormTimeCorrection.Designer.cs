@@ -196,6 +196,7 @@
             this.HelpProviderTimeCorrection.SetShowHelp(this.ComboBoxUrlTimeCorrection, true);
             this.ComboBoxUrlTimeCorrection.Size = new System.Drawing.Size(233, 21);
             this.ComboBoxUrlTimeCorrection.TabIndex = 2;
+            this.ComboBoxUrlTimeCorrection.KeyUp += new System.Windows.Forms.KeyEventHandler(this.ComboBoxUrlTimeCorrection_KeyUp);
             // 
             // FormTimeCorrection
             // 
