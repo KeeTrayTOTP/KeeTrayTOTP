@@ -37,7 +37,7 @@ namespace KeeTrayTOTP.Menu
 
         public virtual ToolStripMenuItem ProvideMenuItem()
         {
-            var rootTrayMenuItem = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin, Resources.TOTP);
+            var rootTrayMenuItem = new ToolStripMenuItemEx(Localization.Strings.TrayTOTPPlugin, Resources.TOTP);
 
             rootTrayMenuItem.DropDownItems.Add(CreatePseudoToolStripMenuItem());
             rootTrayMenuItem.DropDownOpening += OnRootDropDownOpening;
@@ -85,17 +85,17 @@ namespace KeeTrayTOTP.Menu
 
         private ToolStripMenuItem CreateDatabaseMenuItemForDocument(PwDocument document)
         {
-            ToolStripMenuItem mainDropDownItem;
+            ToolStripMenuItemEx mainDropDownItem;
             if (!document.Database.IsOpen)
             {
                 var documentName = UrlUtil.GetFileName(document.LockedIoc.Path);
                 documentName += " [" + Localization.Strings.Locked + "]";
-                mainDropDownItem = new ToolStripMenuItem(documentName, Resources.TOTP_Error, OnClickOpenDatabase);
+                mainDropDownItem = new ToolStripMenuItemEx(documentName, Resources.TOTP_Error, OnClickOpenDatabase);
             }
             else
             {
                 var documentName = UrlUtil.GetFileName(document.Database.IOConnectionInfo.Path);
-                mainDropDownItem = new ToolStripMenuItem(documentName, ImageExtensions.CreateImageFromColor(document.Database.Color));
+                mainDropDownItem = new ToolStripMenuItemEx(documentName, ImageExtensions.CreateImageFromColor(document.Database.Color));
                 mainDropDownItem.DropDownOpening += OnDatabaseDropDownOpening;
                 mainDropDownItem.DropDownOpening += MenuItemHelper.OnDatabaseDropDownOpening;
                 mainDropDownItem.DropDownClosed += OnDropDownClosed;
