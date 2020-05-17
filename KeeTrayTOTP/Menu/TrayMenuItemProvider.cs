@@ -169,7 +169,9 @@ namespace KeeTrayTOTP.Menu
             var validPwEntries = Plugin.GetVisibleAndValidPasswordEntries(pwDocument.Database).ToArray();
             if (validPwEntries.Length > 0)
             {
-                return validPwEntries.Select(entry => CreateMenuItemFromPwEntry(entry, pwDocument.Database));
+                return validPwEntries
+                    .Select(entry => CreateMenuItemFromPwEntry(entry, pwDocument.Database))
+                    .OrderBy(t => t.Text);
             }
 
             return NoTOTPEntriesFoundMenuItem(pwDocument);
