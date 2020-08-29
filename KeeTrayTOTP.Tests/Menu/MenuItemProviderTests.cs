@@ -51,7 +51,7 @@ namespace KeeTrayTOTP.Tests.Menu
 
             trayMenuItem.Should().NotBeNull();
             trayMenuItem.HasDropDownItems.Should().BeTrue();
-            trayMenuItem.DropDownItems.Should().HaveCount(1, "because, there should be a pseudo entry.");
+            trayMenuItem.DropDownItems.Should().HaveCount(0, "because, the entries are added at opening of the menu.");
         }
 
         [TestMethod]
