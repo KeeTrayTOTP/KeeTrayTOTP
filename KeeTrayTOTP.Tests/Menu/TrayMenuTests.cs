@@ -5,7 +5,9 @@ using KeeTrayTOTP.Tests.Extensions;
 using KeeTrayTOTP.Tests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
+using KeePassLib;
 
 namespace KeeTrayTOTP.Tests.Menu
 {
@@ -144,5 +146,33 @@ namespace KeeTrayTOTP.Tests.Menu
             sut.Count.Should().Be(6,
                 "because, the recycle bin is treated as a regular folder.");
         }
+
+        [TestMethod]
+        public void BuildMenuItemsForRootDropDown_ShouldReturnColoredEntryMenuItems_IfThereAreColoredPwEntries()
+        {
+            var foregroundColor = Color.Red;
+            var backgroundColor = Color.Blue;
+
+            PwEntry ApplyColor(PwEntry entry)
+            {
+                entry.ForegroundColor = foregroundColor;
+                entry.BackgroundColor = backgroundColor;
+                return entry;
+            }
+
+            var documents = new List<PwDocument>(new[]
+            {
+                new PwDocument().New().WithTotpEnabledEntries(1, ApplyColor).WithTotpEnabledEntries(1)
+            });
+
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+
+            sut.Should().Contain(
+                item => 
+                        item.ForeColor == foregroundColor && 
+                        item.BackColor == backgroundColor, 
+                "because, there is one entry with these colors set.");
+        }
+        
     }
 }
