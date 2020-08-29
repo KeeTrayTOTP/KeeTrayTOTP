@@ -220,6 +220,8 @@ namespace KeeTrayTOTP.Menu
             {
                 Tag = entry,
                 Image = validEntry ? GetEntryImage(entry, pwDatabase) : Resources.TOTP_Error,
+                BackColor = entry.BackgroundColor,
+                ForeColor = entry.ForegroundColor,
                 Enabled = validEntry,
             };
             menuItem.Click += OnNotifyMenuTOTPClick;
