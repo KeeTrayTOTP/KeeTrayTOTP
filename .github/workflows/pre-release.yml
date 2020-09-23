@@ -36,6 +36,16 @@ jobs:
         name: KeeTrayTOTP.plgx
         path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
 
+    - name: Generate hashes
+      run: |
+        Add-Content hashes.txt "Filename: KeeTrayTOTP.plgx"
+        Add-Content hashes.txt "=========================="
+        foreach ($algorithm in (Get-Command Get-FileHash).Parameters["Algorithm"].Attributes[1].ValidValues)
+        {
+            Add-Content hashes.txt "${algorithm}: $((Get-FileHash KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx -Algorithm $algorithm).Hash)"
+        }
+      shell: pwsh
+        
     - name: Create prerelease
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -45,3 +55,4 @@ jobs:
         title: "Development Build"
         files: |
            **/KeeTrayTOTP.plgx
+           hashes.txt
