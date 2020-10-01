@@ -8,14 +8,6 @@ namespace KeeTrayTOTP.Helpers
     [DesignerCategory("")]
     public class ToolStripMenuItemEx : ToolStripMenuItem
     {
-        public ToolStripMenuItemEx()
-        {
-        }
-
-        public ToolStripMenuItemEx(string text) : base(text)
-        {
-        }
-
         public ToolStripMenuItemEx(string text, Image image) : base(text, image)
         {
         }
@@ -43,6 +35,19 @@ namespace KeeTrayTOTP.Helpers
                 }
 
                 return dropDownLocation;
+            }
+        }
+
+        /// <summary>
+        /// Controls whether the drop-down arrow is displayed even if there are no visible drop-down items
+        /// </summary>
+        public bool ForceDropDownArrow { get; set; }
+
+        public override bool HasDropDownItems
+        {
+            get
+            {
+                return ForceDropDownArrow || base.HasDropDownItems;
             }
         }
     }

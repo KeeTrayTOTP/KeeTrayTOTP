@@ -2,6 +2,7 @@
 using KeeTrayTOTP.Libraries;
 using System;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace KeeTrayTOTP
@@ -318,15 +319,12 @@ namespace KeeTrayTOTP
             // Storage
             if (_plugin.PluginHost.MainWindow.ActiveDatabase.IsOpen)
             {
-                foreach (var pe in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true))
+                foreach (var str in _plugin.PluginHost.MainWindow.ActiveDatabase.RootGroup.GetEntries(true).SelectMany(pe => pe.Strings))
                 {
-                    foreach (var str in pe.Strings)
+                    if (!ComboBoxTOTPSeedStringName.Items.Contains(str.Key))
                     {
-                        if (!ComboBoxTOTPSeedStringName.Items.Contains(str.Key))
-                        {
-                            ComboBoxTOTPSeedStringName.Items.Add(str.Key);
-                            ComboBoxTOTPSettingsStringName.Items.Add(str.Key);
-                        }
+                        ComboBoxTOTPSeedStringName.Items.Add(str.Key);
+                        ComboBoxTOTPSettingsStringName.Items.Add(str.Key);
                     }
                 }
             }

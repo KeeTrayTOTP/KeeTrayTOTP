@@ -1,0 +1,59 @@
+name: SonarQube
+
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the master branch
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+env:
+  DOTNET_NOLOGO: 1
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-java@v1
+      with:
+        java-version: '13' # The JDK version to make available on the path.
+        java-package: jdk # (jre, jdk, or jdk+fx) - defaults to jdk
+        architecture: x64 # (x64 or x86) - defaults to x64
+
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.0.0
+
+    - name: Setup Nuget.exe
+      uses: warrenbuckley/Setup-Nuget@v1
+
+    - name: nuget restore
+      run: nuget restore KeeTrayTOTP.sln
+
+    - name: Install dotnet-sonarscanner
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: SonarScanner Begin
+      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml"
+
+    - name: MSBuild
+      run: msbuild KeeTrayTOTP.sln /m
+
+    - name: Run tests
+      # It looks like the dotnet CLI can no longer build net45 projects? see https://github.com/microsoft/msbuild/issues/4704
+      run: dotnet test --no-build --collect:"XPlat Code Coverage" --settings coverlet.runsettings
+
+      # Copy coverage file to root for SonarQube.
+      # SonarQube currently does not support wildcards, and the coverage file ends up in a new folder with a random name.
+    - name: Copy coverage file
+      run: cp -Path ("KeeTrayTOTP.Tests\TestResults\" + (gci -Path KeeTrayTOTP.Tests\TestResults -Recurse -Force -Name coverage.opencover.xml)) -Destination coverage.opencover.xml
+
+    - name: SonarScanner End
+      run: dotnet sonarscanner end
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

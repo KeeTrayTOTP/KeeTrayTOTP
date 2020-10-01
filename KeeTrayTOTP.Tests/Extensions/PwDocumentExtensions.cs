@@ -1,4 +1,5 @@
-﻿using KeePass.UI;
+﻿using System;
+using KeePass.UI;
 using KeePassLib;
 using KeePassLib.Keys;
 using KeePassLib.Serialization;
@@ -38,11 +39,16 @@ namespace KeeTrayTOTP.Tests.Extensions
 
         public static PwDocument WithTotpEnabledEntries(this PwDocument pwDocument, int count)
         {
+            return WithTotpEnabledEntries(pwDocument, count, entry => entry);
+        }
+
+        public static PwDocument WithTotpEnabledEntries(this PwDocument pwDocument, int count, Func<PwEntry, PwEntry> additionalConfigurations)
+        {
             for (int i = 0; i < count; i++)
             {
-                pwDocument.Database.RootGroup.AddEntry(
-                    new PwEntry(true, true).WithValidTotpSettings(),
-                    true);
+                var withValidTotpSettings = new PwEntry(true, true).WithValidTotpSettings();
+                var pwEntry = additionalConfigurations(withValidTotpSettings);
+                pwDocument.Database.RootGroup.AddEntry(pwEntry, true);
             }
 
             return pwDocument;

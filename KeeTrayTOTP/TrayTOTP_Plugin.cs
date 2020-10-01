@@ -61,6 +61,11 @@ namespace KeeTrayTOTP
         private bool _liColumnTotpContains;
 
         /// <summary>
+        /// Previous value of KeePass.Program.Config.MainWindow.ShowEntriesOfSubGroups
+        /// </summary>
+        private bool _bPreviousShowEntriesOfSubGroups;
+
+        /// <summary>
         /// Entries Refresh Timer.
         /// </summary>
         private readonly Timer _liRefreshTimer = new Timer();
@@ -152,9 +157,26 @@ namespace KeeTrayTOTP
             TimeCorrections = new TimeCorrectionCollection(Settings.TimeCorrectionEnable);
             TimeCorrections.AddRangeFromList(Settings.TimeCorrectionList);
 
+            PluginHost.MainWindow.UIStateUpdated += MainWindow_UIStateUpdated;
+
             return true;
         }
 
+        /// <summary>
+        /// React on the user toggling display of entries in subgroups
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void MainWindow_UIStateUpdated(object sender, EventArgs e)
+        {
+            if (_bPreviousShowEntriesOfSubGroups != KeePass.Program.Config.MainWindow.ShowEntriesOfSubGroups)
+            {
+                //User toggled display of entries in subgroups
+                //Enforce rechecking for required updates in OnTimerTick
+                _bPreviousShowEntriesOfSubGroups = KeePass.Program.Config.MainWindow.ShowEntriesOfSubGroups;
+                ResetLastSelectedGroup();
+            }
+        }
 
         /// <summary>
         /// Occurs when the main window is shown.
@@ -264,11 +286,12 @@ namespace KeeTrayTOTP
                     {
                         _liColumnTotpContains = false;
                         _liGroupsPreviousSelected = selectedGroup;
-                        foreach (var entry in selectedGroup.GetEntries(true))
+                        foreach (var entry in selectedGroup.GetEntries(KeePass.Program.Config.MainWindow.ShowEntriesOfSubGroups))
                         {
                             if (TOTPEntryValidator.HasSeed(entry))
                             {
                                 _liColumnTotpContains = true;
+                                break; //No need to check remaining entries
                             }
                         }
                     }
@@ -396,6 +419,7 @@ namespace KeeTrayTOTP
 
             // Unregister internal events.
             PluginHost.MainWindow.Shown -= MainWindow_Shown;
+            PluginHost.MainWindow.UIStateUpdated -= MainWindow_UIStateUpdated;
 
             // Dispose menu items
             if (_menuItemProvider != null)
@@ -433,6 +457,14 @@ namespace KeeTrayTOTP
         public override string UpdateUrl
         {
             get { return "https://raw.githubusercontent.com/KeeTrayTOTP/KeeTrayTOTP/master/version_manifest.txt"; }
+        }
+
+        /// <summary>
+        /// Resets last selected group to ensure TOTP is shown and TOTP value counter is active
+        /// </summary>
+        internal void ResetLastSelectedGroup()
+        {
+            _liGroupsPreviousSelected = null;
         }
     }
 }
