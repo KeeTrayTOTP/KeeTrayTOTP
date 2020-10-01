@@ -1,7 +1,10 @@
-﻿using KeePass.UI;
+﻿using System;
+using KeePass.UI;
 using KeePassLib;
 using KeePassLib.Keys;
 using KeePassLib.Serialization;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace KeeTrayTOTP.Tests.Extensions
 {
@@ -17,7 +20,8 @@ namespace KeeTrayTOTP.Tests.Extensions
         public static PwDocument NewAs(this PwDocument pwDocument, string filename)
         {
             pwDocument.Database.New(IOConnectionInfo.FromPath(filename), new CompositeKey());
-            return pwDocument;
+
+            return pwDocument.CreateRecycleBin();
         }
 
         public static PwDocument New(this PwDocument pwDocument)
@@ -25,15 +29,41 @@ namespace KeeTrayTOTP.Tests.Extensions
             return pwDocument.NewAs("foobar");
         }
 
+        public static PwDocument CreateRecycleBin(this PwDocument pwDocument)
+        {
+            var recycleBin = pwDocument.Database.RootGroup.FindCreateGroup("Recycle bin", true);
+            pwDocument.Database.RecycleBinUuid = recycleBin.Uuid;
+
+            return pwDocument;
+        }
+
         public static PwDocument WithTotpEnabledEntries(this PwDocument pwDocument, int count)
+        {
+            return WithTotpEnabledEntries(pwDocument, count, entry => entry);
+        }
+
+        public static PwDocument WithTotpEnabledEntries(this PwDocument pwDocument, int count, Func<PwEntry, PwEntry> additionalConfigurations)
         {
             for (int i = 0; i < count; i++)
             {
-                pwDocument.Database.RootGroup.AddEntry(
+                var withValidTotpSettings = new PwEntry(true, true).WithValidTotpSettings();
+                var pwEntry = additionalConfigurations(withValidTotpSettings);
+                pwDocument.Database.RootGroup.AddEntry(pwEntry, true);
+            }
+
+            return pwDocument;
+        }
+
+        public static PwDocument WithDeletedTotpEnabledEntries(this PwDocument pwDocument, int count)
+        {
+            var recycleBin = pwDocument.Database.RootGroup.FindGroup(pwDocument.Database.RecycleBinUuid, true);
+            for (int i = 0; i < count; i++)
+            {
+                recycleBin.AddEntry(
                     new PwEntry(true, true).WithValidTotpSettings(),
                     true);
             }
-            
+
             return pwDocument;
         }
 
@@ -59,6 +89,16 @@ namespace KeeTrayTOTP.Tests.Extensions
             }
 
             return pwDocument;
+        }
+
+        public static IEnumerable<PwDocument> AsEnumerable(this PwDocument pwDocument)
+        {
+            yield return pwDocument;
+        }
+
+        public static List<PwDocument> AsList(this PwDocument pwDocument)
+        {
+            return pwDocument.AsEnumerable().ToList();
         }
     }
 }

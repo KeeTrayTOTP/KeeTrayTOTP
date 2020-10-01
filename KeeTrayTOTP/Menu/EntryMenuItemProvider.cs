@@ -23,10 +23,23 @@ namespace KeeTrayTOTP.Menu
         {
             var rootEntryMenuItem = new ToolStripMenuItem(Localization.Strings.TrayTOTPPlugin, Properties.Resources.TOTP);
 
-            var entryMenuCopyTotp = new ToolStripMenuItem(Localization.Strings.CopyTOTP, Properties.Resources.TOTP, OnEntryMenuTOTPClick, (Keys)Shortcut.CtrlT);
-            var entryMenuSetupTotp = new ToolStripMenuItem(Localization.Strings.SetupTOTP, Properties.Resources.TOTP_Setup, OnEntryMenuSetupClick, (Keys)Shortcut.CtrlShiftI);
-            var entryMenuShowQrCode = new ToolStripMenuItem(Localization.Strings.ShowQR, Properties.Resources.TOTP_Setup, OnEntryMenuShowQRClick, (Keys)Shortcut.CtrlShiftJ);
-
+            // The ShortCutKeys assignments are required in this form and
+            // can not be setup as constructor parameters, because an implementation
+            // in the mono framework is missing.
+            // see https://github.com/mono/mono/issues/19755
+            var entryMenuCopyTotp = new ToolStripMenuItem(Localization.Strings.CopyTOTP, Properties.Resources.TOTP, OnEntryMenuTOTPClick)
+            {
+                ShortcutKeys = (Keys)Shortcut.CtrlT
+            };
+            var entryMenuSetupTotp = new ToolStripMenuItem(Localization.Strings.SetupTOTP, Properties.Resources.TOTP_Setup, OnEntryMenuSetupClick)
+            {
+                ShortcutKeys = (Keys)Shortcut.CtrlShiftI
+            };
+            var entryMenuShowQrCode = new ToolStripMenuItem(Localization.Strings.ShowQR, Properties.Resources.TOTP_Setup, OnEntryMenuShowQRClick)
+            {
+                ShortcutKeys = (Keys)Shortcut.CtrlShiftJ
+            };
+            
             rootEntryMenuItem.DropDownItems.Add(entryMenuCopyTotp);
             rootEntryMenuItem.DropDownItems.Add(entryMenuSetupTotp);
             rootEntryMenuItem.DropDownItems.Add(entryMenuShowQrCode);

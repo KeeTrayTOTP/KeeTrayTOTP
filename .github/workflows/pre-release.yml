@@ -4,7 +4,7 @@ name: "KeeTrayTOTP Pre Release"
 on:
   push:
     branches:
-      - 'master' 
+      - 'master'
     tags-ignore:
       - '*'
 env:
@@ -17,37 +17,35 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    
+
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.0.0
-    
+
     - name: Setup Nuget.exe
       uses: warrenbuckley/Setup-Nuget@v1
 
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
 
-    - name: Install dotnet-sonarscanner
-      run: dotnet tool install --global dotnet-sonarscanner
-      
-    - name: SonarScanner Begin
-      run: dotnet sonarscanner begin /k:KeeTrayTOTP_KeeTrayTOTP /o:keetraytotp /d:sonar.host.url="https://sonarcloud.io"
-
     - name: MSBuild (With Plgx)
       run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
-
-    - name: SonarScanner End
-      run: dotnet sonarscanner end
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
     - name: Upload plgx
       uses: actions/upload-artifact@v1
       with:
         name: KeeTrayTOTP.plgx
-        path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx        
+        path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
 
+    - name: Generate hashes
+      run: |
+        Add-Content hashes.txt "Filename: KeeTrayTOTP.plgx"
+        Add-Content hashes.txt "=========================="
+        foreach ($algorithm in (Get-Command Get-FileHash).Parameters["Algorithm"].Attributes[1].ValidValues)
+        {
+            Add-Content hashes.txt "${algorithm}: $((Get-FileHash KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx -Algorithm $algorithm).Hash)"
+        }
+      shell: pwsh
+        
     - name: Create prerelease
       uses: "marvinpinto/action-automatic-releases@latest"
       with:
@@ -57,3 +55,4 @@ jobs:
         title: "Development Build"
         files: |
            **/KeeTrayTOTP.plgx
+           hashes.txt

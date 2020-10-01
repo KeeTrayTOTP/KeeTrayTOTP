@@ -1,28 +1,27 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using FluentAssertions;
-using KeePass.App.Configuration;
-using KeePass.Forms;
-using KeePass.Plugins;
+﻿using FluentAssertions;
 using KeePass.UI;
 using KeeTrayTOTP.Menu;
 using KeeTrayTOTP.Tests.Extensions;
+using KeeTrayTOTP.Tests.Helpers;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
+using KeePassLib;
 
 namespace KeeTrayTOTP.Tests.Menu
 {
     [TestClass]
     public class TrayMenuTests
     {
-        private KeeTrayTOTPExt _plugin;
         private TrayMenuItemProvider _trayMenuItemProvider;
 
         [TestInitialize]
         public void Initialize()
         {
-            _plugin = CreatePluginHostMock(out var host);
-            _trayMenuItemProvider = new TrayMenuItemProvider(_plugin, host.Object);
+            var (plugin, host) = PluginHostHelper.CreateAndInitialize();
+
+            _trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
         }
 
         [TestMethod]
@@ -37,28 +36,21 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldReturnCorrectMenuItem_IfNoDatabaseIsOpened()
         {
-            var documents = new List<PwDocument>(new[]
-            {
-                new PwDocument()
-            });
+            var pwDocument = new PwDocument();
 
-            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
 
             sut.Count.Should().Be(1);
             sut.First().Text.Should().Be(Localization.Strings.NoDatabaseIsOpened,
                 "because, there is no open database. (KeePass always provides a (new) PwDocument, even if there is no database open.");
         }
 
-
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldReturnEntryMenuItems_IfThereIsOnlyASingleDatabase()
         {
-            var documents = new List<PwDocument>(new[]
-            {
-                new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4)
-            });
+            var pwDocument = new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4);
 
-            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
 
             sut.Count.Should().Be(4,
                 "because, the items are added directly to the root tray menuitem if there is only a single database opened.");
@@ -67,12 +59,9 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldReturnCorrectInfo_IfThereAreNoTotpEntries()
         {
-            var documents = new List<PwDocument>(new[]
-            {
-                new PwDocument().New().WithNonTotpEntries(4)
-            });
+            var pwDocument = new PwDocument().New().WithNonTotpEntries(4);
 
-            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
 
             sut.Count.Should().Be(1);
             sut.First().Text.Should().Contain(Localization.Strings.NoTOTPEntriesFound,
@@ -97,12 +86,9 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldCreateASingleMenuItemWithLocked_IfASingleLockedDatabasesIsPresent()
         {
-            var documents = new List<PwDocument>(new[]
-            {
-                new PwDocument().New().Locked()
-            });
+            var pwDocument = new PwDocument().New().Locked();
 
-            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
 
             sut.Count.Should().Be(1);
             sut.First().Text.Should().Contain("[" + Localization.Strings.Locked + "]", "because, there is only a locked database.");
@@ -127,35 +113,66 @@ namespace KeeTrayTOTP.Tests.Menu
         [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldCreateDisabledMenuItems_IfTotpSettingsNotValid()
         {
+            var pwDocument = new PwDocument().New().WithFaultyTotpEnabledEntries(2);
+
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
+
+            sut.Count.Should().Be(2);
+            sut.Should().OnlyContain(s => !s.Enabled,
+                "because all entries contain invalid settings and can't be used");
+        }
+
+        [TestMethod]
+        public void BuildMenuItemsForRootDropDown_ShouldReturnEntryMenuItemsNotInRecycleBin()
+        {
+            var pwDocument = new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4).WithDeletedTotpEnabledEntries(2);
+
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
+
+            sut.Count.Should().Be(4,
+                "because, valid entries in the recycle bin should not show up.");
+        }
+
+        [TestMethod]
+        public void BuildMenuItemsForRootDropDown_ShouldReturnEntryMenuItems_WhenRecycleBinNotEnabled()
+        {
+            var pwDocument = new PwDocument().New().WithNonTotpEntries(2).WithTotpEnabledEntries(4).WithDeletedTotpEnabledEntries(2);
+
+            // Treat recycle bin as a regular folder
+            pwDocument.Database.RecycleBinEnabled = false;
+
+            var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(pwDocument.AsList()).ToList();
+
+            sut.Count.Should().Be(6,
+                "because, the recycle bin is treated as a regular folder.");
+        }
+
+        [TestMethod]
+        public void BuildMenuItemsForRootDropDown_ShouldReturnColoredEntryMenuItems_IfThereAreColoredPwEntries()
+        {
+            var foregroundColor = Color.Red;
+            var backgroundColor = Color.Blue;
+
+            PwEntry ApplyColor(PwEntry entry)
+            {
+                entry.ForegroundColor = foregroundColor;
+                entry.BackgroundColor = backgroundColor;
+                return entry;
+            }
+
             var documents = new List<PwDocument>(new[]
             {
-                new PwDocument().New().WithFaultyTotpEnabledEntries(2)
+                new PwDocument().New().WithTotpEnabledEntries(1, ApplyColor).WithTotpEnabledEntries(1)
             });
 
             var sut = _trayMenuItemProvider.BuildMenuItemsForRootDropDown(documents).ToList();
 
-            sut.Count.Should().Be(2);
-            sut.Should().OnlyContain(s => !s.Enabled, 
-                "because all entries contain invalid settings and can't be used");
+            sut.Should().Contain(
+                item => 
+                        item.ForeColor == foregroundColor && 
+                        item.BackColor == backgroundColor, 
+                "because, there is one entry with these colors set.");
         }
-
-        private static KeeTrayTOTPExt CreatePluginHostMock(out Mock<IPluginHost> host)
-        {
-            var plugin = new KeeTrayTOTPExt();
-            host = new Mock<IPluginHost>(MockBehavior.Strict);
-
-            var mainForm = new MainForm();
-            host.SetupGet(c => c.MainWindow).Returns(mainForm);
-
-            var customConfig = new AceCustomConfig();
-            host.SetupGet(c => c.CustomConfig).Returns(customConfig);
-
-            var columnProviderPool = new ColumnProviderPool();
-            host.SetupGet(c => c.ColumnProviderPool).Returns(columnProviderPool);
-
-            plugin.Initialize(host.Object);
-
-            return plugin;
-        }
+        
     }
 }

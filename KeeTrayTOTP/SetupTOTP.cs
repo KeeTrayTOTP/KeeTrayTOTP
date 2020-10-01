@@ -187,6 +187,7 @@ namespace KeeTrayTOTP
                 _entry.Touch(true);
 
                 _plugin.PluginHost.MainWindow.ActiveDatabase.Modified = true;
+                _plugin.ResetLastSelectedGroup();
             }
             catch (Exception ex)
             {
