@@ -80,6 +80,7 @@
             this.LabelTOTPSeedStringName = new System.Windows.Forms.Label();
             this.ComboBoxTOTPSeedStringName = new System.Windows.Forms.ComboBox();
             this.LabelDescriptionTOTPSeed = new System.Windows.Forms.Label();
+            this.LabelRestartRequired = new System.Windows.Forms.Label();
             this.ButtonOK = new System.Windows.Forms.Button();
             this.ButtonCancel = new System.Windows.Forms.Button();
             this.ButtonApply = new System.Windows.Forms.Button();
@@ -139,6 +140,7 @@
             //
             // GroupBoxTrayMenu
             //
+            this.GroupBoxTrayMenu.Controls.Add(this.LabelRestartRequired);
             this.GroupBoxTrayMenu.Controls.Add(this.CheckBoxEnableLegacyTrayMenuProvider);
             this.GroupBoxTrayMenu.Controls.Add(this.CheckBoxTrimTrayText);
             this.GroupBoxTrayMenu.Controls.Add(this.CheckBoxShowTOTPEntriesTrayMenu);
@@ -161,6 +163,7 @@
             this.CheckBoxEnableLegacyTrayMenuProvider.TabIndex = 3;
             this.CheckBoxEnableLegacyTrayMenuProvider.Text = "Enable legacy tray menu \r\n(Requires program restart, not recommended)";
             this.CheckBoxEnableLegacyTrayMenuProvider.UseVisualStyleBackColor = true;
+            this.CheckBoxEnableLegacyTrayMenuProvider.CheckedChanged += new System.EventHandler(this.CalculateRefreshNoticeVisibility);
             //
             // CheckBoxTrimTrayText
             //
@@ -185,6 +188,7 @@
             this.CheckBoxShowTOTPEntriesTrayMenu.TabIndex = 1;
             this.CheckBoxShowTOTPEntriesTrayMenu.Text = "Show &TOTP enabled entries in tray menu";
             this.CheckBoxShowTOTPEntriesTrayMenu.UseVisualStyleBackColor = true;
+            this.CheckBoxShowTOTPEntriesTrayMenu.CheckedChanged += new System.EventHandler(this.CalculateRefreshNoticeVisibility);
             //
             // LabelDescriptionTrayMenu
             //
@@ -702,7 +706,18 @@
             this.LabelDescriptionTOTPSeed.TabIndex = 0;
             this.LabelDescriptionTOTPSeed.Text = "The Seed is the key used to generated the TOTPs. It will be stored with protectio" +
     "n using the name specified below.";
-            //
+            // 
+            // LabelRestartRequired
+            // 
+            this.LabelRestartRequired.AutoSize = true;
+            this.LabelRestartRequired.ForeColor = System.Drawing.Color.Red;
+            this.LabelRestartRequired.Location = new System.Drawing.Point(16, 54);
+            this.LabelRestartRequired.Name = "LabelRestartRequired";
+            this.LabelRestartRequired.Size = new System.Drawing.Size(268, 13);
+            this.LabelRestartRequired.TabIndex = 4;
+            this.LabelRestartRequired.Text = "Please restart KeePass for the change(s) to take effect.";
+            this.LabelRestartRequired.Visible = false;
+            // 
             // ButtonOK
             //
             this.ButtonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -888,5 +903,6 @@
         private System.ComponentModel.BackgroundWorker WorkerReset;
         private System.Windows.Forms.CheckBox CheckBoxTrimTrayText;
         private System.Windows.Forms.CheckBox CheckBoxEnableLegacyTrayMenuProvider;
+        private System.Windows.Forms.Label LabelRestartRequired;
     }
 }
