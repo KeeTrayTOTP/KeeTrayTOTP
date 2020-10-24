@@ -34,6 +34,19 @@ namespace KeeTrayTOTP.Tests.Menu
         }
 
         [TestMethod]
+        public void TrayMenuItemProvider_ShouldReturnNullIfDeactivated()
+        {
+            var (plugin, host) = PluginHostHelper.CreateAndInitialize();
+            plugin.Settings.NotifyContextVisible = false;
+
+            var trayMenuItemProvider = new TrayMenuItemProvider(plugin, host.Object);
+
+            var sut = trayMenuItemProvider.ProvideMenuItem();
+
+            sut.Should().BeNull();
+        }
+
+        [TestMethod]
         public void BuildMenuItemsForRootDropDown_ShouldReturnCorrectMenuItem_IfNoDatabaseIsOpened()
         {
             var pwDocument = new PwDocument();

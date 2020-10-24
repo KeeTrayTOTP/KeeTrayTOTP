@@ -467,5 +467,13 @@ namespace KeeTrayTOTP
         {
             GlobalWindowManager.RemoveWindow(this);
         }
+
+        private void CalculateRefreshNoticeVisibility(object sender, EventArgs e)
+        {
+            var showTotpEntriesTrayMenuChanged = (_plugin.Settings.NotifyContextVisible != CheckBoxShowTOTPEntriesTrayMenu.Checked);
+            var showLegacyTotpEntriesTrayMenuChanged = (_plugin.Settings.LegacyTrayMenuProviderEnable != CheckBoxEnableLegacyTrayMenuProvider.Checked);
+
+            LabelRestartRequired.Visible = showTotpEntriesTrayMenuChanged || showLegacyTotpEntriesTrayMenuChanged;
+        }
     }
 }

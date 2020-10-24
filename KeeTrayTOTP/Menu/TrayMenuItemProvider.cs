@@ -37,6 +37,11 @@ namespace KeeTrayTOTP.Menu
 
         public virtual ToolStripMenuItem ProvideMenuItem()
         {
+            if (!Plugin.Settings.NotifyContextVisible)
+            {
+                return null;
+            }
+
             var rootTrayMenuItem = new ToolStripMenuItemEx(Localization.Strings.TrayTOTPPlugin, Resources.TOTP);
             rootTrayMenuItem.ForceDropDownArrow = true;
             rootTrayMenuItem.DropDownOpening += OnRootDropDownOpening;
