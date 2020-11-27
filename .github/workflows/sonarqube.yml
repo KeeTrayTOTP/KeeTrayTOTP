@@ -29,7 +29,7 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     - name: Setup Nuget.exe
-      uses: warrenbuckley/Setup-Nuget@v1
+      uses: nuget/setup-nuget@v1
 
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
