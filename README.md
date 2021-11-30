@@ -19,6 +19,19 @@ In the case of Steam Mobile Authenticator the new output format was reverse engi
 
 The latest release can be found [here](https://github.com/KeeTrayTOTP/KeeTrayTOTP/releases).
 
+#### Chocolatey 📦 
+Or you can [use Chocolatey to install](https://community.chocolatey.org/packages/keepass-plugin-keetraytotp#install) it in a more automated manner:
+
+```
+choco install keepass-plugin-keetraytotp
+```
+
+To [upgrade KeePass Plugin KeeTrayTOTP](https://community.chocolatey.org/packages/keepass-plugin-keetraytotp#upgrade) to the [latest release version](https://community.chocolatey.org/packages/keepass-plugin-keetraytotp#versionhistory) for enjoying the newest features, run the following command from the command line or from PowerShell:
+
+```
+choco upgrade keepass-plugin-keetraytotp
+```
+
 ## Dependencies
 
 * [Keepass 2.31](http://keepass.info/)
