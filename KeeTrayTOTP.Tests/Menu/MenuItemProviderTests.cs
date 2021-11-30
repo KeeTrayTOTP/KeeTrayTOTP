@@ -51,7 +51,7 @@ namespace KeeTrayTOTP.Tests.Menu
 
             trayMenuItem.Should().NotBeNull();
             trayMenuItem.HasDropDownItems.Should().BeTrue();
-            trayMenuItem.DropDownItems.Should().HaveCount(0, "because, the entries are added at opening of the menu.");
+            trayMenuItem.DropDownItems.Count.Should().Be(0, "because, the entries are added at opening of the menu.");
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace KeeTrayTOTP.Tests.Menu
             var mainMenuItem = sut.GetMenuItem(PluginMenuType.Main);
             mainMenuItem.Should().NotBeNull();
             mainMenuItem.HasDropDownItems.Should().BeTrue();
-            mainMenuItem.DropDownItems.Should().HaveCount(4);
+            mainMenuItem.DropDownItems.Count.Should().Be(4);
         }
 
         [TestMethod]
@@ -77,7 +77,7 @@ namespace KeeTrayTOTP.Tests.Menu
             var mainMenuItem = sut.GetMenuItem(PluginMenuType.Entry);
             mainMenuItem.Should().NotBeNull();
             mainMenuItem.HasDropDownItems.Should().BeTrue();
-            mainMenuItem.DropDownItems.Should().HaveCount(3);
+            mainMenuItem.DropDownItems.Count.Should().Be(3);
         }
 
         [TestMethod]
