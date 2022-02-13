@@ -8,7 +8,7 @@
     <!-- For building .plgx -->
     <PlgxConfiguration>
       <Prerequisites>
-        <KeePassVersion>2.31</KeePassVersion>
+        <KeePassVersion>2.50</KeePassVersion>
         <DotNetVersion>4.0</DotNetVersion>
       </Prerequisites>
     </PlgxConfiguration>
@@ -23,7 +23,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>KeeTrayTOTP</RootNamespace>
     <AssemblyName>KeeTrayTOTP</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
