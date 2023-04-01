@@ -37,7 +37,7 @@ namespace KeeTrayTOTP.Menu
             };
             var entryMenuShowQrCode = new ToolStripMenuItem(Localization.Strings.ShowQR, Properties.Resources.TOTP_Setup, OnEntryMenuShowQRClick)
             {
-                ShortcutKeys = (Keys)Shortcut.CtrlShiftJ
+                ShortcutKeys = (Keys)Shortcut.CtrlShiftT
             };
             
             rootEntryMenuItem.DropDownItems.Add(entryMenuCopyTotp);
