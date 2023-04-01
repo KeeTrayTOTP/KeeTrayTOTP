@@ -204,7 +204,7 @@ It simply copies the current generated TOTP to the clipboard and uses KeePass's 
   <data name="LabelDescriptionAutoType.Text" xml:space="preserve">
     <value>This plugin's help information will not include explanations on the function as it is very widely used. If you do not know how it works, Google it!! You are missing out on the second most important part of KeePass (after password storage).
 
-This figure shows you that this plugin supports Auto-Type and has it's own placeholder to send the TOTP in a keystroke sequence.</value>
+This figure shows you that this plugin supports Auto-Type and has its own placeholder to send the TOTP in a keystroke sequence.</value>
   </data>
   <metadata name="LabelTitleAutoType.Locked" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
@@ -237,9 +237,9 @@ Finally, it supports time correction for servers that have high security standar
     <value>True</value>
   </metadata>
   <data name="LabelDescriptionStorage.Text" xml:space="preserve">
-    <value>The figure below show's where the TOTP seed and settings are stored within the entry. Only one TOTP may be created in an entry.
+    <value>The figure below shows where the TOTP seed and settings are stored within the entry. Only one TOTP may be created in an entry.
 
-The settings lets you change the name of these strings in case you required to used another name.
+The settings lets you change the name of these strings in case you're required to used another name.
 
 Do not simply rename them as the reference will be lost and the TOTP will not generate.</value>
   </data>
