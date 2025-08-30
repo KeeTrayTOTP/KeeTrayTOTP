@@ -44,8 +44,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install xvfb-run
-      run: sudo apt -y install xvfb
+    - name: Install mono + msbuild + xvfb
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y mono-complete msbuild xvfb
 
     - name: MSBuild
       run: msbuild /t:Restore,Build /target:build
