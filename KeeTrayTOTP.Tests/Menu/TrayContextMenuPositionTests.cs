@@ -8,7 +8,7 @@ namespace KeeTrayTOTP.Tests.Menu
     [TestClass]
     public class TrayContextMenuPositionTests
     {
-        [DataTestMethod]
+        [TestMethod]
         [DynamicData(nameof(DropDownLocationTestData))]
         public void CalculatedLocationForDropDown_Should_ReturnTheCorrectLocation(Size controlSize, Point mousePosition,
             Rectangle screenRect, Point expectedPoint)
