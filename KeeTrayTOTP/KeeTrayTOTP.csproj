@@ -64,10 +64,6 @@
       <Version>1.0.3</Version>
       <ExcludeFromPlgx />
     </PackageReference>
-    <!-- Provide .NET Framework reference assemblies on build agents that don't have legacy targeting packs installed -->
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
