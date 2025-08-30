@@ -47,14 +47,8 @@ jobs:
     - name: Install xvfb-run
       run: sudo apt -y install xvfb
 
-    - name: Download nuget.exe
-      run: wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-
-    - name: nuget restore
-      run: mono nuget.exe restore
-
     - name: MSBuild
-      run: msbuild /target:build
+      run: msbuild /t:Restore,Build /target:build
 
     - name: Run tests
       run: xvfb-run dotnet vstest KeeTrayTOTP.Tests/bin/Debug/KeeTrayTOTP.Tests.dll
