@@ -44,25 +44,35 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2
-
-    - name: Setup dotnet
-      uses: actions/setup-dotnet@v4
-
     - name: Install Mono and xvfb
       run: |
         sudo apt-get update
-        sudo apt-get install -y mono-devel xvfb
+        sudo apt-get install -y ca-certificates gnupg
+        sudo gpg --homedir /tmp --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+        sudo chmod +r /usr/share/keyrings/mono-official-archive-keyring.gpg
+        echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+        sudo apt-get update
+
+    - name: Install Mono toolchain + xvfb
+      run: |
+        sudo apt-get install -y mono-devel mono-complete mono-xbuild xvfb
+        mono --version
+        xbuild /version || true
+        msbuild /version || true
 
     - name: Download nuget.exe
       run: wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 
     - name: nuget restore
-      run: msbuild /target:restore KeeTrayTOTP.sln
+      run: mono nuget.exe restore KeeTrayTOTP.sln
 
     - name: MSBuild
-      run: msbuild /target:build KeeTrayTOTP.sln
+      run: msbuild /target:Build /p:Configuration=Release KeeTrayTOTP.sln
+
+    - name: Setup .NET SDK for vstest
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '6.0.x'
 
     - name: Run tests
       run: xvfb-run dotnet vstest KeeTrayTOTP.Tests/bin/Debug/KeeTrayTOTP.Tests.dll
