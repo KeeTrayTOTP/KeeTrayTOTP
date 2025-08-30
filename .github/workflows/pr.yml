@@ -33,7 +33,7 @@ jobs:
       run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
 
     - name: Upload plgx
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: KeeTrayTOTP.plgx
         path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx
