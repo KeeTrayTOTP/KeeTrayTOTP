@@ -53,10 +53,10 @@ jobs:
       run: wget https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
 
     - name: nuget restore
-      run: mono nuget.exe restore
+      run: msbuild /target:restore KeeTrayTOTP.sln
 
     - name: MSBuild
-      run: msbuild /target:build
+      run: msbuild /target:build KeeTrayTOTP.sln
 
     - name: Run tests
       run: xvfb-run dotnet vstest KeeTrayTOTP.Tests/bin/Debug/KeeTrayTOTP.Tests.dll
