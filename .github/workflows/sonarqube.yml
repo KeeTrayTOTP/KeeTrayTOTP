@@ -37,7 +37,7 @@ jobs:
       run: dotnet tool install --global dotnet-sonarscanner
 
     - name: SonarScanner Begin
-      run: dotnet sonarscanner begin /k:keetraytotp /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml" /d:sonar.login="${{ env.SONAR_TOKEN }}"
+      run: dotnet sonarscanner begin /k:keetraytotp /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.opencover.reportsPaths="coverage.opencover.xml" /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
     - name: MSBuild
       run: msbuild KeeTrayTOTP.sln /m
@@ -52,6 +52,6 @@ jobs:
       run: cp -Path ("KeeTrayTOTP.Tests\TestResults\" + (gci -Path KeeTrayTOTP.Tests\TestResults -Recurse -Force -Name coverage.opencover.xml)) -Destination coverage.opencover.xml
 
     - name: SonarScanner End
-      run: dotnet sonarscanner end /d:sonar.login="${{ env.SONAR_TOKEN }}"
+      run: dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
