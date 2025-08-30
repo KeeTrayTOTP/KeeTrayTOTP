@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <AssemblyTitle>KeeTrayTOTP.Tests</AssemblyTitle>
     <Product>KeeTrayTOTP.Tests</Product>
     <Copyright>Copyright © $([System.DateTime]::Now.ToString(yyyy))</Copyright>
