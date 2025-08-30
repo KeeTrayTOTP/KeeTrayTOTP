@@ -44,6 +44,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Setup dotnet
+      uses: actions/setup-dotnet@v4
+
     - name: Install Mono and xvfb
       run: |
         sudo apt-get update
