@@ -78,4 +78,4 @@ jobs:
         dotnet-version: '6.0.x'
 
     - name: Run tests
-      run: xvfb-run dotnet vstest KeeTrayTOTP.Tests/bin/Debug/KeeTrayTOTP.Tests.dll
+      run: xvfb-run dotnet vstest KeeTrayTOTP.Tests/bin/Release/KeeTrayTOTP.Tests.dll
