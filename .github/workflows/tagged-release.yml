@@ -15,13 +15,13 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
     
     - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v2
 
     - name: Setup Nuget.exe
-      uses: nuget/setup-nuget@v1
+      uses: NuGet/setup-nuget@v2
 
     - name: nuget restore
       run: nuget restore KeeTrayTOTP.sln
@@ -30,7 +30,7 @@ jobs:
       run: msbuild KeeTrayTOTP.sln /p:Configuration=ReleasePlgx
 
     - name: Upload plgx
-      uses: actions/upload-artifact@v1
+      uses: actions/upload-artifact@v4
       with:
         name: KeeTrayTOTP.plgx
         path: KeeTrayTOTP\bin\ReleasePlgx\KeeTrayTOTP.plgx

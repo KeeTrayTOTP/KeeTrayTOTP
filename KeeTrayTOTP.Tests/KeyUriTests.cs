@@ -137,7 +137,7 @@ namespace KeeTrayTOTP.Tests
         }
 
         // Testcases kindly borrowed from: https://github.com/Aftnet/OTPManager/blob/7ba3c4a34bce6ddc83c040de84e36faed4cde60e/OTPManager.Shared.Test/Components/OTPUriConverterTest.cs
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("otpauth://totp/Test:Alice Loller%40test.com?secret=ABABABABABABABAB&algorithm=SHA256&digits=6&issuer=Test", "Alice Loller@test.com", "Test")]
         [DataRow("otpauth://totp/Test:Alice Loller%40test.com?secret=ABABABABABABABAB&algorithm=SHA256&digits=6", "Alice Loller@test.com", "Test")]
         [DataRow("otpauth://totp/Alice Loller%40test.com?secret=ABABABABABABABAB&algorithm=SHA256&digits=6&issuer=Test", "Alice Loller@test.com", "Test")]
@@ -154,7 +154,7 @@ namespace KeeTrayTOTP.Tests
         }
 
         // Testcases kindly borrowed from: https://github.com/Aftnet/OTPManager/blob/7ba3c4a34bce6ddc83c040de84e36faed4cde60e/OTPManager.Shared.Test/Components/OTPUriConverterTest.cs
-        [DataTestMethod]
+        [TestMethod]
         [DataRow("tpauth://totp/SomeLabel?secret=ABABABABABABABAB&algorithm=SHA256&digits=6", "Uri scheme must be otpauth.")]
         [DataRow("otpauth://hotp/SomeLabel?secret=ABABABABABABABAB&algorithm=SHA256&digits=6", "Only totp is supported.")]
         [DataRow("otpauth://totp/?secret=ABABABABABABABAB&algorithm=SHA256&digits=6", "No label")]

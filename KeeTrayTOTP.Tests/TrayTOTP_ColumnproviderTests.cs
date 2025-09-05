@@ -31,7 +31,7 @@ namespace KeeTrayTOTP.Tests
         [DataRow(InvalidSeed, ValidSettings, "Error, bad seed!")]
         [DataRow(null, ValidSettings, "Error, no seed!")]
         [DataRow(null, null, "")]
-        [DataTestMethod]
+        [TestMethod]
         public void GetCellDataStatus_ShouldReturnExpectedValues(string seed, string settings, string expected)
         {
             var column = new TrayTOTP_ColumnProvider(_plugin);
@@ -55,7 +55,7 @@ namespace KeeTrayTOTP.Tests
         [DataRow(InvalidSeed, ValidSettings, "Error, bad seed!")]
         [DataRow(null, ValidSettings, "Error, no seed!")]
         [DataRow(null, null, "")]
-        [DataTestMethod]
+        [TestMethod]
         public void GetCellDataCode_ShouldReturnExpectedValues(string seed, string settings, string expected)
         {
             var column = new TrayTOTP_ColumnProvider(_plugin);
@@ -77,7 +77,7 @@ namespace KeeTrayTOTP.Tests
 
         [DataRow(true, @"^\d{6} \(\d{1,2}\)$", DisplayName = "Column timer visible should show a code and validity")]
         [DataRow(false, @"^\d{6}$", DisplayName = "Column timer invisible should only show a code")]
-        [DataTestMethod]
+        [TestMethod]
         public void GetCellDataCode_WithValidSeedAndSettings_ShouldReturnA6DigitCodeWithDuration(bool showTimer, string regex)
         {
             _plugin.Settings.TOTPColumnTimerVisible = showTimer;
