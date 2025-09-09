@@ -34,6 +34,6 @@
     <PackageReference Include="MSTest.TestFramework" Version="3.10.4" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
     <PackageReference Include="System.ValueTuple" Version="4.6.1" />
-    <PackageReference Include="System.Collections.Immutable" Version="9.0.8" />
+    <PackageReference Include="System.Collections.Immutable" Version="9.0.9" />
   </ItemGroup>
 </Project>
